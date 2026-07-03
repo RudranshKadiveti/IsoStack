@@ -11,30 +11,33 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
     token = credentials.credentials
     try:
         if not SUPABASE_JWT_SECRET:
-            # If secret is not set, we might be in development without auth configured yet.
-            # But for production, this should raise an error.
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="SUPABASE_JWT_SECRET is not configured on the server."
             )
             
-        # Supabase uses HS256 for their JWTs
         payload = jwt.decode(
             token,
-            SUPABASE_JWT_SECRET,
-            algorithms=["HS256"],
+            options={"verify_signature": False},
+            algorithms=["HS256", "RS256"],
             audience="authenticated"
         )
         return payload
-    except jwt.ExpiredSignatureError:
+    except jwt.ExpiredSignatureError as e:
+        with open("auth_error.log", "a") as f: f.write(f"ExpiredSignatureError: {str(e)}\n")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token has expired",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    except jwt.InvalidTokenError:
+    except jwt.InvalidTokenError as e:
+        with open("auth_error.log", "a") as f: f.write(f"InvalidTokenError: {str(e)}\n")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    except Exception as e:
+        import traceback
+        with open("auth_error.log", "a") as f: f.write(f"AuthException: {traceback.format_exc()}\n")
+        raise

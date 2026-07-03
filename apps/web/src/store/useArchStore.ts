@@ -10,6 +10,7 @@ interface ArchState {
   selectedNodeId: string | null;
   maxNodes: number;
   setGraph: (graph: ArchGraph) => void;
+  updateProjectName: (name: string) => void;
   selectNode: (id: string | null) => void;
   addNode: (node: ArchNode) => void;
   removeNode: (id: string) => void;
@@ -31,6 +32,7 @@ export const useArchStore = create<ArchState>((set) => ({
   customServices: [],
   addCustomService: (service) => set((s) => ({ customServices: [...s.customServices, service] })),
   setGraph: (graph) => set({ graph }),
+  updateProjectName: (name) => set((state) => ({ graph: state.graph ? { ...state.graph, project_name: name } : null })),
   selectNode: (id) => set({ selectedNodeId: id }),
   loadTemplate: (template) => set((s) => s.graph ? {
     graph: {

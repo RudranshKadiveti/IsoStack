@@ -63,10 +63,10 @@ export function AuthModal() {
   return (
     <div className="fixed inset-0 bg-[#0B0F1A]/90 backdrop-blur-md z-[999] flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-[#0F172A] border border-[#1E293B] p-8 rounded-2xl shadow-2xl max-w-md w-full flex flex-col items-center my-8">
-        <div className="w-12 h-12 rounded-xl bg-[#1E293B] border border-[#334155] flex items-center justify-center mb-6 shadow-inner">
-          <Sparkles className="w-6 h-6 text-[#3B82F6]" />
+        <div className="w-16 h-16 rounded-full bg-[#0B0F1A] border-2 border-[#334155]/60 flex items-center justify-center mb-6 shadow-md overflow-hidden flex-shrink-0">
+          <img src="/logo.png" alt="IsoStack Logo" className="w-full h-full object-cover object-center scale-110" />
         </div>
-        <h2 className="text-2xl font-bold text-[#F1F5F9] mb-2 text-center">Welcome to IsoStack</h2>
+        <h2 className="text-3xl text-[#F1F5F9] mb-2 text-center font-medium tracking-wide" style={{ fontFamily: "'Newsreader', serif" }}>Welcome to IsoStack</h2>
         <p className="text-[#94A3B8] text-sm text-center mb-6">
           Sign in to generate architectures, save your progress, and export your code to GitHub.
         </p>

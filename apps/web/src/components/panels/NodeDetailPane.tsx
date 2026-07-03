@@ -5,7 +5,7 @@ import { useUIStore } from '../../store/useUIStore';
 import { generateWorkspace } from '../../lib/api';
 import { SERVICE_CATALOG } from '../../lib/services.catalog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
-import { ChevronDown, AlertTriangle, Info, XCircle, DollarSign, Activity, Zap } from 'lucide-react';
+import { ChevronDown, AlertTriangle, Info, XCircle, DollarSign, Activity, Zap, FileText, Link, Cloud, Image, FileSpreadsheet } from 'lucide-react';
 import { AlternateApproachesPanel } from './AlternateApproachesPanel';
 import { DeploymentPanel } from './DeploymentPanel';
 import { SecurityPanel } from './SecurityPanel';
@@ -446,7 +446,7 @@ export function NodeDetailPane() {
                   }}
                   className="flex-1 py-2 rounded-lg border border-[#1E293B] bg-[#0F172A] hover:bg-[#1E293B] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] text-xs font-medium transition-all flex items-center justify-center gap-2"
                 >
-                  <span>↓</span> Markdown
+                  <FileText className="w-4 h-4" /> Markdown
                 </button>
                 <button
                   onClick={() => {
@@ -459,7 +459,7 @@ export function NodeDetailPane() {
                   }}
                   className="flex-1 py-2 rounded-lg border border-[#1E293B] bg-[#0F172A] hover:bg-[#1E293B] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] text-xs font-medium transition-all flex items-center justify-center gap-2"
                 >
-                  <span>🔗</span> OpenAPI
+                  <Link className="w-4 h-4" /> OpenAPI
                 </button>
                 <button
                   onClick={() => {
@@ -472,7 +472,7 @@ export function NodeDetailPane() {
                   }}
                   className="flex-1 py-2 rounded-lg border border-[#1E293B] bg-[#0F172A] hover:bg-[#1E293B] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] text-xs font-medium transition-all flex items-center justify-center gap-2"
                 >
-                  <span>☁️</span> TF
+                  <Cloud className="w-4 h-4" /> TF
                 </button>
               </div>
               <div className="flex gap-2 mb-2">
@@ -491,7 +491,7 @@ export function NodeDetailPane() {
                   }}
                   className="flex-1 py-2 rounded-lg border border-[#1E293B] bg-[#0F172A] hover:bg-[#1E293B] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] text-xs font-medium transition-all flex items-center justify-center gap-2"
                 >
-                  <span>🖼️</span> PNG
+                  <Image className="w-4 h-4" /> PNG
                 </button>
                 <button
                   onClick={() => {
@@ -509,7 +509,7 @@ export function NodeDetailPane() {
                   }}
                   className="flex-1 py-2 rounded-lg border border-[#1E293B] bg-[#0F172A] hover:bg-[#1E293B] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] text-xs font-medium transition-all flex items-center justify-center gap-2"
                 >
-                  <span>📊</span> CSV
+                  <FileSpreadsheet className="w-4 h-4" /> CSV
                 </button>
               </div>
               

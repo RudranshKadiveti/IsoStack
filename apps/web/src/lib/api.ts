@@ -1,13 +1,22 @@
 import axios from 'axios';
 import type { ArchGraph } from './types';
 import { useAuthStore } from '../store/useAuthStore';
+import { supabase } from './supabase';
 
 const client = axios.create({ baseURL: '/api' });
 
-client.interceptors.request.use((config) => {
-  const session = useAuthStore.getState().session;
+client.interceptors.request.use(async (config) => {
+  const { data: { session }, error } = await supabase.auth.getSession();
+  
   if (session?.access_token) {
     config.headers.Authorization = `Bearer ${session.access_token}`;
+  } else {
+    // If no session is returned but we have a user in state, the refresh token expired
+    const authStore = useAuthStore.getState();
+    if (authStore.user) {
+      await authStore.signOut();
+      window.location.href = '/login'; // Force redirect
+    }
   }
   return config;
 });
@@ -52,6 +61,17 @@ export async function describeNode(
     node_type: nodeType,
     label,
     project_context: projectContext,
+  });
+  return data;
+}
+
+export async function chatWithAarkus(
+  messages: { role: string; content: string }[],
+  contextData?: string
+): Promise<{ reply: string }> {
+  const { data } = await client.post('/chat', {
+    messages,
+    context_data: contextData,
   });
   return data;
 }

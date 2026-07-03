@@ -13,3 +13,11 @@ class DescribeNodeRequest(BaseModel):
 class WorkspaceRequest(BaseModel):
     graph: dict           # the full ArchGraph as raw dict
     target_path: str      # absolute local path
+
+class ChatMessage(BaseModel):
+    role: str
+    content: str
+
+class ChatRequest(BaseModel):
+    messages: list[ChatMessage]
+    context_data: Optional[str] = None

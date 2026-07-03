@@ -5,9 +5,15 @@ import '@xyflow/react/dist/style.css';
 import { useArchStore } from '../../store/useArchStore';
 import { getLayoutedElements } from '../../lib/flowLayout';
 import { ServiceNode } from './ServiceNode';
+import { CustomEdge } from './CustomEdge';
 
 const nodeTypes = {
   serviceNode: ServiceNode,
+};
+
+const edgeTypes = {
+  default: CustomEdge,
+  network: CustomEdge,
 };
 
 export function BuilderCanvas() {
@@ -67,6 +73,7 @@ export function BuilderCanvas() {
         onNodeDragStop={(_, node) => updateNodePositionXY(node.id, node.position.x, node.position.y)}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         fitView
         colorMode="dark"
         connectionMode={ConnectionMode.Loose}

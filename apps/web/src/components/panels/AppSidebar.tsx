@@ -92,10 +92,10 @@ export function AppSidebar() {
       {/* Logo Area */}
       <div className="h-16 px-5 flex items-center border-b border-[#1E293B]">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded bg-[#1E293B] flex items-center justify-center border border-[#334155] shadow-inner text-lg">
-            ⚡
+          <div className="w-11 h-11 flex items-center justify-center rounded-full overflow-hidden border-2 border-[#334155]/60 shadow-md bg-[#0B0F1A] flex-shrink-0">
+            <img src="/logo.png" alt="IsoStack Logo" className="w-full h-full object-cover object-center scale-110" />
           </div>
-          <span className="text-[#F1F5F9] font-bold text-lg tracking-tight">IsoStack</span>
+          <span className="text-[#F1F5F9] text-xl font-medium tracking-wide" style={{ fontFamily: "'Newsreader', serif" }}>IsoStack</span>
         </div>
       </div>
 
