@@ -41,13 +41,44 @@ export async function generateArchitecture(
   return data;
 }
 
-export async function generateWorkspace(
-  graph: ArchGraph,
-  targetPath: string
-): Promise<{ success: boolean; message: string }> {
-  const { data } = await client.post('/workspace', {
-    graph,
-    target_path: targetPath,
+export async function generateBoilerplate(
+  graphData: ArchGraph,
+  pngData: string | null
+): Promise<{ generation_id: string; gap_report: string; success_ratio: string }> {
+  const { data } = await client.post('/generate-boilerplate', {
+    graph_data: graphData,
+    png_data: pngData,
+  });
+  return data;
+}
+
+export async function pushBoilerplate(
+  generationId: string,
+  repoName: string,
+  branchName: string
+): Promise<{ status: string; message: string; repo_url: string }> {
+  const { data } = await client.post('/push-boilerplate', {
+    generation_id: generationId,
+    repo_name: repoName,
+    branch_name: branchName,
+  });
+  return data;
+}
+
+export async function getUserRepos(): Promise<any[]> {
+  const { data } = await client.get('/github/user-repos');
+  return data.repos;
+}
+
+export async function getBranches(repoName: string): Promise<any[]> {
+  const { data } = await client.get(`/github/branches?repo=${repoName}`);
+  return data.branches;
+}
+
+export async function createBranch(repoName: string, branchName: string): Promise<any> {
+  const { data } = await client.post('/github/create-branch', {
+    repo_name: repoName,
+    branch_name: branchName,
   });
   return data;
 }

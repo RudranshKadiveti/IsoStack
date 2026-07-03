@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useArchStore } from '../../store/useArchStore';
 import { useUIStore } from '../../store/useUIStore';
-import { generateWorkspace } from '../../lib/api';
+import { generateBoilerplate, pushBoilerplate, getUserRepos, getBranches, createBranch } from '../../lib/api';
 import { SERVICE_CATALOG } from '../../lib/services.catalog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
-import { ChevronDown, AlertTriangle, Info, XCircle, DollarSign, Activity, Zap, FileText, Link, Cloud, Image, FileSpreadsheet } from 'lucide-react';
+import { ChevronDown, AlertTriangle, Info, XCircle, DollarSign, Activity, Zap, FileText, Link, Cloud, Image, FileSpreadsheet, Loader2, Plus } from 'lucide-react';
 import { AlternateApproachesPanel } from './AlternateApproachesPanel';
 import { DeploymentPanel } from './DeploymentPanel';
 import { SecurityPanel } from './SecurityPanel';
@@ -29,8 +29,77 @@ export function NodeDetailPane() {
   const selectNode = useArchStore((s) => s.selectNode);
   const updateNodeVariant = useArchStore((s) => s.updateNodeVariant);
 
-  const [path, setPath] = useState('C:/projects/myapp');
-  const [wsStatus, setWsStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
+  const [repositories, setRepositories] = useState<any[]>([]);
+  const [selectedRepo, setSelectedRepo] = useState<string>('');
+  const [loadingRepos, setLoadingRepos] = useState(false);
+  const [wsStatus, setWsStatus] = useState<'idle' | 'loading' | 'preview' | 'pushing' | 'done' | 'error'>('idle');
+  const [generationId, setGenerationId] = useState<string | null>(null);
+  const [gapReport, setGapReport] = useState<string | null>(null);
+  const [successRatio, setSuccessRatio] = useState<string | null>(null);
+
+  // Branch state
+  const [branches, setBranches] = useState<any[]>([]);
+  const [selectedBranch, setSelectedBranch] = useState<string>('');
+  const [loadingBranches, setLoadingBranches] = useState(false);
+  const [showCreateBranch, setShowCreateBranch] = useState(false);
+  const [newBranchName, setNewBranchName] = useState('');
+  const [creatingBranch, setCreatingBranch] = useState(false);
+
+  useEffect(() => {
+    async function fetchRepos() {
+      setLoadingRepos(true);
+      try {
+        const repos = await getUserRepos();
+        setRepositories(repos || []);
+      } catch (err: any) {
+        if (err?.response?.status !== 401) {
+          toast.error('Failed to load repositories');
+        }
+      } finally {
+        setLoadingRepos(false);
+      }
+    }
+    fetchRepos();
+  }, []);
+
+  const loadBranches = async (repoName: string) => {
+    setLoadingBranches(true);
+    setBranches([]);
+    setSelectedBranch('');
+    try {
+      const b = await getBranches(repoName);
+      setBranches(b || []);
+      if (b?.some((x: any) => x.name === 'main')) setSelectedBranch('main');
+      else if (b?.length > 0) setSelectedBranch(b[0].name);
+    } catch (err: any) {
+      toast.error('Failed to fetch branches');
+    } finally {
+      setLoadingBranches(false);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedRepo) {
+      loadBranches(selectedRepo);
+    }
+  }, [selectedRepo]);
+
+  const handleCreateBranch = async () => {
+    if (!newBranchName.trim()) return toast.error('Please enter a branch name');
+    setCreatingBranch(true);
+    try {
+      await createBranch(selectedRepo, newBranchName);
+      toast.success(`Branch "${newBranchName}" created`);
+      setNewBranchName('');
+      setShowCreateBranch(false);
+      setSelectedBranch(newBranchName);
+      await loadBranches(selectedRepo);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail || 'Failed to create branch');
+    } finally {
+      setCreatingBranch(false);
+    }
+  };
 
   const setDetailPane = useUIStore((s) => s.setDetailPane);
   const [activeTab, setActiveTab] = useState<'properties' | 'templates' | 'security' | 'deployment'>('properties');
@@ -63,15 +132,40 @@ export function NodeDetailPane() {
   const totalCount = graph.utilities_checklist?.length || 0;
 
   async function handleGenerate() {
-    if (!path.trim() || !graph) return;
+    if (!selectedRepo) return toast.error('Please select a repository');
+    if (!selectedBranch) return toast.error('Please select a branch');
+    if (!graph) return;
+    
     setWsStatus('loading');
     try {
-      await generateWorkspace(graph, path.trim());
-      setWsStatus('done');
-      toast.success('Workspace files generated!');
-    } catch {
+      const flowEl = document.querySelector('.react-flow') as HTMLElement;
+      let pngDataUrl = null;
+      if (flowEl) {
+        pngDataUrl = await toPng(flowEl, { backgroundColor: '#0B0F1A' });
+      }
+      
+      const result = await generateBoilerplate(graph, pngDataUrl);
+      setGenerationId(result.generation_id);
+      setGapReport(result.gap_report);
+      setSuccessRatio(result.success_ratio);
+      setWsStatus('preview');
+      toast.success('Boilerplate generated! Please review the gap report.');
+    } catch (err: any) {
       setWsStatus('error');
-      toast.error('Workspace generation failed');
+      toast.error(err?.response?.data?.detail || 'Failed to generate boilerplate');
+    }
+  }
+
+  async function handlePush() {
+    if (!generationId || !selectedRepo || !selectedBranch) return;
+    setWsStatus('pushing');
+    try {
+      const result = await pushBoilerplate(generationId, selectedRepo, selectedBranch);
+      setWsStatus('done');
+      toast.success(result.message || 'Pushed to GitHub successfully!');
+    } catch (err: any) {
+      setWsStatus('error');
+      toast.error(err?.response?.data?.detail || 'Failed to push to GitHub');
     }
   }
 
@@ -513,20 +607,109 @@ export function NodeDetailPane() {
                 </button>
               </div>
               
-              <div className="flex gap-2">
-                <input
-                  className="flex-1 bg-[#0F172A] border border-[#1E293B] focus:border-[#3B82F6]/50 text-[10px] rounded-lg px-2.5 py-2 outline-none font-mono text-[#64748B] transition-colors"
-                  placeholder="Workspace path…"
-                  value={path}
-                  onChange={(e) => setPath(e.target.value)}
-                />
-                <button
-                  onClick={handleGenerate}
-                  disabled={wsStatus === 'loading'}
-                  className="bg-[#1D4ED8] hover:bg-[#2563EB] disabled:opacity-50 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
-                >
-                  {wsStatus === 'loading' ? '…' : wsStatus === 'done' ? '✓' : 'Build'}
-                </button>
+              <div className="flex flex-col gap-2">
+                {loadingRepos ? (
+                  <div className="text-xs text-[#94A3B8] text-center py-2 flex justify-center items-center gap-1.5"><Loader2 className="w-3.5 h-3.5 animate-spin" /> Loading repositories...</div>
+                ) : (
+                  <select
+                    className="w-full bg-[#0F172A] border border-[#1E293B] focus:border-[#3B82F6]/50 text-xs rounded-lg px-2.5 py-2 outline-none font-mono text-[#64748B] transition-colors appearance-none"
+                    value={selectedRepo}
+                    onChange={(e) => setSelectedRepo(e.target.value)}
+                  >
+                    <option value="" disabled>Select a GitHub Repository</option>
+                    {repositories.map((repo) => (
+                      <option key={repo.id} value={repo.name}>
+                        {repo.name} {repo.is_private ? '(Private)' : ''}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                
+                {selectedRepo && (
+                  <>
+                    {loadingBranches ? (
+                      <div className="text-xs text-[#94A3B8] text-center py-2 flex justify-center items-center gap-1.5"><Loader2 className="w-3.5 h-3.5 animate-spin" /> Loading branches...</div>
+                    ) : (
+                      <select
+                        className="w-full bg-[#0F172A] border border-[#1E293B] focus:border-[#3B82F6]/50 text-xs rounded-lg px-2.5 py-2 outline-none font-mono text-[#64748B] transition-colors appearance-none"
+                        value={selectedBranch}
+                        onChange={(e) => setSelectedBranch(e.target.value)}
+                      >
+                        <option value="" disabled>Select a Branch</option>
+                        {branches.map((branch) => (
+                          <option key={branch.name} value={branch.name}>
+                            {branch.name} {branch.protected ? '(Protected)' : ''}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+
+                    {!showCreateBranch ? (
+                      <button
+                        onClick={() => setShowCreateBranch(true)}
+                        className="w-full py-1.5 rounded-lg border border-[#1E293B] bg-transparent hover:bg-[#1E293B] text-[#94A3B8] hover:text-[#F1F5F9] text-xs font-medium transition-all flex items-center justify-center gap-1.5"
+                      >
+                        <Plus className="w-3 h-3" /> Create New Branch
+                      </button>
+                    ) : (
+                      <div className="flex gap-1.5">
+                        <input
+                          type="text"
+                          placeholder="e.g. feature/new-arch"
+                          value={newBranchName}
+                          onChange={(e) => setNewBranchName(e.target.value)}
+                          disabled={creatingBranch}
+                          className="flex-1 bg-[#0F172A] border border-[#1E293B] focus:border-[#3B82F6]/50 text-xs rounded-lg px-2 py-1 outline-none font-mono text-[#F8FAFC] transition-colors"
+                        />
+                        <button
+                          onClick={handleCreateBranch}
+                          disabled={creatingBranch || !newBranchName.trim()}
+                          className="bg-[#10B981] hover:bg-[#059669] disabled:opacity-50 text-white text-xs font-semibold px-2.5 py-1 rounded-lg transition-colors flex items-center justify-center min-w-[50px]"
+                        >
+                          {creatingBranch ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Create'}
+                        </button>
+                        <button
+                          onClick={() => { setShowCreateBranch(false); setNewBranchName(''); }}
+                          disabled={creatingBranch}
+                          className="bg-transparent border border-[#1E293B] hover:bg-[#1E293B] text-[#94A3B8] text-xs px-2.5 py-1 rounded-lg transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {wsStatus === 'preview' ? (
+                  <div className="flex flex-col gap-2 mt-2">
+                    <div className="bg-[#1E293B] rounded-lg p-3 text-xs text-[#E2E8F0] max-h-48 overflow-y-auto">
+                      <h4 className="font-bold text-[#3B82F6] mb-2">Generation Preview ({successRatio} Nodes Success)</h4>
+                      <div className="whitespace-pre-wrap font-mono text-[10px] opacity-90">{gapReport}</div>
+                    </div>
+                    <button
+                      onClick={handlePush}
+                      disabled={wsStatus === 'pushing'}
+                      className="w-full bg-[#10B981] hover:bg-[#059669] disabled:opacity-50 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors flex justify-center items-center gap-2"
+                    >
+                      {wsStatus === 'pushing' ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Pushing to {selectedBranch}...</> : 'Review & Push'}
+                    </button>
+                    <button
+                      onClick={() => setWsStatus('idle')}
+                      disabled={wsStatus === 'pushing'}
+                      className="w-full bg-transparent border border-[#334155] hover:bg-[#334155] disabled:opacity-50 text-[#94A3B8] text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleGenerate}
+                    disabled={wsStatus === 'loading' || wsStatus === 'pushing' || !selectedRepo || !selectedBranch}
+                    className="w-full bg-[#1D4ED8] hover:bg-[#2563EB] disabled:opacity-50 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors flex justify-center items-center gap-2 mt-1"
+                  >
+                    {wsStatus === 'loading' ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Generating AI Boilerplate...</> : wsStatus === 'done' ? '✓ Pushed' : 'Generate & Review Boilerplate'}
+                  </button>
+                )}
               </div>
             </div>
           </>

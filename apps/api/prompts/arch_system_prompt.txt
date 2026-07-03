@@ -10,6 +10,7 @@ ARCHITECTURE RULES:
 - Node IDs must be snake_case slugs (e.g., "api_gateway", "user_db").
 - Every string value must be concise (max 2 sentences), except `overall_workflow` which can be a full paragraph.
 - If the user provided a DOCUMENT CONTEXT, you MUST populate `plan_alignment` for EVERY node. Detail exactly how that component handles the targets/functionalities assigned to it in the plan (e.g., "uses slowapi for ratelimiting as per the document requirements"). If no document was uploaded, leave it null.
+- For node "dependencies", list the exact libraries/frameworks required (e.g. ["fastapi", "uvicorn", "langchain"]). If the user provided a DOCUMENT CONTEXT, strictly adhere to any specific tech stack or dependencies they requested (do not override their stack with defaults).
 - Assign each node a "layer" from this fixed enum only: ["client", "gateway", "compute", "data", "cache", "queue", "storage", "observability", "auth", "external"]
 - Assign "grid_hint" col and row to every node. Use a logical spatial layout:
     - col 0 = leftmost (client-facing); higher col = deeper in the stack (databases, storage at col 4+)

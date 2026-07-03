@@ -32,7 +32,8 @@ class ArchNode(BaseModel):
     id: str; label: str; serviceType: str; variantId: str; layer: LayerType
     tags: list[str]; description: str
     plan_alignment: Optional[str] = None
-    responsibilities: list[str]; metrics: NodeMetrics; grid_hint: GridHint
+    responsibilities: list[str]; dependencies: list[str] = []
+    metrics: NodeMetrics; grid_hint: GridHint
 
 class ArchEdge(BaseModel):
     id: str; source: str; target: str
@@ -61,3 +62,16 @@ class ArchGraph(BaseModel):
         ids = [n.id for n in v]
         assert len(ids) == len(set(ids)), "Duplicate node IDs"
         return v
+
+class FileContent(BaseModel):
+    path: str
+    content: str
+
+class RootBoilerplate(BaseModel):
+    files: list[FileContent]
+    decisions_needed: list[str] = []
+
+class NodeBoilerplate(BaseModel):
+    files: list[FileContent]
+    shared_models_imported: list[str] = []
+    decisions_needed: list[str] = []

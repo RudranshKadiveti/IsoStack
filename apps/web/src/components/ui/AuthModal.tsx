@@ -51,7 +51,10 @@ export function AuthModal() {
       setIsLoadingGithub(true);
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
-        options: { redirectTo: window.location.origin }
+        options: { 
+          redirectTo: window.location.origin,
+          scopes: 'repo'
+        }
       });
       if (error) throw error;
     } catch (err: any) {
