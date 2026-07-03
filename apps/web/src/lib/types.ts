@@ -29,6 +29,7 @@ export interface ArchNode {
   layer: LayerType;
   tags: string[];
   description: string;
+  plan_alignment?: string;
   responsibilities: string[];
   metrics: NodeMetrics;
   grid_hint: GridHint;
@@ -61,6 +62,7 @@ export interface AlternativeArch {
 export interface ArchGraph {
   project_name: string;
   description: string;
+  overall_workflow?: string;
   nodes: ArchNode[];
   edges: ArchEdge[];
   utilities_checklist: UtilityItem[];

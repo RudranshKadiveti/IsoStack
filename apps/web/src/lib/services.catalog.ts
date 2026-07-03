@@ -32,6 +32,7 @@ export const CATEGORY_CONFIG: Record<string, { label: string; color: string; bgC
   infrastructure: { label: "Infrastructure",       color: "oklch(0.6 0.15 280)",  bgColor: "bg-purple-500/20",  borderColor: "border-purple-500/30",  icon: Server,       order: 5 },
   ai:             { label: "AI / LLM",             color: "oklch(0.6 0.18 160)",  bgColor: "bg-teal-500/20",    borderColor: "border-teal-500/30",    icon: Sparkles,     order: 6 },
   monitoring:     { label: "Monitoring",           color: "oklch(0.65 0.18 50)",  bgColor: "bg-amber-600/20",   borderColor: "border-amber-600/30",   icon: BarChart3,    order: 7 },
+  custom:         { label: "Custom Nodes",         color: "oklch(0.7 0.1 100)",   bgColor: "bg-emerald-500/20", borderColor: "border-emerald-500/30", icon: Box,          order: 8 },
 };
 
 export const SERVICE_CATALOG: Service[] = [

@@ -1,10 +1,13 @@
+import { useEffect } from 'react';
 import { BuilderCanvas } from './components/canvas/BuilderCanvas';
 import { PromptBar } from './components/panels/PromptBar';
 import { NodeDetailPane } from './components/panels/NodeDetailPane';
 
 import { AppSidebar } from './components/panels/AppSidebar';
 import { CollaborationBar } from './components/ui/CollaborationBar';
+import { AuthModal } from './components/ui/AuthModal';
 import { useUIStore } from './store/useUIStore';
+import { useAuthStore } from './store/useAuthStore';
 
 import { Toaster } from 'react-hot-toast';
 
@@ -12,11 +15,24 @@ import { TooltipProvider } from './components/ui/tooltip';
 
 export default function App() {
   const isLoading = useUIStore((s) => s.isLoading);
+  const { session, initialized, initialize } = useAuthStore();
 
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+
+  if (!initialized) {
+    return (
+      <div className="flex w-screen h-screen items-center justify-center bg-[#0F172A]">
+        <div className="w-8 h-8 rounded-full border-2 border-[#3B82F6] border-t-transparent animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <TooltipProvider>
       <div className="flex w-screen h-screen overflow-hidden bg-[#0F172A] select-none text-[#F1F5F9] font-sans">
+      {!session && <AuthModal />}
       <Toaster
         position="top-center"
         toastOptions={{
@@ -42,7 +58,7 @@ export default function App() {
       <div className="flex-1 flex flex-col relative h-full overflow-hidden">
         
         {/* Top Header / Prompt */}
-        <div className="absolute top-0 w-full z-10 flex items-start justify-center p-4 py-6 pointer-events-none">
+        <div className="absolute top-0 w-full z-10 flex items-start justify-center p-4 py-6 pointer-events-none pr-16">
           <div className="pointer-events-auto w-full max-w-2xl px-4">
             <PromptBar />
           </div>

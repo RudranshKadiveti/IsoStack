@@ -20,12 +20,16 @@ interface ArchState {
   toggleUtility: (index: number) => void;
   updateNodeVariant: (id: string, variantId: string) => void;
   loadTemplate: (template: any) => void;
+  customServices: any[];
+  addCustomService: (service: any) => void;
 }
 
 export const useArchStore = create<ArchState>((set) => ({
   graph: null,
   selectedNodeId: null,
   maxNodes: BUILDER_CONFIG.maxNodes,
+  customServices: [],
+  addCustomService: (service) => set((s) => ({ customServices: [...s.customServices, service] })),
   setGraph: (graph) => set({ graph }),
   selectNode: (id) => set({ selectedNodeId: id }),
   loadTemplate: (template) => set((s) => s.graph ? {

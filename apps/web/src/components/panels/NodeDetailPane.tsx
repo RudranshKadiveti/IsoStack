@@ -33,14 +33,17 @@ export function NodeDetailPane() {
   const [wsStatus, setWsStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
 
   const setDetailPane = useUIStore((s) => s.setDetailPane);
+  const [activeTab, setActiveTab] = useState<'properties' | 'templates' | 'security' | 'deployment'>('properties');
+
+  const [isWorkflowExpanded, setIsWorkflowExpanded] = useState(false);
 
   if (!graph) return (
-    <div className="h-full w-full bg-[#0B0F1A] border-l border-[#1E293B] flex items-center justify-center">
-      <div className="text-center p-6 text-[#475569]">
-        <div className="text-4xl mb-4">✨</div>
-        <p className="text-sm font-medium">No architecture generated</p>
-        <p className="text-xs mt-2">Describe what you want to build in the prompt bar to get started.</p>
+    <div className="h-full w-full bg-[#0B0F1A] border-l border-[#1E293B] flex flex-col shadow-[-4px_0_24px_rgba(0,0,0,0.5)] z-20 overflow-hidden overflow-y-auto">
+      <div className="p-5 border-b border-[#1E293B] flex-shrink-0">
+         <h2 className="text-[#F1F5F9] text-lg font-bold leading-tight flex-1 mr-2">Templates</h2>
+         <p className="text-[#64748B] text-xs leading-relaxed mt-1">Start by loading a template or describe your idea to generate one.</p>
       </div>
+      <AlternateApproachesPanel />
     </div>
   );
 
@@ -72,8 +75,6 @@ export function NodeDetailPane() {
     }
   }
 
-  const [activeTab, setActiveTab] = useState<'properties' | 'templates' | 'security' | 'deployment'>('properties');
-
   return (
     <div className="h-full w-full bg-[#0B0F1A] border-l border-[#1E293B] flex flex-col shadow-[-4px_0_24px_rgba(0,0,0,0.5)] z-20 overflow-hidden">
       
@@ -91,6 +92,25 @@ export function NodeDetailPane() {
           </span>
         </div>
         <p className="text-[#64748B] text-xs leading-relaxed">{graph.description}</p>
+        {graph.overall_workflow && (
+          <div className="mt-3 bg-[#1E293B]/50 border border-[#334155] rounded-lg overflow-hidden transition-all duration-300">
+            <button 
+              onClick={() => setIsWorkflowExpanded(!isWorkflowExpanded)}
+              className="w-full flex items-center justify-between p-3 text-left hover:bg-[#334155]/30 transition-colors"
+            >
+              <p className="text-[#94A3B8] text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1.5">
+                <Activity size={12} className="text-[#3B82F6]" />
+                Architecture Workflow
+              </p>
+              <ChevronDown className={`w-3.5 h-3.5 text-[#94A3B8] transition-transform duration-200 ${isWorkflowExpanded ? 'rotate-180' : ''}`} />
+            </button>
+            {isWorkflowExpanded && (
+              <div className="px-3 pb-3 pt-0">
+                <p className="text-[#CBD5E1] text-[11px] leading-relaxed">{graph.overall_workflow}</p>
+              </div>
+            )}
+          </div>
+        )}
         
         {/* Tabs */}
         <div className="flex gap-4 mt-4 border-b border-[#1E293B]">
@@ -222,6 +242,16 @@ export function NodeDetailPane() {
                       </li>
                     ))}
                   </ul>
+                )}
+
+                {node.plan_alignment && (
+                  <div className="mb-3 bg-[#0F172A] border border-[#1E293B] rounded p-2.5">
+                    <p className="text-[10px] uppercase tracking-wider text-[#475569] font-semibold mb-1 flex items-center gap-1">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                      Plan Alignment
+                    </p>
+                    <p className="text-[#94A3B8] text-[11px] leading-relaxed">{node.plan_alignment}</p>
+                  </div>
                 )}
 
                 {node.metrics && (

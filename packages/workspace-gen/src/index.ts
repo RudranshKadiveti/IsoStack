@@ -1,4 +1,4 @@
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, readFileSync } from 'fs';
 import { join } from 'path';
 
 interface ArchGraph {
@@ -10,7 +10,8 @@ interface ArchGraph {
   alternative_architectures: any[];
 }
 
-const graph: ArchGraph = JSON.parse(process.argv[2]);
+const graphFile = process.argv[2];
+const graph: ArchGraph = JSON.parse(readFileSync(graphFile, 'utf-8'));
 const targetPath: string = process.argv[3];
 
 import { generateDirectories } from './generators/directoryGen';

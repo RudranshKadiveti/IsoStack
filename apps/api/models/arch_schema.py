@@ -20,7 +20,7 @@ class GridHint(BaseModel):
     @field_validator('col', 'row')
     @classmethod
     def in_range(cls, v):
-        assert 0 <= v <= 7, "grid_hint col/row must be 0-7"
+        assert 0 <= v, "grid_hint col/row must be >= 0"
         return v
 
 class NodeMetrics(BaseModel):
@@ -31,6 +31,7 @@ class NodeMetrics(BaseModel):
 class ArchNode(BaseModel):
     id: str; label: str; serviceType: str; variantId: str; layer: LayerType
     tags: list[str]; description: str
+    plan_alignment: Optional[str] = None
     responsibilities: list[str]; metrics: NodeMetrics; grid_hint: GridHint
 
 class ArchEdge(BaseModel):
@@ -48,6 +49,7 @@ class AlternativeArch(BaseModel):
 
 class ArchGraph(BaseModel):
     project_name: str; description: str
+    overall_workflow: Optional[str] = None
     nodes: list[ArchNode]; edges: list[ArchEdge]
     utilities_checklist: list[UtilityItem]
     alternative_architectures: list[AlternativeArch]

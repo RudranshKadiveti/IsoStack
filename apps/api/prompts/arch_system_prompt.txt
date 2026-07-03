@@ -4,10 +4,12 @@ YOUR ONLY JOB: Analyze the user's project description and produce a complete, pr
 
 ARCHITECTURE RULES:
 - Infer a realistic, production-grade architecture — not a toy one.
+- Define `overall_workflow` (string) for the entire architecture, providing a clear, detailed final description showing workflows in the design and how data flows through the system.
 - Include between 5 and 14 nodes. Never fewer than 5.
 - Every node must have at least one edge connecting it to the graph. No isolated nodes.
 - Node IDs must be snake_case slugs (e.g., "api_gateway", "user_db").
-- Every string value must be concise (max 2 sentences).
+- Every string value must be concise (max 2 sentences), except `overall_workflow` which can be a full paragraph.
+- If the user provided a DOCUMENT CONTEXT, you MUST populate `plan_alignment` for EVERY node. Detail exactly how that component handles the targets/functionalities assigned to it in the plan (e.g., "uses slowapi for ratelimiting as per the document requirements"). If no document was uploaded, leave it null.
 - Assign each node a "layer" from this fixed enum only: ["client", "gateway", "compute", "data", "cache", "queue", "storage", "observability", "auth", "external"]
 - Assign "grid_hint" col and row to every node. Use a logical spatial layout:
     - col 0 = leftmost (client-facing); higher col = deeper in the stack (databases, storage at col 4+)

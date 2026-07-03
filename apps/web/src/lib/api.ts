@@ -1,16 +1,34 @@
 import axios from 'axios';
 import type { ArchGraph } from './types';
+import { useAuthStore } from '../store/useAuthStore';
 
 const client = axios.create({ baseURL: '/api' });
 
+client.interceptors.request.use((config) => {
+  const session = useAuthStore.getState().session;
+  if (session?.access_token) {
+    config.headers.Authorization = `Bearer ${session.access_token}`;
+  }
+  return config;
+});
+
 export async function generateArchitecture(
   prompt: string,
-  existingNodeIds?: string[]
+  existingNodeIds?: string[],
+  files?: File[] | null
 ): Promise<ArchGraph> {
-  const { data } = await client.post<ArchGraph>('/generate', {
-    prompt,
-    existing_node_ids: existingNodeIds ?? null,
-  });
+  const formData = new FormData();
+  formData.append('prompt', prompt);
+  if (existingNodeIds && existingNodeIds.length > 0) {
+    formData.append('existing_node_ids', JSON.stringify(existingNodeIds));
+  }
+  if (files && files.length > 0) {
+    for (const f of files) {
+      formData.append('files', f);
+    }
+  }
+
+  const { data } = await client.post<ArchGraph>('/generate', formData);
   return data;
 }
 

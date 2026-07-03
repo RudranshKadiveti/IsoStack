@@ -10,7 +10,7 @@ def resolve_grid_collisions(graph: ArchGraph) -> ArchGraph:
             row += 1
             if row > 7:
                 row = 0
-                col = min(col + 1, 7)
+                col += 1
         occupied.add((col, row))
         node.grid_hint.col = col
         node.grid_hint.row = row

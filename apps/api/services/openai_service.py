@@ -11,6 +11,7 @@ def build_user_message(prompt: str, existing_ids: list[str] | None) -> str:
     if existing_ids:
         msg += f"\n\nEXISTING NODES (preserve these IDs exactly, only extend the graph with new nodes):\n{', '.join(existing_ids)}"
     msg += "\n\nGenerate the full architecture now."
+    print("DEBUG: Message to LLM:\n", msg)
     return msg
 
 async def generate_architecture(
