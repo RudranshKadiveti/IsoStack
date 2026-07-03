@@ -1,5 +1,6 @@
 import { BaseEdge, EdgeLabelRenderer, getBezierPath, type EdgeProps } from '@xyflow/react';
 import { useArchStore } from '../../store/useArchStore';
+import { useSimulationStore } from '../../store/useSimulationStore';
 import { X } from 'lucide-react';
 
 export function CustomEdge({
@@ -24,10 +25,22 @@ export function CustomEdge({
   });
 
   const removeEdge = useArchStore((s) => s.removeEdge);
+  const activeEdgeId = useSimulationStore((s) => s.activeEdgeId);
+  const isSimulatingActive = activeEdgeId === id;
 
   return (
     <>
-      <BaseEdge path={edgePath} markerEnd={markerEnd} style={{ ...style, strokeWidth: selected ? 3 : 2, opacity: selected ? 1 : 0.7 }} />
+      <BaseEdge 
+        path={edgePath} 
+        markerEnd={markerEnd} 
+        style={{ 
+          ...style, 
+          strokeWidth: isSimulatingActive ? 4 : selected ? 3 : 2, 
+          opacity: isSimulatingActive ? 1 : selected ? 1 : 0.7,
+          stroke: isSimulatingActive ? '#10B981' : style.stroke,
+          filter: isSimulatingActive ? 'drop-shadow(0 0 8px rgba(16, 185, 129, 0.8))' : 'none'
+        }} 
+      />
       <EdgeLabelRenderer>
         <div
           style={{

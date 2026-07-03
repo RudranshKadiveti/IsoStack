@@ -6,13 +6,15 @@ import { CollaborationBar } from './ui/CollaborationBar';
 import { useUIStore } from '../store/useUIStore';
 import { useArchStore } from '../store/useArchStore';
 import { useWorkspaceStore } from '../store/useWorkspaceStore';
-import { ArrowLeft, Save, Star, Trash2 } from 'lucide-react';
+import { ArrowLeft, Save, Star, Trash2, MoreVertical, Play, BookOpen } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import { ARCHITECTURE_TEMPLATES } from '../lib/architecture.templates';
 import { toast } from 'react-hot-toast';
 import { FloatingCopilot } from './dashboard/FloatingCopilot';
 import { ConfirmModal } from './ui/ConfirmModal';
+import { useSimulationStore } from '../store/useSimulationStore';
+import { SimulationOverlay } from './canvas/SimulationOverlay';
 
 export function BuilderView() {
   const { id } = useParams<{ id: string }>();
@@ -27,6 +29,8 @@ export function BuilderView() {
   
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving'>('saved');
   const [isClearConfirmOpen, setIsClearConfirmOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showNotes, setShowNotes] = useState(false);
   const isInitialMount = useRef(true);
 
   // Load Workspace on Mount
@@ -208,10 +212,10 @@ export function BuilderView() {
           <div className="flex items-center gap-4 pointer-events-auto flex-1 basis-0">
             <button 
               onClick={() => navigate('/')}
-              className="flex items-center gap-2 px-3 py-1.5 bg-[#1E293B]/80 hover:bg-[#334155] border border-[#334155] rounded-lg text-sm text-[#F1F5F9] font-medium backdrop-blur-md transition-colors shadow-lg whitespace-nowrap shrink-0"
+              className="flex items-center justify-center w-8 h-8 bg-[#1E293B]/80 hover:bg-[#334155] border border-[#334155] rounded-lg text-[#F1F5F9] backdrop-blur-md transition-colors shadow-lg shrink-0"
+              title="Back to Dashboard"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span className="hidden sm:inline">Back to Dashboard</span>
             </button>
           </div>
           
@@ -235,37 +239,7 @@ export function BuilderView() {
             )}
           </div>
 
-          <div className="pointer-events-auto flex items-center justify-end gap-2 flex-1 basis-0">
-            {(!id?.startsWith('template_') && !id?.startsWith('custom_')) && graph?.nodes?.length > 0 && (
-              <>
-                <button
-                  onClick={() => setIsClearConfirmOpen(true)}
-                  className="px-3 py-1.5 bg-[#ef4444]/10 hover:bg-[#ef4444]/20 border border-[#ef4444]/30 rounded-full text-xs font-medium text-[#ef4444] backdrop-blur-md transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                  Clear Canvas
-                </button>
-                <button
-                  onClick={() => {
-                    const addCustomTemplate = useWorkspaceStore.getState().addCustomTemplate;
-                    addCustomTemplate({
-                      id: `custom_${Date.now()}`,
-                      name: graph.project_name || 'My Custom Template',
-                      description: graph.description || 'A custom architecture template.',
-                      category: 'My Templates',
-                      pros: ['Custom built for my needs'],
-                      cons: [],
-                      nodes: graph.nodes,
-                      edges: graph.edges
-                    });
-                    toast.success('Saved as template!');
-                  }}
-                  className="px-3 py-1.5 bg-[#1E293B]/80 hover:bg-[#334155] border border-[#334155] rounded-full text-xs font-medium text-[#F1F5F9] backdrop-blur-md transition-colors whitespace-nowrap shrink-0"
-                >
-                  Save as Template
-                </button>
-              </>
-            )}
+          <div className="pointer-events-auto flex items-center justify-end gap-2 flex-1 basis-0 relative">
             <div className="flex items-center gap-2 px-3 py-1.5 bg-[#1E293B]/80 border border-[#334155] rounded-full text-xs font-medium text-[#94A3B8] backdrop-blur-md whitespace-nowrap shrink-0">
               {id?.startsWith('template_') ? (
               <>
@@ -286,7 +260,81 @@ export function BuilderView() {
               </>
             )}
             </div>
-            <CollaborationBar />
+            
+            <div className="relative">
+              <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#1E293B]/80 hover:bg-[#334155] border border-[#334155] text-[#F1F5F9] backdrop-blur-md transition-colors shadow-lg"
+              >
+                <MoreVertical className="w-4 h-4" />
+              </button>
+              
+              {isMenuOpen && (
+                <div className="absolute top-10 right-0 w-48 bg-[#0F172A] border border-[#1E293B] rounded-xl shadow-2xl py-2 z-[100] flex flex-col gap-1 px-2">
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      const { startSimulation, isSimulating, stopSimulation } = useSimulationStore.getState();
+                      if (isSimulating) stopSimulation();
+                      else startSimulation();
+                    }}
+                    className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-[#10B981] hover:bg-[#10B981]/10 rounded-lg transition-colors w-full text-left"
+                  >
+                    <Play className="w-4 h-4 fill-current" />
+                    Simulate
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setShowNotes(true);
+                    }}
+                    className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-[#F1F5F9] hover:bg-[#1E293B] rounded-lg transition-colors w-full text-left"
+                  >
+                    <BookOpen className="w-4 h-4" />
+                    Design Notes
+                  </button>
+
+                  {(!id?.startsWith('template_') && !id?.startsWith('custom_')) && graph?.nodes?.length > 0 && (
+                    <>
+                      <div className="h-px bg-[#1E293B] my-1 mx-1" />
+                      <button
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          const addCustomTemplate = useWorkspaceStore.getState().addCustomTemplate;
+                          addCustomTemplate({
+                            id: `custom_${Date.now()}`,
+                            name: graph.project_name || 'My Custom Template',
+                            description: graph.description || 'A custom architecture template.',
+                            category: 'My Templates',
+                            pros: ['Custom built for my needs'],
+                            cons: [],
+                            nodes: graph.nodes,
+                            edges: graph.edges
+                          });
+                          toast.success('Saved as template!');
+                        }}
+                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-[#F1F5F9] hover:bg-[#1E293B] rounded-lg transition-colors w-full text-left"
+                      >
+                        Save as Template
+                      </button>
+                      <button
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          setIsClearConfirmOpen(true);
+                        }}
+                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-[#ef4444] hover:bg-[#ef4444]/10 rounded-lg transition-colors w-full text-left"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Clear Canvas
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+              
+              <CollaborationBar isOpen={showNotes} onClose={() => setShowNotes(false)} />
+            </div>
           </div>
         </div>
 
@@ -302,6 +350,7 @@ export function BuilderView() {
           <BuilderCanvas />
         </div>
 
+        <SimulationOverlay />
         <FloatingCopilot />
       </div>
 

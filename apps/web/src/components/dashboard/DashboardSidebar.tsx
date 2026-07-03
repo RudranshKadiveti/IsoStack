@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Home, FolderOpen, LayoutTemplate, ShieldCheck, Star, Share2, Settings, LogOut } from 'lucide-react';
+import { Home, FolderOpen, LayoutTemplate, ShieldCheck, Star, Share2, Settings, LogOut, Lock } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 
 export function DashboardSidebar() {
@@ -47,9 +47,15 @@ export function DashboardSidebar() {
           <NavLink to="/starred" className={navItemClass}>
             <Star className="w-4 h-4" /> Starred
           </NavLink>
-          <NavLink to="/shared" className={navItemClass}>
-            <Share2 className="w-4 h-4" /> Shared
-          </NavLink>
+          <button 
+            onClick={() => import('react-hot-toast').then(m => m.toast('This feature is currently under construction or planned for the next version of the application', { icon: '🔒' }))}
+            className={`${navItemClass({ isActive: false })} opacity-50 cursor-not-allowed w-full`}
+          >
+            <div className="flex items-center gap-3 flex-1">
+              <Share2 className="w-4 h-4" /> Shared
+            </div>
+            <Lock className="w-3.5 h-3.5 text-[#64748B]" />
+          </button>
         </div>
       </div>
 

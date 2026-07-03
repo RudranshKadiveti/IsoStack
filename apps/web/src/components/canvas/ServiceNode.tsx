@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { useArchStore } from '../../store/useArchStore';
 import { useUIStore } from '../../store/useUIStore';
+import { useSimulationStore } from '../../store/useSimulationStore';
 import type { ArchNode } from '../../lib/types';
 import { SERVICE_CATALOG } from '../../lib/services.catalog';
 
@@ -22,6 +23,8 @@ function ServiceNodeComponent({ data, selected }: ServiceNodeProps) {
   
   const selectNode = useArchStore(s => s.selectNode);
   const setDetailPane = useUIStore(s => s.setDetailPane);
+  const activeNodeId = useSimulationStore(s => s.activeNodeId);
+  const isSimulatingActive = activeNodeId === node.id;
 
   const handleClick = () => {
     selectNode(node.id);
@@ -31,12 +34,14 @@ function ServiceNodeComponent({ data, selected }: ServiceNodeProps) {
   return (
     <div 
       className={`group relative flex items-center p-[6px] gap-3 rounded-lg border min-w-[200px] shadow-sm transition-all duration-300 cursor-pointer ${
-        selected ? 'shadow-[0_0_20px_rgba(var(--tw-shadow-color),0.4)]' : 'hover:shadow-lg'
+        isSimulatingActive 
+          ? 'shadow-[0_0_30px_rgba(var(--tw-shadow-color),0.8)] scale-105 z-50 ring-4 ring-offset-2 ring-offset-[#0F172A] ring-[#3B82F6]' 
+          : selected ? 'shadow-[0_0_20px_rgba(var(--tw-shadow-color),0.4)]' : 'hover:shadow-lg'
       }`}
       style={{
-        backgroundColor: `color-mix(in oklch, ${color} ${selected ? '15%' : '8%'}, transparent)`,
-        borderColor: `color-mix(in oklch, ${color} ${selected ? '100%' : '20%'}, transparent)`,
-        '--tw-shadow-color': selected ? color : 'transparent'
+        backgroundColor: `color-mix(in oklch, ${color} ${isSimulatingActive ? '30%' : selected ? '15%' : '8%'}, transparent)`,
+        borderColor: `color-mix(in oklch, ${color} ${isSimulatingActive ? '100%' : selected ? '100%' : '20%'}, transparent)`,
+        '--tw-shadow-color': isSimulatingActive ? color : selected ? color : 'transparent'
       } as React.CSSProperties}
       onClick={handleClick}
     >

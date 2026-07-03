@@ -1,4 +1,4 @@
-import { MoreVertical, ExternalLink, Copy, Edit2, Trash2 } from 'lucide-react';
+import { MoreVertical, ExternalLink, Copy, Edit2, Trash2, Play } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import type { Workspace } from '../../lib/types/workspace';
 import { motion } from 'framer-motion';
@@ -34,7 +34,7 @@ export function WorkspaceCard({ workspace }: { workspace: Workspace }) {
       >
         {/* Thumbnail Area */}
         <div 
-          className="h-32 bg-[#1E293B]/50 w-full relative flex-shrink-0 cursor-pointer overflow-hidden flex items-center justify-center border-b border-[#1E293B]"
+          className="h-32 bg-[#1E293B]/50 w-full relative flex-shrink-0 cursor-pointer overflow-hidden flex items-center justify-center border-b border-[#1E293B] group/thumb"
           onClick={() => navigate(`/workspace/${workspace.id}`)}
         >
           {workspace.thumbnail ? (
@@ -52,6 +52,20 @@ export function WorkspaceCard({ workspace }: { workspace: Workspace }) {
             <span className={`px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide border uppercase ${getStatusColor(workspace.status)} backdrop-blur-md`}>
               {workspace.status}
             </span>
+          </div>
+
+          {/* Simulate Action on Hover */}
+          <div className="absolute inset-0 bg-[#0F172A]/60 backdrop-blur-[2px] opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
+             <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/workspace/${workspace.id}?simulate=true`);
+                }}
+                className="flex items-center gap-2 bg-[#3B82F6] hover:bg-[#2563EB] text-white px-4 py-2 rounded-lg font-semibold transition-transform hover:scale-105 shadow-lg"
+             >
+                <Play className="w-4 h-4 fill-current" />
+                Simulate
+             </button>
           </div>
         </div>
 

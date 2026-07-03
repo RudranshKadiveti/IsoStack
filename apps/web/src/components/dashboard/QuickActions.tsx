@@ -1,4 +1,4 @@
-import { Plus, Search, Download, LayoutTemplate } from 'lucide-react';
+import { Plus, Search, Download, LayoutTemplate, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useWorkspaceStore } from '../../store/useWorkspaceStore';
@@ -48,28 +48,40 @@ export function QuickActions() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {actions.map((action, i) => {
           const Icon = action.icon;
+          const isLocked = action.id === 'import';
+
           return (
             <motion.button
               key={action.id}
               onClick={() => {
+                if (isLocked) {
+                  import('react-hot-toast').then(m => m.toast('This feature is currently under construction or planned for the next version of the application', { icon: '🔒' }));
+                  return;
+                }
                 if (action.id === 'create') {
                   const id = createWorkspace('Untitled Architecture');
                   navigate(`/workspace/${id}`);
                 } else if (action.id === 'templates') {
                   navigate('/templates');
+                } else if (action.id === 'review') {
+                  navigate('/review');
                 }
-                // future actions for review and import
               }}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -2 }}
-              className={`flex items-center gap-4 p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] ${action.border} transition-all text-left shadow-sm hover:shadow-md group`}
+              whileHover={isLocked ? {} : { y: -2 }}
+              className={`flex items-center gap-4 p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] ${isLocked ? 'opacity-70 cursor-not-allowed' : action.border} transition-all text-left shadow-sm ${isLocked ? '' : 'hover:shadow-md'} group relative`}
             >
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${action.bg} ${action.color}`}>
-                <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
+              {isLocked && (
+                <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#1E293B] flex items-center justify-center">
+                  <Lock className="w-3 h-3 text-[#94A3B8]" />
+                </div>
+              )}
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${action.bg} ${action.color} ${isLocked ? 'opacity-50' : ''}`}>
+                <Icon className={`w-5 h-5 transition-transform ${isLocked ? '' : 'group-hover:scale-110'}`} />
               </div>
-              <span className="font-semibold text-[#F1F5F9]">{action.label}</span>
+              <span className={`font-semibold ${isLocked ? 'text-[#94A3B8]' : 'text-[#F1F5F9]'}`}>{action.label}</span>
             </motion.button>
           );
         })}

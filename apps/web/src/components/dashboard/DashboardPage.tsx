@@ -7,6 +7,7 @@ import { useWorkspaceStore } from '../../store/useWorkspaceStore';
 import { useLocation } from 'react-router-dom';
 
 import { TemplatesPage } from './TemplatesPage';
+import { ArchitectureReviewPage } from './ArchitectureReviewPage';
 
 export function DashboardPage() {
   const { workspaces, searchQuery } = useWorkspaceStore();
@@ -31,7 +32,11 @@ export function DashboardPage() {
     return <TemplatesPage />;
   }
 
-  if (location.pathname === '/review' || location.pathname === '/starred' || location.pathname === '/shared') {
+  if (location.pathname === '/review') {
+    return <ArchitectureReviewPage />;
+  }
+
+  if (location.pathname === '/starred' || location.pathname === '/shared') {
     return (
       <div className="p-8 max-w-7xl mx-auto pb-24 flex items-center justify-center mt-20">
         <p className="text-[#94A3B8]">This feature is under construction.</p>
