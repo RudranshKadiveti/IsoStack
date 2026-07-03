@@ -13,11 +13,11 @@
 
 </div>
 
-
 [![Status](https://img.shields.io/badge/status-under%20development-orange?style=flat-square&labelColor=1a1a2e)](https://github.com/RudranshKadiveti/IsoStack)
 [![Tech](https://img.shields.io/badge/frontend-React%20%2B%20TypeScript-3B82F6?style=flat-square&labelColor=1a1a2e)](https://vitejs.dev/)
 [![Backend](https://img.shields.io/badge/backend-FastAPI%20%2B%20Python-009688?style=flat-square&labelColor=1a1a2e)](https://fastapi.tiangolo.com/)
 [![AI](https://img.shields.io/badge/AI-GPT--4o-7C3AED?style=flat-square&labelColor=1a1a2e)](https://openai.com/)
+[![Auth](https://img.shields.io/badge/auth-Supabase-3ECF8E?style=flat-square&labelColor=1a1a2e)](https://supabase.com/)
 [![License](https://img.shields.io/badge/license-MIT-gray?style=flat-square&labelColor=1a1a2e)](./LICENSE)
 
 *Describe a product. Get a production-grade infrastructure diagram.*
@@ -50,8 +50,11 @@ Built for engineers who want to think in architecture rather than boilerplate.
 | Cloud-agnostic Terraform export | ✅ Implemented |
 | Auto-generated markdown deployment guide | ✅ Implemented |
 | Architecture Record Book (in-canvas note taking) | ✅ Implemented |
-| Workspace scaffold generator | 🔄 In Progress |
-| Authentication and user accounts | 🔲 Not Started |
+| User authentication & session security (Supabase) | ✅ Implemented |
+| Document upload & context-aware generation | ✅ Implemented |
+| Workspace scaffold generator with rich boilerplates | ✅ Implemented |
+| Auto-generated workspace onboarding docs | ✅ Implemented |
+| Custom node creation & sidebar filtering | ✅ Implemented |
 | Diagram sharing / collaboration | 🔲 Not Started |
 | Deployment pipeline integration | 🔲 Not Started |
 
@@ -64,17 +67,22 @@ IsoStack/
 ├── apps/
 │   ├── api/                    # FastAPI backend
 │   │   ├── routers/            # REST endpoints (generate, workspace, health)
-│   │   ├── services/           # OpenAI integration, layout engine
+│   │   ├── services/           # OpenAI integration, layout engine, file extraction
 │   │   ├── models/             # Pydantic schemas (enforced AI output)
+│   │   ├── dependencies.py     # Supabase JWT verification (auth guard)
+│   │   ├── file_extractor.py   # PDF / DOCX / TXT text extraction
 │   │   └── prompts/            # System prompts for the AI engine
 │   └── web/                    # Vite + React frontend
 │       └── src/
-│           ├── components/     # Canvas, sidebar, panels, UI primitives
-│           ├── store/          # Zustand state (arch graph, UI state)
-│           ├── lib/            # Validator, cost estimator, exporters, layout
+│           ├── components/     # Canvas, sidebar, panels, AuthModal, UI primitives
+│           ├── store/          # Zustand state (arch graph, auth session, UI state)
+│           ├── lib/            # Validator, cost estimator, exporters, layout, api.ts
 │           └── hooks/          # AI generation hook
 └── packages/
     └── workspace-gen/          # TypeScript workspace scaffold generator
+        ├── index.ts            # CLI entry (file-path-based input)
+        ├── boilerplateGen.ts   # Service boilerplate templates
+        └── indexGen.ts         # Onboarding doc generator (README, architecture, etc.)
 ```
 
 ---
@@ -82,15 +90,19 @@ IsoStack/
 ## How It Works
 
 ```
-User types a project description
+User logs in (Supabase) and types a project description
+  (optionally attaching up to 5 reference documents)
         │
         ▼
-FastAPI /generate endpoint
+FastAPI /generate endpoint  (JWT-protected)
+        │
+        ├── file_extractor.py pulls text from PDFs/DOCX/TXT
         │
         ▼
 GPT-4o (structured output mode) ──► ArchGraph JSON
         │
         ├── nodes[]                — services, databases, gateways, etc.
+        │     └── plan_alignment   — how the node maps to uploaded requirements
         ├── edges[]                — typed connections between nodes
         ├── utilities_checklist[]  — requirement compliance
         └── alternative_architectures[]
@@ -106,8 +118,14 @@ Side panels compute:
   ├── Validation issues
   ├── Performance metrics
   ├── Cost estimates (AWS / GCP / Azure)
+  ├── Workflow summary + plan alignment
   ├── Deployment guide
   └── OpenAPI / Terraform export
+        │
+        ▼
+workspace-gen scaffolds the chosen architecture into a real project,
+including README.md, architecture.md, phase-wise-planning.md, and
+an agent-briefing-guide.md for downstream AI coding assistants
 ```
 
 ---
@@ -118,19 +136,41 @@ Side panels compute:
 - React 18 + TypeScript
 - Vite
 - React Flow (canvas rendering)
-- Zustand (state management)
+- Zustand (state management, incl. auth session)
 - Tailwind CSS
+- Axios (with auth interceptor)
 
 **Backend**
 - Python 3.12
 - FastAPI
 - OpenAI Python SDK (structured output via `beta.chat.completions.parse`)
 - Pydantic v2
+- PyJWT (Supabase JWT verification)
+- pypdf / python-docx (document text extraction)
+
+**Auth**
+- Supabase (Email/Password + Google & GitHub OAuth)
 
 **Tooling**
 - pnpm workspaces (monorepo)
 - uv (Python package management)
 - TSX (workspace generator runtime)
+
+---
+
+## What's New
+
+**Authentication & session security**
+JWT-based auth backed by Supabase. `dependencies.py` verifies tokens (`HS256`, via `SUPABASE_JWT_SECRET`) and now guards `/generate`, `/describe-node`, and `/workspace`. On the frontend, a new `AuthModal.tsx` handles login/registration with Email/Password and Google/GitHub OAuth, backed by a `useAuthStore.ts` Zustand store and a global Axios interceptor (`api.ts`) that attaches the bearer token to every request.
+
+**Context-aware generation from uploaded documents**
+`PromptBar.tsx` now accepts up to 5 architecture-related documents (`.pdf`, `.docx`, `.txt`, `.json`, `.md`). The new `file_extractor.py` extracts text via `pypdf`, `python-docx`, or UTF-8 decoding, and feeds it into the generation prompt. Each generated node now carries a `plan_alignment` field (added to `arch_schema.py`) explaining how it satisfies the uploaded requirements.
+
+**Workspace generator upgrades**
+`workspace-gen`'s CLI now reads input from a file path instead of inline JSON, fixing command-length limits on Windows for large architecture graphs. `boilerplateGen.ts` produces functional boilerplate (port bindings, DB init scripts, env setup, docker-compose) for PostgreSQL, MongoDB, Redis, RabbitMQ, and Kong API Gateway. `indexGen.ts` now auto-generates a full onboarding doc set per scaffolded workspace: `README.md`, `architecture.md`, `phase-wise-planning.md`, and `agent-briefing-guide.md`.
+
+**Builder UI/UX polish**
+A "Create Custom Node" modal in `AppSidebar.tsx` lets users add bespoke components to the canvas. The sidebar now supports service-type filtering and search. `NodeDetailPane.tsx` gained a collapsible "Architecture Workflow" panel summarizing data flow, plus rendering of `plan_alignment` details for document-sourced nodes.
 
 ---
 
@@ -141,12 +181,13 @@ Side panels compute:
 - Node.js 18+, pnpm 8+
 - Python 3.12+, uv
 - An OpenAI API key with GPT-4o access
+- A Supabase project (URL, anon key, and JWT secret)
 
 ### Backend
 
 ```bash
 cd apps/api
-cp .env.example .env          # Fill in your OPENAI_API_KEY
+cp .env.example .env          # Fill in OPENAI_API_KEY, SUPABASE_JWT_SECRET, etc.
 uv sync
 uv run uvicorn main:app --port 8000 --reload
 ```
@@ -166,13 +207,13 @@ The app will be available at `http://localhost:5173`.
 
 > **This project is under active development.**
 >
-> Core functionality is working end-to-end. Several features listed in the roadmap above are planned but not yet implemented. APIs and data schemas may change between commits without notice. Not recommended for production use in its current state.
+> Core functionality, authentication, document-aware generation, and workspace scaffolding are working end-to-end. Several features listed in the roadmap below are planned but not yet implemented. APIs and data schemas may change between commits without notice. Not recommended for production use in its current state.
 
 ---
 
 ## Roadmap
 
-- Persistent project storage with user accounts
+- Persistent project storage tied to user accounts
 - Shareable architecture links with version history
 - Deployment pipeline integration (GitHub Actions, Terraform Cloud)
 - Multi-model AI support (Claude, Gemini)
@@ -526,7 +567,6 @@ Explore large distributed systems in immersive 3D or AR/VR environments, making 
 ## 🌌 Long-Term Goal
 
 The long-term goal of IsoStack is to become an intelligent software architecture platform that helps engineers move seamlessly from **idea → architecture → validation → deployment**, combining AI-assisted design, interactive visualization, automated best practices, and natural human-computer interaction into a single developer experience.
-
 
 ## Contributing
 
