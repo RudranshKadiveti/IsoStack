@@ -7,8 +7,10 @@ export const BUILDER_CONFIG = {
 
 interface ArchState {
   graph: ArchGraph | null;
+  isDirty: boolean;
   selectedNodeId: string | null;
   maxNodes: number;
+  setDirty: (dirty: boolean) => void;
   setGraph: (graph: ArchGraph) => void;
   updateProjectName: (name: string) => void;
   selectNode: (id: string | null) => void;
@@ -27,14 +29,17 @@ interface ArchState {
 
 export const useArchStore = create<ArchState>((set) => ({
   graph: null,
+  isDirty: false,
   selectedNodeId: null,
   maxNodes: BUILDER_CONFIG.maxNodes,
   customServices: [],
+  setDirty: (dirty) => set({ isDirty: dirty }),
   addCustomService: (service) => set((s) => ({ customServices: [...s.customServices, service] })),
-  setGraph: (graph) => set({ graph }),
-  updateProjectName: (name) => set((state) => ({ graph: state.graph ? { ...state.graph, project_name: name } : null })),
+  setGraph: (graph) => set({ graph, isDirty: false }),
+  updateProjectName: (name) => set((state) => ({ isDirty: true, graph: state.graph ? { ...state.graph, project_name: name } : null })),
   selectNode: (id) => set({ selectedNodeId: id }),
   loadTemplate: (template) => set((s) => s.graph ? {
+    isDirty: true,
     graph: {
       ...s.graph,
       nodes: template.nodes,
@@ -43,9 +48,10 @@ export const useArchStore = create<ArchState>((set) => ({
     }
   } : s),
   addNode: (node) => set((s) => s.graph
-    ? { graph: { ...s.graph, nodes: [...(s.graph.nodes || []), node] } }
+    ? { isDirty: true, graph: { ...s.graph, nodes: [...(s.graph.nodes || []), node] } }
     : s),
   removeNode: (id) => set((s) => s.graph ? {
+    isDirty: true,
     graph: {
       ...s.graph,
       nodes: (s.graph.nodes || []).filter((n) => n.id !== id),
@@ -53,6 +59,7 @@ export const useArchStore = create<ArchState>((set) => ({
     }
   } : s),
   updateNodePosition: (id, col, row) => set((s) => s.graph ? {
+    isDirty: true,
     graph: {
       ...s.graph,
       nodes: (s.graph.nodes || []).map((n) =>
@@ -61,6 +68,7 @@ export const useArchStore = create<ArchState>((set) => ({
     }
   } : s),
   updateNodePositionXY: (id, x, y) => set((s) => s.graph ? {
+    isDirty: true,
     graph: {
       ...s.graph,
       nodes: (s.graph.nodes || []).map((n) =>
@@ -69,12 +77,14 @@ export const useArchStore = create<ArchState>((set) => ({
     }
   } : s),
   addEdge: (edge) => set((s) => s.graph
-    ? { graph: { ...s.graph, edges: [...(s.graph.edges || []), edge] } }
+    ? { isDirty: true, graph: { ...s.graph, edges: [...(s.graph.edges || []), edge] } }
     : s),
   removeEdge: (id) => set((s) => s.graph ? {
+    isDirty: true,
     graph: { ...s.graph, edges: (s.graph.edges || []).filter((e) => e.id !== id) }
   } : s),
   toggleUtility: (index) => set((s) => s.graph ? {
+    isDirty: true,
     graph: {
       ...s.graph,
       utilities_checklist: (s.graph.utilities_checklist || []).map((u, i) =>
@@ -83,6 +93,7 @@ export const useArchStore = create<ArchState>((set) => ({
     }
   } : s),
   updateNodeVariant: (id, variantId) => set((s) => s.graph ? {
+    isDirty: true,
     graph: {
       ...s.graph,
       nodes: (s.graph.nodes || []).map((n) =>

@@ -138,8 +138,7 @@ export function BuilderView() {
         }
 
         if (template) {
-          const hasChanged = JSON.stringify(graph.nodes) !== JSON.stringify(template.nodes) || 
-                             JSON.stringify(graph.edges) !== JSON.stringify(template.edges);
+          const hasChanged = useArchStore.getState().isDirty;
           
           if (hasChanged) {
             setSaveStatus('saving');
@@ -206,7 +205,7 @@ export function BuilderView() {
         
         {/* Top Navigation & Status */}
         <div className="absolute top-4 left-4 right-4 z-20 flex justify-between items-center pointer-events-none">
-          <div className="flex items-center gap-4 pointer-events-auto">
+          <div className="flex items-center gap-4 pointer-events-auto flex-1 basis-0">
             <button 
               onClick={() => navigate('/')}
               className="flex items-center gap-2 px-3 py-1.5 bg-[#1E293B]/80 hover:bg-[#334155] border border-[#334155] rounded-lg text-sm text-[#F1F5F9] font-medium backdrop-blur-md transition-colors shadow-lg whitespace-nowrap shrink-0"
@@ -216,7 +215,7 @@ export function BuilderView() {
             </button>
           </div>
           
-          <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-center pointer-events-auto min-w-0 px-4 w-full max-w-[400px]">
+          <div className="flex justify-center items-center pointer-events-auto flex-1 basis-0 min-w-0 px-4">
             {graph && (!id?.startsWith('template_') && !id?.startsWith('custom_')) && (
               <input
                 type="text"
@@ -236,7 +235,7 @@ export function BuilderView() {
             )}
           </div>
 
-          <div className="pointer-events-auto flex items-center justify-end gap-2">
+          <div className="pointer-events-auto flex items-center justify-end gap-2 flex-1 basis-0">
             {(!id?.startsWith('template_') && !id?.startsWith('custom_')) && graph?.nodes?.length > 0 && (
               <>
                 <button
