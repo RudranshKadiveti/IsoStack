@@ -107,10 +107,10 @@ export function NodeDetailPane() {
   const [isWorkflowExpanded, setIsWorkflowExpanded] = useState(false);
 
   if (!graph) return (
-    <div className="h-full w-full bg-[#0B0F1A] border-l border-[#1E293B] flex flex-col shadow-[-4px_0_24px_rgba(0,0,0,0.5)] z-20 overflow-hidden overflow-y-auto">
-      <div className="p-5 border-b border-[#1E293B] flex-shrink-0">
-         <h2 className="text-[#F1F5F9] text-lg font-bold leading-tight flex-1 mr-2">Templates</h2>
-         <p className="text-[#64748B] text-xs leading-relaxed mt-1">Start by loading a template or describe your idea to generate one.</p>
+    <div className="h-full w-full bg-[#FFFFFF] border-l border-[#E5E7EB] flex flex-col shadow-[-4px_0_24px_rgba(0,0,0,0.5)] z-20 overflow-hidden overflow-y-auto">
+      <div className="p-5 border-b border-[#E5E7EB] flex-shrink-0">
+         <h2 className="text-[#111827] text-lg font-bold leading-tight flex-1 mr-2">Templates</h2>
+         <p className="text-[#6B7280] text-xs leading-relaxed mt-1">Start by loading a template or describe your idea to generate one.</p>
       </div>
       <AlternateApproachesPanel />
     </div>
@@ -141,7 +141,7 @@ export function NodeDetailPane() {
       const flowEl = document.querySelector('.react-flow') as HTMLElement;
       let pngDataUrl = null;
       if (flowEl) {
-        pngDataUrl = await toPng(flowEl, { backgroundColor: '#0B0F1A' });
+        pngDataUrl = await toPng(flowEl, { backgroundColor: '#FFFFFF' });
       }
       
       const result = await generateBoilerplate(graph, pngDataUrl);
@@ -170,12 +170,12 @@ export function NodeDetailPane() {
   }
 
   return (
-    <div className="h-full w-full bg-[#0B0F1A] border-l border-[#1E293B] flex flex-col shadow-[-4px_0_24px_rgba(0,0,0,0.5)] z-20 overflow-hidden">
+    <div className="h-full w-full bg-[#FFFFFF] border-l border-[#E5E7EB] flex flex-col shadow-[-4px_0_24px_rgba(0,0,0,0.5)] z-20 overflow-hidden">
       
       {/* Header */}
-      <div className="p-5 border-b border-[#1E293B] flex-shrink-0">
+      <div className="p-5 border-b border-[#E5E7EB] flex-shrink-0">
         <div className="flex items-start justify-between mb-2">
-          <h2 className="text-[#F1F5F9] text-lg font-bold leading-tight flex-1 mr-2">
+          <h2 className="text-[#111827] text-lg font-bold leading-tight flex-1 mr-2">
             {graph.project_name}
           </h2>
           <span
@@ -185,50 +185,50 @@ export function NodeDetailPane() {
             {difficulty.label}
           </span>
         </div>
-        <p className="text-[#64748B] text-xs leading-relaxed">{graph.description}</p>
+        <p className="text-[#6B7280] text-xs leading-relaxed">{graph.description}</p>
         {graph.overall_workflow && (
-          <div className="mt-3 bg-[#1E293B]/50 border border-[#334155] rounded-lg overflow-hidden transition-all duration-300">
+          <div className="mt-3 bg-[#E5E7EB]/50 border border-[#D1D5DB] rounded-lg overflow-hidden transition-all duration-300">
             <button 
               onClick={() => setIsWorkflowExpanded(!isWorkflowExpanded)}
-              className="w-full flex items-center justify-between p-3 text-left hover:bg-[#334155]/30 transition-colors"
+              className="w-full flex items-center justify-between p-3 text-left hover:bg-[#D1D5DB]/30 transition-colors"
             >
-              <p className="text-[#94A3B8] text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1.5">
+              <p className="text-[#4B5563] text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1.5">
                 <Activity size={12} className="text-[#3B82F6]" />
                 Architecture Workflow
               </p>
-              <ChevronDown className={`w-3.5 h-3.5 text-[#94A3B8] transition-transform duration-200 ${isWorkflowExpanded ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-3.5 h-3.5 text-[#4B5563] transition-transform duration-200 ${isWorkflowExpanded ? 'rotate-180' : ''}`} />
             </button>
             {isWorkflowExpanded && (
               <div className="px-3 pb-3 pt-0">
-                <p className="text-[#CBD5E1] text-[11px] leading-relaxed">{graph.overall_workflow}</p>
+                <p className="text-[#374151] text-[11px] leading-relaxed">{graph.overall_workflow}</p>
               </div>
             )}
           </div>
         )}
         
         {/* Tabs */}
-        <div className="flex gap-4 mt-4 border-b border-[#1E293B]">
+        <div className="flex gap-4 mt-4 border-b border-[#E5E7EB]">
           <button
             onClick={() => setActiveTab('properties')}
-            className={`pb-2 text-xs font-semibold transition-colors border-b-2 ${activeTab === 'properties' ? 'text-[#F1F5F9] border-[#3B82F6]' : 'text-[#64748B] border-transparent hover:text-[#94A3B8]'}`}
+            className={`pb-2 text-xs font-semibold transition-colors border-b-2 ${activeTab === 'properties' ? 'text-[#111827] border-[#3B82F6]' : 'text-[#6B7280] border-transparent hover:text-[#4B5563]'}`}
           >
             Properties
           </button>
           <button
             onClick={() => setActiveTab('security')}
-            className={`pb-2 text-xs font-semibold transition-colors border-b-2 ${activeTab === 'security' ? 'text-[#F1F5F9] border-[#3B82F6]' : 'text-[#64748B] border-transparent hover:text-[#94A3B8]'}`}
+            className={`pb-2 text-xs font-semibold transition-colors border-b-2 ${activeTab === 'security' ? 'text-[#111827] border-[#3B82F6]' : 'text-[#6B7280] border-transparent hover:text-[#4B5563]'}`}
           >
             Security
           </button>
           <button
             onClick={() => setActiveTab('deployment')}
-            className={`pb-2 text-xs font-semibold transition-colors border-b-2 ${activeTab === 'deployment' ? 'text-[#F1F5F9] border-[#3B82F6]' : 'text-[#64748B] border-transparent hover:text-[#94A3B8]'}`}
+            className={`pb-2 text-xs font-semibold transition-colors border-b-2 ${activeTab === 'deployment' ? 'text-[#111827] border-[#3B82F6]' : 'text-[#6B7280] border-transparent hover:text-[#4B5563]'}`}
           >
             Deployment
           </button>
           <button
             onClick={() => setActiveTab('templates')}
-            className={`pb-2 text-xs font-semibold transition-colors border-b-2 ${activeTab === 'templates' ? 'text-[#F1F5F9] border-[#3B82F6]' : 'text-[#64748B] border-transparent hover:text-[#94A3B8]'}`}
+            className={`pb-2 text-xs font-semibold transition-colors border-b-2 ${activeTab === 'templates' ? 'text-[#111827] border-[#3B82F6]' : 'text-[#6B7280] border-transparent hover:text-[#4B5563]'}`}
           >
             Templates
           </button>
@@ -246,12 +246,12 @@ export function NodeDetailPane() {
           <>
             {/* Selected node details */}
             {node && (
-              <div className="p-4 border-b border-[#1E293B]" style={{ background: `color-mix(in oklch, ${color} 5%, transparent)` }}>
+              <div className="p-4 border-b border-[#E5E7EB]" style={{ background: `color-mix(in oklch, ${color} 5%, transparent)` }}>
                 <div className="flex items-center justify-between mb-3">
-                  <p className="text-[10px] uppercase tracking-widest font-semibold text-[#475569]">Selected Node</p>
+                  <p className="text-[10px] uppercase tracking-widest font-semibold text-[#9CA3AF]">Selected Node</p>
                   <button
                     onClick={() => { setDetailPane(false); selectNode(null); }}
-                    className="text-[#475569] hover:text-[#94A3B8] text-xl leading-none"
+                    className="text-[#9CA3AF] hover:text-[#4B5563] text-xl leading-none"
                   >
                     ×
                   </button>
@@ -268,7 +268,7 @@ export function NodeDetailPane() {
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-[#F1F5F9] font-semibold truncate">{node.label}</h3>
+                    <h3 className="text-[#111827] font-semibold truncate">{node.label}</h3>
                     <span 
                       className="text-[10px] font-mono"
                       style={{ color }}
@@ -281,12 +281,12 @@ export function NodeDetailPane() {
                 {/* Variant selector */}
                 {serviceDef && serviceDef.variants.length > 1 && (
                   <div className="mb-3">
-                    <p className="text-[10px] uppercase tracking-wider text-[#475569] font-semibold mb-1.5">Variant</p>
+                    <p className="text-[10px] uppercase tracking-wider text-[#9CA3AF] font-semibold mb-1.5">Variant</p>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <button className="w-full flex items-center justify-between px-3 py-2 rounded-lg border border-[#1E293B] bg-[#0F172A] hover:border-[#334155] text-sm text-[#F1F5F9] transition-colors">
+                        <button className="w-full flex items-center justify-between px-3 py-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] hover:border-[#D1D5DB] text-sm text-[#111827] transition-colors">
                           <span>{variantDef?.label || node.variantId}</span>
-                          <ChevronDown className="w-4 h-4 text-[#64748B]" />
+                          <ChevronDown className="w-4 h-4 text-[#6B7280]" />
                         </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-[260px]">
@@ -294,7 +294,7 @@ export function NodeDetailPane() {
                           <DropdownMenuItem
                             key={v.id}
                             onClick={() => updateNodeVariant(node.id, v.id)}
-                            className={node.variantId === v.id ? 'bg-[#1E293B]' : ''}
+                            className={node.variantId === v.id ? 'bg-[#E5E7EB]' : ''}
                           >
                             <div className="flex flex-col py-0.5">
                               <div className="flex items-center gap-2">
@@ -303,10 +303,10 @@ export function NodeDetailPane() {
                                   <span className="text-[10px] text-[#3B82F6] font-mono">current</span>
                                 )}
                               </div>
-                              <p className="text-[10px] text-[#64748B] mt-0.5">{v.description}</p>
+                              <p className="text-[10px] text-[#6B7280] mt-0.5">{v.description}</p>
                               <div className="flex gap-1 mt-1 flex-wrap">
                                 {v.tags.map(tag => (
-                                  <span key={tag} className="text-[8px] font-mono px-1.5 py-0.5 rounded bg-[#1E293B] text-[#94A3B8]">{tag}</span>
+                                  <span key={tag} className="text-[8px] font-mono px-1.5 py-0.5 rounded bg-[#E5E7EB] text-[#4B5563]">{tag}</span>
                                 ))}
                               </div>
                             </div>
@@ -317,13 +317,13 @@ export function NodeDetailPane() {
                   </div>
                 )}
 
-                <p className="text-[#94A3B8] text-xs leading-relaxed mb-3">{node.description}</p>
+                <p className="text-[#4B5563] text-xs leading-relaxed mb-3">{node.description}</p>
 
                 {/* Tags */}
                 {node.tags && node.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1 mb-3">
                     {node.tags.map(tag => (
-                      <span key={tag} className="text-[9px] font-mono px-2 py-0.5 rounded bg-[#1E293B] text-[#94A3B8]">{tag}</span>
+                      <span key={tag} className="text-[9px] font-mono px-2 py-0.5 rounded bg-[#E5E7EB] text-[#4B5563]">{tag}</span>
                     ))}
                   </div>
                 )}
@@ -331,7 +331,7 @@ export function NodeDetailPane() {
                 {node.responsibilities && node.responsibilities.length > 0 && (
                   <ul className="space-y-1 mb-3">
                     {node.responsibilities.map((r, i) => (
-                      <li key={i} className="flex items-start gap-2 text-[#CBD5E1] text-xs">
+                      <li key={i} className="flex items-start gap-2 text-[#374151] text-xs">
                         <span style={{ color }} className="flex-shrink-0 mt-0.5">▸</span> {r}
                       </li>
                     ))}
@@ -339,27 +339,27 @@ export function NodeDetailPane() {
                 )}
 
                 {node.plan_alignment && (
-                  <div className="mb-3 bg-[#0F172A] border border-[#1E293B] rounded p-2.5">
-                    <p className="text-[10px] uppercase tracking-wider text-[#475569] font-semibold mb-1 flex items-center gap-1">
+                  <div className="mb-3 bg-[#F9FAFB] border border-[#E5E7EB] rounded p-2.5">
+                    <p className="text-[10px] uppercase tracking-wider text-[#9CA3AF] font-semibold mb-1 flex items-center gap-1">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
                       Plan Alignment
                     </p>
-                    <p className="text-[#94A3B8] text-[11px] leading-relaxed">{node.plan_alignment}</p>
+                    <p className="text-[#4B5563] text-[11px] leading-relaxed">{node.plan_alignment}</p>
                   </div>
                 )}
 
                 {node.metrics && (
                   <div className="grid grid-cols-3 gap-2 mb-3">
                     {([['RPS', node.metrics.expected_rps], ['Data', node.metrics.data_size], ['SLA', node.metrics.sla]] as [string, string | null][]).map(([label, val]) => (
-                      <div key={label} className="bg-[#0B0F1A] border border-[#1E293B] rounded p-2 text-center shadow-inner">
-                        <p className="text-[#475569] text-[9px] uppercase">{label}</p>
-                        <p className="text-[#F1F5F9] text-[10px] font-mono mt-0.5">{val ?? '—'}</p>
+                      <div key={label} className="bg-[#FFFFFF] border border-[#E5E7EB] rounded p-2 text-center shadow-inner">
+                        <p className="text-[#9CA3AF] text-[9px] uppercase">{label}</p>
+                        <p className="text-[#111827] text-[10px] font-mono mt-0.5">{val ?? '—'}</p>
                       </div>
                     ))}
                   </div>
                 )}
 
-                <p className="text-[#475569] text-xs mb-3">{edgeCount} connection{edgeCount !== 1 ? 's' : ''}</p>
+                <p className="text-[#9CA3AF] text-xs mb-3">{edgeCount} connection{edgeCount !== 1 ? 's' : ''}</p>
 
                 <button
                   onClick={() => { removeNode(node.id); setDetailPane(false); selectNode(null); }}
@@ -372,15 +372,15 @@ export function NodeDetailPane() {
 
             {/* Validation Issues */}
             {(graph.nodes?.length || 0) > 0 && (
-              <div className="p-4 border-b border-[#1E293B]">
-                <p className="text-[#475569] text-[10px] uppercase tracking-widest font-semibold mb-3 flex items-center justify-between">
+              <div className="p-4 border-b border-[#E5E7EB]">
+                <p className="text-[#9CA3AF] text-[10px] uppercase tracking-widest font-semibold mb-3 flex items-center justify-between">
                   <span className="flex items-center gap-1.5"><Activity className="w-3.5 h-3.5" /> Architecture Health</span>
                 </p>
                 <div className="space-y-2">
                   {validateArchitecture(graph).map(issue => (
                     <div key={issue.id} className="rounded-lg p-3 border shadow-sm" style={{
-                      borderColor: issue.severity === 'error' ? '#7F1D1D40' : issue.severity === 'warning' ? '#78350F40' : '#1E293B',
-                      background: issue.severity === 'error' ? '#450a0a' : issue.severity === 'warning' ? '#451a03' : '#0F172A'
+                      borderColor: issue.severity === 'error' ? '#7F1D1D40' : issue.severity === 'warning' ? '#78350F40' : '#E5E7EB',
+                      background: issue.severity === 'error' ? '#450a0a' : issue.severity === 'warning' ? '#451a03' : '#F9FAFB'
                     }}>
                       <div className="flex items-start gap-2.5">
                         {issue.severity === 'error' ? <XCircle className="w-4 h-4 text-red-500 mt-0.5" /> : 
@@ -390,7 +390,7 @@ export function NodeDetailPane() {
                           <p className={`text-xs font-bold ${issue.severity === 'error' ? 'text-red-400' : issue.severity === 'warning' ? 'text-amber-400' : 'text-blue-400'}`}>
                             {issue.title}
                           </p>
-                          <p className="text-[#94A3B8] text-[10px] mt-1 leading-relaxed">{issue.description}</p>
+                          <p className="text-[#4B5563] text-[10px] mt-1 leading-relaxed">{issue.description}</p>
                         </div>
                       </div>
                     </div>
@@ -401,8 +401,8 @@ export function NodeDetailPane() {
 
             {/* Performance Metrics */}
             {(graph.nodes?.length || 0) > 0 && (
-              <div className="p-4 border-b border-[#1E293B]">
-                <p className="text-[#475569] text-[10px] uppercase tracking-widest font-semibold mb-3 flex items-center justify-between">
+              <div className="p-4 border-b border-[#E5E7EB]">
+                <p className="text-[#9CA3AF] text-[10px] uppercase tracking-widest font-semibold mb-3 flex items-center justify-between">
                   <span className="flex items-center gap-1.5"><Zap className="w-3.5 h-3.5 text-yellow-400" /> Performance Analysis</span>
                 </p>
                 {(() => {
@@ -410,27 +410,27 @@ export function NodeDetailPane() {
                   return (
                     <div className="space-y-3">
                       <div className="grid grid-cols-2 gap-2">
-                        <div className="bg-[#0B0F1A] border border-[#1E293B] rounded p-2 text-center shadow-inner">
-                          <p className="text-[#475569] text-[9px] uppercase">Latency Score</p>
+                        <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded p-2 text-center shadow-inner">
+                          <p className="text-[#9CA3AF] text-[9px] uppercase">Latency Score</p>
                           <p className="text-emerald-400 text-sm font-mono mt-0.5">{perf.latencyScore}/100</p>
                         </div>
-                        <div className="bg-[#0B0F1A] border border-[#1E293B] rounded p-2 text-center shadow-inner">
-                          <p className="text-[#475569] text-[9px] uppercase">Throughput</p>
+                        <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded p-2 text-center shadow-inner">
+                          <p className="text-[#9CA3AF] text-[9px] uppercase">Throughput</p>
                           <p className="text-blue-400 text-sm font-mono mt-0.5">{perf.throughputLevel}</p>
                         </div>
-                        <div className="bg-[#0B0F1A] border border-[#1E293B] rounded p-2 text-center shadow-inner">
-                          <p className="text-[#475569] text-[9px] uppercase">Availability</p>
+                        <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded p-2 text-center shadow-inner">
+                          <p className="text-[#9CA3AF] text-[9px] uppercase">Availability</p>
                           <p className="text-purple-400 text-sm font-mono mt-0.5">{perf.availability}</p>
                         </div>
-                        <div className="bg-[#0B0F1A] border border-[#1E293B] rounded p-2 text-center shadow-inner">
-                          <p className="text-[#475569] text-[9px] uppercase">Complexity</p>
+                        <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded p-2 text-center shadow-inner">
+                          <p className="text-[#9CA3AF] text-[9px] uppercase">Complexity</p>
                           <p className="text-orange-400 text-sm font-mono mt-0.5">{perf.complexityScore}/100</p>
                         </div>
                       </div>
                       {perf.bottlenecks.length > 0 && (
                         <div className="mt-2">
-                          <p className="text-[#94A3B8] text-[10px] mb-1 font-semibold">Potential Bottlenecks:</p>
-                          <ul className="list-disc pl-4 text-[10px] text-[#64748B] space-y-0.5">
+                          <p className="text-[#4B5563] text-[10px] mb-1 font-semibold">Potential Bottlenecks:</p>
+                          <ul className="list-disc pl-4 text-[10px] text-[#6B7280] space-y-0.5">
                             {perf.bottlenecks.map((b, i) => <li key={i}>{b}</li>)}
                           </ul>
                         </div>
@@ -443,30 +443,30 @@ export function NodeDetailPane() {
 
             {/* Cost Estimate */}
             {(graph.nodes?.length || 0) > 0 && (
-              <div className="p-4 border-b border-[#1E293B]">
-                <p className="text-[#475569] text-[10px] uppercase tracking-widest font-semibold mb-3 flex items-center justify-between">
+              <div className="p-4 border-b border-[#E5E7EB]">
+                <p className="text-[#9CA3AF] text-[10px] uppercase tracking-widest font-semibold mb-3 flex items-center justify-between">
                   <span className="flex items-center gap-1.5"><DollarSign className="w-3.5 h-3.5" /> Estimated Cost</span>
                   <span className="text-emerald-400 font-mono">${estimateCost(graph).awsMonthly}/mo</span>
                 </p>
                 <div className="flex gap-2 mb-3">
-                  <div className="flex-1 bg-[#1E293B]/50 border border-[#334155] rounded p-1.5 text-center">
-                    <p className="text-[8px] text-[#94A3B8] uppercase">AWS</p>
-                    <p className="text-xs font-mono text-[#F8FAFC]">${estimateCost(graph).awsMonthly}</p>
+                  <div className="flex-1 bg-[#E5E7EB]/50 border border-[#D1D5DB] rounded p-1.5 text-center">
+                    <p className="text-[8px] text-[#4B5563] uppercase">AWS</p>
+                    <p className="text-xs font-mono text-[#030712]">${estimateCost(graph).awsMonthly}</p>
                   </div>
-                  <div className="flex-1 bg-[#1E293B]/50 border border-[#334155] rounded p-1.5 text-center">
-                    <p className="text-[8px] text-[#94A3B8] uppercase">GCP</p>
-                    <p className="text-xs font-mono text-[#F8FAFC]">${estimateCost(graph).gcpMonthly}</p>
+                  <div className="flex-1 bg-[#E5E7EB]/50 border border-[#D1D5DB] rounded p-1.5 text-center">
+                    <p className="text-[8px] text-[#4B5563] uppercase">GCP</p>
+                    <p className="text-xs font-mono text-[#030712]">${estimateCost(graph).gcpMonthly}</p>
                   </div>
-                  <div className="flex-1 bg-[#1E293B]/50 border border-[#334155] rounded p-1.5 text-center">
-                    <p className="text-[8px] text-[#94A3B8] uppercase">Azure</p>
-                    <p className="text-xs font-mono text-[#F8FAFC]">${estimateCost(graph).azureMonthly}</p>
+                  <div className="flex-1 bg-[#E5E7EB]/50 border border-[#D1D5DB] rounded p-1.5 text-center">
+                    <p className="text-[8px] text-[#4B5563] uppercase">Azure</p>
+                    <p className="text-xs font-mono text-[#030712]">${estimateCost(graph).azureMonthly}</p>
                   </div>
                 </div>
                 <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
                   {estimateCost(graph).breakdown.map(item => (
-                    <div key={item.nodeId} className="flex justify-between items-center text-xs p-1.5 hover:bg-[#1E293B] rounded">
-                      <span className="text-[#CBD5E1] truncate mr-2" title={item.description}>{item.label}</span>
-                      <span className="text-[#94A3B8] font-mono">${item.cost}</span>
+                    <div key={item.nodeId} className="flex justify-between items-center text-xs p-1.5 hover:bg-[#E5E7EB] rounded">
+                      <span className="text-[#374151] truncate mr-2" title={item.description}>{item.label}</span>
+                      <span className="text-[#4B5563] font-mono">${item.cost}</span>
                     </div>
                   ))}
                 </div>
@@ -474,10 +474,10 @@ export function NodeDetailPane() {
             )}
 
             {/* Requirements section */}
-            <div className="p-4 border-b border-[#1E293B]">
-              <p className="text-[#475569] text-[10px] uppercase tracking-widest font-semibold mb-3 flex items-center justify-between">
+            <div className="p-4 border-b border-[#E5E7EB]">
+              <p className="text-[#9CA3AF] text-[10px] uppercase tracking-widest font-semibold mb-3 flex items-center justify-between">
                 <span>Requirements</span>
-                <span className="font-mono lowercase text-[#64748B]">{metCount}/{totalCount} met</span>
+                <span className="font-mono lowercase text-[#6B7280]">{metCount}/{totalCount} met</span>
               </p>
               <div className="space-y-2">
                 {graph.utilities_checklist?.map((u, i) => (
@@ -505,7 +505,7 @@ export function NodeDetailPane() {
                         >
                           {u.item}
                         </p>
-                        <p className="text-[#94A3B8] text-xs mt-1 leading-relaxed">{u.description}</p>
+                        <p className="text-[#4B5563] text-xs mt-1 leading-relaxed">{u.description}</p>
                       </div>
                     </div>
                   </div>
@@ -515,7 +515,7 @@ export function NodeDetailPane() {
 
             {/* Actions */}
             <div className="p-4">
-              <p className="text-[#475569] text-[10px] uppercase tracking-widest font-semibold mb-3">Actions</p>
+              <p className="text-[#9CA3AF] text-[10px] uppercase tracking-widest font-semibold mb-3">Actions</p>
               <div className="flex gap-2 mb-2">
                 <button
                   onClick={() => {
@@ -525,7 +525,7 @@ export function NodeDetailPane() {
                     URL.revokeObjectURL(url);
                     toast.success('JSON exported!');
                   }}
-                  className="flex-1 py-2 rounded-lg border border-[#1E293B] bg-[#0F172A] hover:bg-[#1E293B] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] text-xs font-medium transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] hover:bg-[#E5E7EB] hover:border-[#3B82F6]/50 text-[#4B5563] hover:text-[#111827] text-xs font-medium transition-all flex items-center justify-center gap-2"
                 >
                   <span>{'{ }'}</span> JSON
                 </button>
@@ -538,7 +538,7 @@ export function NodeDetailPane() {
                     URL.revokeObjectURL(url);
                     toast.success('Markdown exported!');
                   }}
-                  className="flex-1 py-2 rounded-lg border border-[#1E293B] bg-[#0F172A] hover:bg-[#1E293B] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] text-xs font-medium transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] hover:bg-[#E5E7EB] hover:border-[#3B82F6]/50 text-[#4B5563] hover:text-[#111827] text-xs font-medium transition-all flex items-center justify-center gap-2"
                 >
                   <FileText className="w-4 h-4" /> Markdown
                 </button>
@@ -551,7 +551,7 @@ export function NodeDetailPane() {
                     URL.revokeObjectURL(url);
                     toast.success('OpenAPI exported!');
                   }}
-                  className="flex-1 py-2 rounded-lg border border-[#1E293B] bg-[#0F172A] hover:bg-[#1E293B] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] text-xs font-medium transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] hover:bg-[#E5E7EB] hover:border-[#3B82F6]/50 text-[#4B5563] hover:text-[#111827] text-xs font-medium transition-all flex items-center justify-center gap-2"
                 >
                   <Link className="w-4 h-4" /> OpenAPI
                 </button>
@@ -564,7 +564,7 @@ export function NodeDetailPane() {
                     URL.revokeObjectURL(url);
                     toast.success('Terraform exported!');
                   }}
-                  className="flex-1 py-2 rounded-lg border border-[#1E293B] bg-[#0F172A] hover:bg-[#1E293B] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] text-xs font-medium transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] hover:bg-[#E5E7EB] hover:border-[#3B82F6]/50 text-[#4B5563] hover:text-[#111827] text-xs font-medium transition-all flex items-center justify-center gap-2"
                 >
                   <Cloud className="w-4 h-4" /> TF
                 </button>
@@ -576,14 +576,14 @@ export function NodeDetailPane() {
                     if (!flowEl) return toast.error('Canvas not found');
                     toast.loading('Exporting image...', { id: 'img-export' });
                     try {
-                      const dataUrl = await toPng(flowEl, { backgroundColor: '#0B0F1A' });
+                      const dataUrl = await toPng(flowEl, { backgroundColor: '#FFFFFF' });
                       const a = document.createElement('a'); a.href = dataUrl; a.download = 'architecture.png'; a.click();
                       toast.success('Image exported!', { id: 'img-export' });
                     } catch (e) {
                       toast.error('Export failed', { id: 'img-export' });
                     }
                   }}
-                  className="flex-1 py-2 rounded-lg border border-[#1E293B] bg-[#0F172A] hover:bg-[#1E293B] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] text-xs font-medium transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] hover:bg-[#E5E7EB] hover:border-[#3B82F6]/50 text-[#4B5563] hover:text-[#111827] text-xs font-medium transition-all flex items-center justify-center gap-2"
                 >
                   <Image className="w-4 h-4" /> PNG
                 </button>
@@ -601,7 +601,7 @@ export function NodeDetailPane() {
                     URL.revokeObjectURL(url);
                     toast.success('CSV exported!');
                   }}
-                  className="flex-1 py-2 rounded-lg border border-[#1E293B] bg-[#0F172A] hover:bg-[#1E293B] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] text-xs font-medium transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] hover:bg-[#E5E7EB] hover:border-[#3B82F6]/50 text-[#4B5563] hover:text-[#111827] text-xs font-medium transition-all flex items-center justify-center gap-2"
                 >
                   <FileSpreadsheet className="w-4 h-4" /> CSV
                 </button>
@@ -609,10 +609,10 @@ export function NodeDetailPane() {
               
               <div className="flex flex-col gap-2">
                 {loadingRepos ? (
-                  <div className="text-xs text-[#94A3B8] text-center py-2 flex justify-center items-center gap-1.5"><Loader2 className="w-3.5 h-3.5 animate-spin" /> Loading repositories...</div>
+                  <div className="text-xs text-[#4B5563] text-center py-2 flex justify-center items-center gap-1.5"><Loader2 className="w-3.5 h-3.5 animate-spin" /> Loading repositories...</div>
                 ) : (
                   <select
-                    className="w-full bg-[#0F172A] border border-[#1E293B] focus:border-[#3B82F6]/50 text-xs rounded-lg px-2.5 py-2 outline-none font-mono text-[#64748B] transition-colors appearance-none"
+                    className="w-full bg-[#F9FAFB] border border-[#E5E7EB] focus:border-[#3B82F6]/50 text-xs rounded-lg px-2.5 py-2 outline-none font-mono text-[#6B7280] transition-colors appearance-none"
                     value={selectedRepo}
                     onChange={(e) => setSelectedRepo(e.target.value)}
                   >
@@ -628,10 +628,10 @@ export function NodeDetailPane() {
                 {selectedRepo && (
                   <>
                     {loadingBranches ? (
-                      <div className="text-xs text-[#94A3B8] text-center py-2 flex justify-center items-center gap-1.5"><Loader2 className="w-3.5 h-3.5 animate-spin" /> Loading branches...</div>
+                      <div className="text-xs text-[#4B5563] text-center py-2 flex justify-center items-center gap-1.5"><Loader2 className="w-3.5 h-3.5 animate-spin" /> Loading branches...</div>
                     ) : (
                       <select
-                        className="w-full bg-[#0F172A] border border-[#1E293B] focus:border-[#3B82F6]/50 text-xs rounded-lg px-2.5 py-2 outline-none font-mono text-[#64748B] transition-colors appearance-none"
+                        className="w-full bg-[#F9FAFB] border border-[#E5E7EB] focus:border-[#3B82F6]/50 text-xs rounded-lg px-2.5 py-2 outline-none font-mono text-[#6B7280] transition-colors appearance-none"
                         value={selectedBranch}
                         onChange={(e) => setSelectedBranch(e.target.value)}
                       >
@@ -647,7 +647,7 @@ export function NodeDetailPane() {
                     {!showCreateBranch ? (
                       <button
                         onClick={() => setShowCreateBranch(true)}
-                        className="w-full py-1.5 rounded-lg border border-[#1E293B] bg-transparent hover:bg-[#1E293B] text-[#94A3B8] hover:text-[#F1F5F9] text-xs font-medium transition-all flex items-center justify-center gap-1.5"
+                        className="w-full py-1.5 rounded-lg border border-[#E5E7EB] bg-transparent hover:bg-[#E5E7EB] text-[#4B5563] hover:text-[#111827] text-xs font-medium transition-all flex items-center justify-center gap-1.5"
                       >
                         <Plus className="w-3 h-3" /> Create New Branch
                       </button>
@@ -659,7 +659,7 @@ export function NodeDetailPane() {
                           value={newBranchName}
                           onChange={(e) => setNewBranchName(e.target.value)}
                           disabled={creatingBranch}
-                          className="flex-1 bg-[#0F172A] border border-[#1E293B] focus:border-[#3B82F6]/50 text-xs rounded-lg px-2 py-1 outline-none font-mono text-[#F8FAFC] transition-colors"
+                          className="flex-1 bg-[#F9FAFB] border border-[#E5E7EB] focus:border-[#3B82F6]/50 text-xs rounded-lg px-2 py-1 outline-none font-mono text-[#030712] transition-colors"
                         />
                         <button
                           onClick={handleCreateBranch}
@@ -671,7 +671,7 @@ export function NodeDetailPane() {
                         <button
                           onClick={() => { setShowCreateBranch(false); setNewBranchName(''); }}
                           disabled={creatingBranch}
-                          className="bg-transparent border border-[#1E293B] hover:bg-[#1E293B] text-[#94A3B8] text-xs px-2.5 py-1 rounded-lg transition-colors"
+                          className="bg-transparent border border-[#E5E7EB] hover:bg-[#E5E7EB] text-[#4B5563] text-xs px-2.5 py-1 rounded-lg transition-colors"
                         >
                           Cancel
                         </button>
@@ -682,7 +682,7 @@ export function NodeDetailPane() {
 
                 {wsStatus === 'preview' ? (
                   <div className="flex flex-col gap-2 mt-2">
-                    <div className="bg-[#1E293B] rounded-lg p-3 text-xs text-[#E2E8F0] max-h-48 overflow-y-auto">
+                    <div className="bg-[#E5E7EB] rounded-lg p-3 text-xs text-[#1F2937] max-h-48 overflow-y-auto">
                       <h4 className="font-bold text-[#3B82F6] mb-2">Generation Preview ({successRatio} Nodes Success)</h4>
                       <div className="whitespace-pre-wrap font-mono text-[10px] opacity-90">{gapReport}</div>
                     </div>
@@ -696,7 +696,7 @@ export function NodeDetailPane() {
                     <button
                       onClick={() => setWsStatus('idle')}
                       disabled={wsStatus === 'pushing'}
-                      className="w-full bg-transparent border border-[#334155] hover:bg-[#334155] disabled:opacity-50 text-[#94A3B8] text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
+                      className="w-full bg-transparent border border-[#D1D5DB] hover:bg-[#D1D5DB] disabled:opacity-50 text-[#4B5563] text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
                     >
                       Cancel
                     </button>

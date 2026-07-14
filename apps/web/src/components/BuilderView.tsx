@@ -189,14 +189,14 @@ export function BuilderView() {
   }, [graph, id]);
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden bg-[#0F172A] select-none text-[#F1F5F9] font-sans">
+    <div className="flex w-screen h-screen overflow-hidden bg-[#F9FAFB] select-none text-[#111827] font-sans">
       {/* Loading overlay */}
       {isLoading && (
-        <div className="absolute inset-0 z-[200] flex items-center justify-center bg-[#0B0F1A]/80 backdrop-blur-sm">
+        <div className="absolute inset-0 z-[200] flex items-center justify-center bg-[#FFFFFF]/80 backdrop-blur-sm">
           <div className="flex flex-col items-center">
             <div className="w-8 h-8 rounded-full border-2 border-[#3B82F6] border-t-transparent animate-spin mb-4" />
             <p className="text-[#3B82F6] text-sm font-semibold tracking-wide">Designing architecture…</p>
-            <p className="text-[#64748B] text-xs mt-1">Generating nodes and enforcing constraints</p>
+            <p className="text-[#6B7280] text-xs mt-1">Generating nodes and enforcing constraints</p>
           </div>
         </div>
       )}
@@ -212,7 +212,7 @@ export function BuilderView() {
           <div className="flex items-center gap-4 pointer-events-auto flex-1 basis-0">
             <button 
               onClick={() => navigate('/')}
-              className="flex items-center justify-center w-8 h-8 bg-[#1E293B]/80 hover:bg-[#334155] border border-[#334155] rounded-lg text-[#F1F5F9] backdrop-blur-md transition-colors shadow-lg shrink-0"
+              className="flex items-center justify-center w-8 h-8 bg-[#E5E7EB]/80 hover:bg-[#D1D5DB] border border-[#D1D5DB] rounded-lg text-[#111827] backdrop-blur-md transition-colors shadow-lg shrink-0"
               title="Back to Dashboard"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -228,19 +228,19 @@ export function BuilderView() {
                   useArchStore.getState().updateProjectName(e.target.value);
                 }}
                 placeholder="Untitled Workspace"
-                className="bg-transparent border border-transparent hover:border-[#334155] focus:border-[#3B82F6] focus:bg-[#0B0F1A]/80 rounded-md px-2 py-1 text-[#F1F5F9] font-semibold text-lg w-full max-w-[400px] text-center outline-none transition-all placeholder-[#64748B] text-ellipsis overflow-hidden whitespace-nowrap"
+                className="bg-transparent border border-transparent hover:border-[#D1D5DB] focus:border-[#3B82F6] focus:bg-[#FFFFFF]/80 rounded-md px-2 py-1 text-[#111827] font-semibold text-lg w-full max-w-[400px] text-center outline-none transition-all placeholder-[#6B7280] text-ellipsis overflow-hidden whitespace-nowrap"
               />
             )}
             
             {graph && (id?.startsWith('template_') || id?.startsWith('custom_')) && (
-              <h2 className="text-[#F1F5F9] font-semibold text-lg px-2 py-1 text-center truncate w-full max-w-[400px]">
+              <h2 className="text-[#111827] font-semibold text-lg px-2 py-1 text-center truncate w-full max-w-[400px]">
                 {graph.project_name || 'Template Preview'}
               </h2>
             )}
           </div>
 
           <div className="pointer-events-auto flex items-center justify-end gap-2 flex-1 basis-0 relative">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-[#1E293B]/80 border border-[#334155] rounded-full text-xs font-medium text-[#94A3B8] backdrop-blur-md whitespace-nowrap shrink-0">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-[#E5E7EB]/80 border border-[#D1D5DB] rounded-full text-xs font-medium text-[#4B5563] backdrop-blur-md whitespace-nowrap shrink-0">
               {id?.startsWith('template_') ? (
               <>
                 <div className="w-3.5 h-3.5 flex items-center justify-center text-amber-400">
@@ -250,7 +250,7 @@ export function BuilderView() {
               </>
             ) : saveStatus === 'saving' ? (
               <>
-                <div className="w-3 h-3 rounded-full border-2 border-[#94A3B8] border-t-transparent animate-spin" />
+                <div className="w-3 h-3 rounded-full border-2 border-[#4B5563] border-t-transparent animate-spin" />
                 Saving...
               </>
             ) : (
@@ -264,13 +264,13 @@ export function BuilderView() {
             <div className="relative">
               <button 
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#1E293B]/80 hover:bg-[#334155] border border-[#334155] text-[#F1F5F9] backdrop-blur-md transition-colors shadow-lg"
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#E5E7EB]/80 hover:bg-[#D1D5DB] border border-[#D1D5DB] text-[#111827] backdrop-blur-md transition-colors shadow-lg"
               >
                 <MoreVertical className="w-4 h-4" />
               </button>
               
               {isMenuOpen && (
-                <div className="absolute top-10 right-0 w-48 bg-[#0F172A] border border-[#1E293B] rounded-xl shadow-2xl py-2 z-[100] flex flex-col gap-1 px-2">
+                <div className="absolute top-10 right-0 w-48 bg-[#F9FAFB] border border-[#E5E7EB] rounded-xl shadow-2xl py-2 z-[100] flex flex-col gap-1 px-2">
                   <button
                     onClick={() => {
                       setIsMenuOpen(false);
@@ -289,7 +289,7 @@ export function BuilderView() {
                       setIsMenuOpen(false);
                       setShowNotes(true);
                     }}
-                    className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-[#F1F5F9] hover:bg-[#1E293B] rounded-lg transition-colors w-full text-left"
+                    className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-[#111827] hover:bg-[#E5E7EB] rounded-lg transition-colors w-full text-left"
                   >
                     <BookOpen className="w-4 h-4" />
                     Design Notes
@@ -297,7 +297,7 @@ export function BuilderView() {
 
                   {(!id?.startsWith('template_') && !id?.startsWith('custom_')) && graph?.nodes?.length > 0 && (
                     <>
-                      <div className="h-px bg-[#1E293B] my-1 mx-1" />
+                      <div className="h-px bg-[#E5E7EB] my-1 mx-1" />
                       <button
                         onClick={() => {
                           setIsMenuOpen(false);
@@ -314,7 +314,7 @@ export function BuilderView() {
                           });
                           toast.success('Saved as template!');
                         }}
-                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-[#F1F5F9] hover:bg-[#1E293B] rounded-lg transition-colors w-full text-left"
+                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-[#111827] hover:bg-[#E5E7EB] rounded-lg transition-colors w-full text-left"
                       >
                         Save as Template
                       </button>
@@ -346,7 +346,7 @@ export function BuilderView() {
         </div>
 
         {/* The React Flow Canvas */}
-        <div className="flex-1 bg-[#0B0F1A] relative z-0">
+        <div className="flex-1 bg-[#FFFFFF] relative z-0">
           <BuilderCanvas />
         </div>
 

@@ -36,17 +36,17 @@ export function PromptBar() {
       {files.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 self-start">
           {files.map((file, i) => (
-            <div key={i} className="flex items-center gap-2 bg-[#1E293B] border border-[#334155] text-xs text-[#E2E8F0] px-3 py-1.5 rounded-full shadow-lg">
+            <div key={i} className="flex items-center gap-2 bg-[#E5E7EB] border border-[#D1D5DB] text-xs text-[#1F2937] px-3 py-1.5 rounded-full shadow-lg">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
               <span className="max-w-[150px] truncate">{file.name}</span>
-              <button onClick={() => removeFile(i)} className="ml-1 text-[#94A3B8] hover:text-red-400">
+              <button onClick={() => removeFile(i)} className="ml-1 text-[#4B5563] hover:text-red-400">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
               </button>
             </div>
           ))}
         </div>
       )}
-      <div className="relative w-full flex gap-2 bg-[#0B0F1A]/90 backdrop-blur-md border border-[#1E293B] p-2 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.4)]">
+      <div className="relative w-full flex gap-2 bg-[#FFFFFF]/90 backdrop-blur-md border border-[#E5E7EB] p-2 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.4)]">
         <input
           type="file"
           multiple
@@ -58,13 +58,13 @@ export function PromptBar() {
         <button
           onClick={() => fileInputRef.current?.click()}
           disabled={files.length >= 5}
-          className={`px-3 transition-colors flex items-center justify-center ${files.length >= 5 ? 'text-[#334155] cursor-not-allowed' : 'text-[#64748B] hover:text-[#3B82F6]'}`}
+          className={`px-3 transition-colors flex items-center justify-center ${files.length >= 5 ? 'text-[#D1D5DB] cursor-not-allowed' : 'text-[#6B7280] hover:text-[#3B82F6]'}`}
           title="Attach architecture document (Max 5)"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
         </button>
         <input
-          className="flex-1 bg-transparent border-none text-[#F1F5F9] px-2 py-2 text-sm outline-none placeholder:text-[#475569] font-[Inter]"
+          className="flex-1 bg-transparent border-none text-[#111827] px-2 py-2 text-sm outline-none placeholder:text-[#9CA3AF] font-[Inter]"
           placeholder="Describe your system or attach a document..."
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
@@ -78,7 +78,7 @@ export function PromptBar() {
           {isLoading ? 'Generating…' : 'Generate'}
         </button>
         {error && (
-          <div className="absolute top-full mt-2 left-2 text-red-400 text-xs bg-[#0F172A] border border-red-900 px-3 py-1.5 rounded-md shadow-lg z-10">{error}</div>
+          <div className="absolute top-full mt-2 left-2 text-red-400 text-xs bg-[#F9FAFB] border border-red-900 px-3 py-1.5 rounded-md shadow-lg z-10">{error}</div>
         )}
       </div>
     </div>

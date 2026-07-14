@@ -44,7 +44,7 @@ export function QuickActions() {
 
   return (
     <section className="mb-12">
-      <h2 className="text-sm font-semibold text-[#64748B] uppercase tracking-wider mb-4">Quick Actions</h2>
+      <h2 className="text-sm font-semibold text-[#6B7280] uppercase tracking-wider mb-4">Quick Actions</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {actions.map((action, i) => {
           const Icon = action.icon;
@@ -71,17 +71,17 @@ export function QuickActions() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
               whileHover={isLocked ? {} : { y: -2 }}
-              className={`flex items-center gap-4 p-4 rounded-xl bg-[#0F172A] border border-[#1E293B] ${isLocked ? 'opacity-70 cursor-not-allowed' : action.border} transition-all text-left shadow-sm ${isLocked ? '' : 'hover:shadow-md'} group relative`}
+              className={`flex items-center gap-4 p-4 rounded-xl bg-[#F9FAFB] border border-[#E5E7EB] ${isLocked ? 'opacity-70 cursor-not-allowed' : action.border} transition-all text-left shadow-sm ${isLocked ? '' : 'hover:shadow-md'} group relative`}
             >
               {isLocked && (
-                <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#1E293B] flex items-center justify-center">
-                  <Lock className="w-3 h-3 text-[#94A3B8]" />
+                <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#E5E7EB] flex items-center justify-center">
+                  <Lock className="w-3 h-3 text-[#4B5563]" />
                 </div>
               )}
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${action.bg} ${action.color} ${isLocked ? 'opacity-50' : ''}`}>
                 <Icon className={`w-5 h-5 transition-transform ${isLocked ? '' : 'group-hover:scale-110'}`} />
               </div>
-              <span className={`font-semibold ${isLocked ? 'text-[#94A3B8]' : 'text-[#F1F5F9]'}`}>{action.label}</span>
+              <span className={`font-semibold ${isLocked ? 'text-[#4B5563]' : 'text-[#111827]'}`}>{action.label}</span>
             </motion.button>
           );
         })}

@@ -30,18 +30,18 @@ export function WorkspaceCard({ workspace }: { workspace: Workspace }) {
     <>
       <motion.div 
         whileHover={{ y: -4 }}
-        className="group bg-[#0F172A] border border-[#1E293B] hover:border-[#334155] rounded-xl overflow-hidden shadow-lg transition-all flex flex-col h-full relative"
+        className="group bg-[#F9FAFB] border border-[#E5E7EB] hover:border-[#D1D5DB] rounded-xl overflow-hidden shadow-lg transition-all flex flex-col h-full relative"
       >
         {/* Thumbnail Area */}
         <div 
-          className="h-32 bg-[#1E293B]/50 w-full relative flex-shrink-0 cursor-pointer overflow-hidden flex items-center justify-center border-b border-[#1E293B] group/thumb"
+          className="h-32 bg-[#E5E7EB]/50 w-full relative flex-shrink-0 cursor-pointer overflow-hidden flex items-center justify-center border-b border-[#E5E7EB] group/thumb"
           onClick={() => navigate(`/workspace/${workspace.id}`)}
         >
           {workspace.thumbnail ? (
             <img src={workspace.thumbnail} alt={workspace.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
           ) : (
-            <div className="flex flex-col items-center justify-center text-[#475569]">
-              <div className="w-16 h-16 rounded-full border border-dashed border-[#475569] flex items-center justify-center opacity-50">
+            <div className="flex flex-col items-center justify-center text-[#9CA3AF]">
+              <div className="w-16 h-16 rounded-full border border-dashed border-[#9CA3AF] flex items-center justify-center opacity-50">
                  <span className="text-xs">Preview</span>
               </div>
             </div>
@@ -55,7 +55,7 @@ export function WorkspaceCard({ workspace }: { workspace: Workspace }) {
           </div>
 
           {/* Simulate Action on Hover */}
-          <div className="absolute inset-0 bg-[#0F172A]/60 backdrop-blur-[2px] opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
+          <div className="absolute inset-0 bg-[#F9FAFB]/60 backdrop-blur-[2px] opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
              <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -73,7 +73,7 @@ export function WorkspaceCard({ workspace }: { workspace: Workspace }) {
         <div className="p-4 flex-1 flex flex-col">
           <div className="flex justify-between items-start mb-1">
             <h3 
-              className="text-[#F1F5F9] font-bold text-base truncate cursor-pointer hover:text-[#3B82F6] transition-colors"
+              className="text-[#111827] font-bold text-base truncate cursor-pointer hover:text-[#3B82F6] transition-colors"
               onClick={() => navigate(`/workspace/${workspace.id}`)}
             >
               {workspace.name}
@@ -81,16 +81,16 @@ export function WorkspaceCard({ workspace }: { workspace: Workspace }) {
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="text-[#64748B] hover:text-[#F1F5F9] p-1 rounded-md hover:bg-[#1E293B] transition-colors -mr-1">
+                <button className="text-[#6B7280] hover:text-[#111827] p-1 rounded-md hover:bg-[#E5E7EB] transition-colors -mr-1">
                   <MoreVertical className="w-4 h-4" />
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-40 bg-[#0F172A] border-[#1E293B] z-50 shadow-2xl">
-                <DropdownMenuItem className="text-[#F1F5F9] hover:bg-[#1E293B] hover:text-[#3B82F6] cursor-pointer" onClick={() => navigate(`/workspace/${workspace.id}`)}>
+              <DropdownMenuContent align="end" className="w-40 bg-[#F9FAFB] border-[#E5E7EB] z-50 shadow-2xl">
+                <DropdownMenuItem className="text-[#111827] hover:bg-[#E5E7EB] hover:text-[#3B82F6] cursor-pointer" onClick={() => navigate(`/workspace/${workspace.id}`)}>
                   <ExternalLink className="w-4 h-4 mr-2" /> Open
                 </DropdownMenuItem>
                 <DropdownMenuItem 
-                  className="text-[#F1F5F9] hover:bg-[#1E293B] cursor-pointer"
+                  className="text-[#111827] hover:bg-[#E5E7EB] cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                     duplicateWorkspace(workspace.id);
@@ -99,7 +99,7 @@ export function WorkspaceCard({ workspace }: { workspace: Workspace }) {
                   <Copy className="w-4 h-4 mr-2" /> Duplicate
                 </DropdownMenuItem>
                 <DropdownMenuItem 
-                  className="text-[#F1F5F9] hover:bg-[#1E293B] cursor-pointer"
+                  className="text-[#111827] hover:bg-[#E5E7EB] cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                     const newName = window.prompt('Enter new workspace name:', workspace.name);
@@ -123,36 +123,36 @@ export function WorkspaceCard({ workspace }: { workspace: Workspace }) {
             </DropdownMenu>
           </div>
 
-          <p className="text-xs text-[#64748B] mb-4 font-medium">Last edited {workspace.lastOpened}</p>
+          <p className="text-xs text-[#6B7280] mb-4 font-medium">Last edited {workspace.lastOpened}</p>
 
           <div className="grid grid-cols-2 gap-y-3 gap-x-2 mt-auto">
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold mb-0.5">Health</span>
+              <span className="text-[10px] text-[#6B7280] uppercase tracking-wider font-semibold mb-0.5">Health</span>
               {workspace.healthScore > 0 ? (
                 <span className={`text-sm font-bold ${getHealthColor(workspace.healthScore)}`}>{workspace.healthScore}%</span>
               ) : (
-                <span className="text-xs text-[#94A3B8] italic">Unanalyzed</span>
+                <span className="text-xs text-[#4B5563] italic">Unanalyzed</span>
               )}
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold mb-0.5">Cloud</span>
+              <span className="text-[10px] text-[#6B7280] uppercase tracking-wider font-semibold mb-0.5">Cloud</span>
               {workspace.serviceCount > 0 ? (
-                <span className="text-sm font-semibold text-[#CBD5E1]">{workspace.cloudProvider}</span>
+                <span className="text-sm font-semibold text-[#374151]">{workspace.cloudProvider}</span>
               ) : (
-                <span className="text-xs text-[#94A3B8] italic">N/A</span>
+                <span className="text-xs text-[#4B5563] italic">N/A</span>
               )}
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold mb-0.5">Cost</span>
+              <span className="text-[10px] text-[#6B7280] uppercase tracking-wider font-semibold mb-0.5">Cost</span>
               {workspace.estimatedCost > 0 ? (
-                <span className="text-sm font-semibold text-[#CBD5E1]">${workspace.estimatedCost}/mo</span>
+                <span className="text-sm font-semibold text-[#374151]">${workspace.estimatedCost}/mo</span>
               ) : (
-                <span className="text-xs text-[#94A3B8] italic">Unanalyzed</span>
+                <span className="text-xs text-[#4B5563] italic">Unanalyzed</span>
               )}
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold mb-0.5">Services</span>
-              <span className="text-sm font-semibold text-[#CBD5E1]">{workspace.serviceCount || 0} Nodes</span>
+              <span className="text-[10px] text-[#6B7280] uppercase tracking-wider font-semibold mb-0.5">Services</span>
+              <span className="text-sm font-semibold text-[#374151]">{workspace.serviceCount || 0} Nodes</span>
             </div>
           </div>
         </div>

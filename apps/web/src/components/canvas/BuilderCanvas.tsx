@@ -62,7 +62,7 @@ export function BuilderCanvas() {
   }, [setEdges, addStoreEdge]);
 
   return (
-    <div className="w-full h-full bg-[#0B0F1A]">
+    <div className="w-full h-full bg-[#FFFFFF]">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -75,14 +75,14 @@ export function BuilderCanvas() {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView
-        colorMode="dark"
+        colorMode="light"
         connectionMode={ConnectionMode.Loose}
         minZoom={0.2}
         maxZoom={4}
       >
-        <Background variant={BackgroundVariant.Dots} gap={24} size={2} color="#1E293B" />
+        <Background variant={BackgroundVariant.Dots} gap={24} size={2} color="#D1D5DB" />
         <Controls 
-          className="bg-[#0F172A] border-[#1E293B] fill-[#94A3B8]"
+          className="bg-white border-gray-200 fill-gray-500"
           showInteractive={false}
         />
         <MiniMap 
@@ -91,10 +91,10 @@ export function BuilderCanvas() {
             if (['postgresql', 'mongodb'].includes(st)) return '#3B82F6';
             if (['redis'].includes(st)) return '#F97316';
             if (['fastapi', 'django', 'nodejs'].includes(st)) return '#8B5CF6';
-            return '#1E293B';
+            return '#D1D5DB';
           }}
-          maskColor="rgba(11, 15, 26, 0.7)"
-          className="bg-[#0F172A] border-[#1E293B]"
+          maskColor="rgba(255, 255, 255, 0.7)"
+          className="bg-white border-gray-200"
         />
       </ReactFlow>
     </div>

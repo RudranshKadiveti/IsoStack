@@ -24,8 +24,8 @@ export function ArchitectureReviewPage() {
     return (
       <div className="p-8 max-w-7xl mx-auto pb-24 animate-in fade-in zoom-in duration-300">
         <div className="mb-10 text-center">
-          <h1 className="text-4xl font-bold text-[#F1F5F9] mb-4 font-serif">Architecture Review</h1>
-          <p className="text-[#94A3B8] max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold text-[#111827] mb-4 font-serif">Architecture Review</h1>
+          <p className="text-[#4B5563] max-w-2xl mx-auto">
             Analyze, review, and simulate your architectural designs. Upload a new design, load from the web, or select an existing workspace to begin a comprehensive review.
           </p>
         </div>
@@ -33,37 +33,37 @@ export function ArchitectureReviewPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 max-w-4xl mx-auto">
           <button 
             onClick={() => import('react-hot-toast').then(m => m.toast('This feature is currently under construction or planned for the next version of the application', { icon: '🔒' }))}
-            className="bg-[#0F172A] border border-[#1E293B] hover:border-[#1E293B] hover:bg-[#1E293B]/30 transition-all rounded-2xl p-8 flex flex-col items-center justify-center text-center group shadow-xl relative opacity-80 cursor-not-allowed"
+            className="bg-[#F9FAFB] border border-[#E5E7EB] hover:border-[#E5E7EB] hover:bg-[#E5E7EB]/30 transition-all rounded-2xl p-8 flex flex-col items-center justify-center text-center group shadow-xl relative opacity-80 cursor-not-allowed"
           >
-            <div className="absolute top-4 left-4 w-8 h-8 rounded-full bg-[#1E293B] flex items-center justify-center">
-              <Lock className="w-4 h-4 text-[#94A3B8]" />
+            <div className="absolute top-4 left-4 w-8 h-8 rounded-full bg-[#E5E7EB] flex items-center justify-center">
+              <Lock className="w-4 h-4 text-[#4B5563]" />
             </div>
-            <div className="w-16 h-16 bg-[#1E293B] rounded-full flex items-center justify-center mb-4 opacity-50">
-              <Upload className="w-8 h-8 text-[#94A3B8]" />
+            <div className="w-16 h-16 bg-[#E5E7EB] rounded-full flex items-center justify-center mb-4 opacity-50">
+              <Upload className="w-8 h-8 text-[#4B5563]" />
             </div>
-            <h3 className="text-xl font-bold text-[#94A3B8] mb-2">Upload Architecture</h3>
-            <p className="text-[#64748B] text-sm">Upload JSON or diagram files to start a review.</p>
+            <h3 className="text-xl font-bold text-[#4B5563] mb-2">Upload Architecture</h3>
+            <p className="text-[#6B7280] text-sm">Upload JSON or diagram files to start a review.</p>
           </button>
           
           <button 
             onClick={() => import('react-hot-toast').then(m => m.toast('This feature is currently under construction or planned for the next version of the application', { icon: '🔒' }))}
-            className="bg-[#0F172A] border border-[#1E293B] hover:border-[#1E293B] hover:bg-[#1E293B]/30 transition-all rounded-2xl p-8 flex flex-col items-center justify-center text-center group shadow-xl relative opacity-80 cursor-not-allowed"
+            className="bg-[#F9FAFB] border border-[#E5E7EB] hover:border-[#E5E7EB] hover:bg-[#E5E7EB]/30 transition-all rounded-2xl p-8 flex flex-col items-center justify-center text-center group shadow-xl relative opacity-80 cursor-not-allowed"
           >
-            <div className="absolute top-4 left-4 w-8 h-8 rounded-full bg-[#1E293B] flex items-center justify-center">
-              <Lock className="w-4 h-4 text-[#94A3B8]" />
+            <div className="absolute top-4 left-4 w-8 h-8 rounded-full bg-[#E5E7EB] flex items-center justify-center">
+              <Lock className="w-4 h-4 text-[#4B5563]" />
             </div>
-            <div className="w-16 h-16 bg-[#1E293B] rounded-full flex items-center justify-center mb-4 opacity-50">
-              <Globe className="w-8 h-8 text-[#94A3B8]" />
+            <div className="w-16 h-16 bg-[#E5E7EB] rounded-full flex items-center justify-center mb-4 opacity-50">
+              <Globe className="w-8 h-8 text-[#4B5563]" />
             </div>
-            <h3 className="text-xl font-bold text-[#94A3B8] mb-2">Load from Web</h3>
-            <p className="text-[#64748B] text-sm">Import public architectures or templates via URL.</p>
+            <h3 className="text-xl font-bold text-[#4B5563] mb-2">Load from Web</h3>
+            <p className="text-[#6B7280] text-sm">Import public architectures or templates via URL.</p>
           </button>
         </div>
 
         <div className="mt-8">
-          <h2 className="text-sm font-semibold text-[#64748B] uppercase tracking-wider mb-6">Select a Workspace to Review</h2>
+          <h2 className="text-sm font-semibold text-[#6B7280] uppercase tracking-wider mb-6">Select a Workspace to Review</h2>
           {workspaces.length === 0 ? (
-             <div className="text-center py-10 text-[#94A3B8]">No workspaces found. Create one first!</div>
+             <div className="text-center py-10 text-[#4B5563]">No workspaces found. Create one first!</div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {workspaces.map((workspace) => (
@@ -85,11 +85,11 @@ export function ArchitectureReviewPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <button onClick={() => setSelectedWorkspace(null)} className="text-[#94A3B8] hover:text-[#F1F5F9] text-sm mb-2 font-medium transition-colors">
+          <button onClick={() => setSelectedWorkspace(null)} className="text-[#4B5563] hover:text-[#111827] text-sm mb-2 font-medium transition-colors">
             &larr; Back to Selection
           </button>
-          <h1 className="text-2xl font-bold text-[#F1F5F9]">{selectedWorkspace.name} - Review</h1>
-          <p className="text-sm text-[#94A3B8] mt-1">Reviewing design, security, and deployment metrics.</p>
+          <h1 className="text-2xl font-bold text-[#111827]">{selectedWorkspace.name} - Review</h1>
+          <p className="text-sm text-[#4B5563] mt-1">Reviewing design, security, and deployment metrics.</p>
         </div>
         <button 
           onClick={handleSimulate}
@@ -101,7 +101,7 @@ export function ArchitectureReviewPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-4 border-b border-[#1E293B] mb-8 overflow-x-auto no-scrollbar pb-2">
+      <div className="flex gap-4 border-b border-[#E5E7EB] mb-8 overflow-x-auto no-scrollbar pb-2">
         <TabButton active={activeTab === 'overview'} onClick={() => setActiveTab('overview')} label="Overview & Ratings" />
         <TabButton active={activeTab === 'inference'} onClick={() => setActiveTab('inference')} label="AI Inference" />
         <TabButton active={activeTab === 'security'} onClick={() => setActiveTab('security')} label="Security Concerns" />
@@ -110,7 +110,7 @@ export function ArchitectureReviewPage() {
       </div>
 
       {/* Tab Content */}
-      <div className="flex-1 bg-[#0F172A] border border-[#1E293B] rounded-2xl p-6 overflow-y-auto shadow-2xl relative custom-scrollbar">
+      <div className="flex-1 bg-[#F9FAFB] border border-[#E5E7EB] rounded-2xl p-6 overflow-y-auto shadow-2xl relative custom-scrollbar">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -123,50 +123,50 @@ export function ArchitectureReviewPage() {
             {activeTab === 'overview' && (
               <div className="space-y-8 max-w-5xl">
                 <div>
-                  <h2 className="text-xl font-bold text-[#F1F5F9] mb-2 flex items-center gap-2">
+                  <h2 className="text-xl font-bold text-[#111827] mb-2 flex items-center gap-2">
                     <Zap className="w-5 h-5 text-yellow-500" /> PERFORMANCE ANALYSIS
                   </h2>
-                  <p className="text-[#94A3B8] text-sm mb-6">
+                  <p className="text-[#4B5563] text-sm mb-6">
                     Based on the <strong>{selectedWorkspace.name}</strong> components, here is the projected performance profile.
                   </p>
                   
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-[#1E293B]/40 border border-[#334155] p-5 rounded-xl flex flex-col items-center justify-center text-center relative overflow-hidden">
-                      <span className="text-[#64748B] text-xs uppercase tracking-widest font-bold mb-2">Latency Score</span>
+                    <div className="bg-[#E5E7EB]/40 border border-[#D1D5DB] p-5 rounded-xl flex flex-col items-center justify-center text-center relative overflow-hidden">
+                      <span className="text-[#6B7280] text-xs uppercase tracking-widest font-bold mb-2">Latency Score</span>
                       <span className="text-2xl font-bold text-green-400">58/100</span>
-                      <details className="mt-3 text-left w-full text-xs text-[#94A3B8] cursor-pointer group">
+                      <details className="mt-3 text-left w-full text-xs text-[#4B5563] cursor-pointer group">
                         <summary className="text-[#3B82F6] hover:text-[#60A5FA] font-medium outline-none">What is Latency?</summary>
-                        <div className="mt-2 p-2 bg-[#0F172A] rounded border border-[#334155]">
+                        <div className="mt-2 p-2 bg-[#F9FAFB] rounded border border-[#D1D5DB]">
                           Latency measures the time it takes for data to pass from frontend through the {selectedWorkspace.graph?.nodes?.length || 0} nodes and back. A score of 58 indicates moderate response times. Adding caching nodes could improve this.
                         </div>
                       </details>
                     </div>
-                    <div className="bg-[#1E293B]/40 border border-[#334155] p-5 rounded-xl flex flex-col items-center justify-center text-center">
-                      <span className="text-[#64748B] text-xs uppercase tracking-widest font-bold mb-2">Throughput</span>
+                    <div className="bg-[#E5E7EB]/40 border border-[#D1D5DB] p-5 rounded-xl flex flex-col items-center justify-center text-center">
+                      <span className="text-[#6B7280] text-xs uppercase tracking-widest font-bold mb-2">Throughput</span>
                       <span className="text-2xl font-bold text-blue-400">Extreme</span>
-                      <details className="mt-3 text-left w-full text-xs text-[#94A3B8] cursor-pointer group">
+                      <details className="mt-3 text-left w-full text-xs text-[#4B5563] cursor-pointer group">
                         <summary className="text-[#3B82F6] hover:text-[#60A5FA] font-medium outline-none">Throughput meaning</summary>
-                        <div className="mt-2 p-2 bg-[#0F172A] rounded border border-[#334155]">
+                        <div className="mt-2 p-2 bg-[#F9FAFB] rounded border border-[#D1D5DB]">
                           Throughput is the volume of requests this architecture can handle. Your stateless services allow for "Extreme" horizontal scaling.
                         </div>
                       </details>
                     </div>
-                    <div className="bg-[#1E293B]/40 border border-[#334155] p-5 rounded-xl flex flex-col items-center justify-center text-center">
-                      <span className="text-[#64748B] text-xs uppercase tracking-widest font-bold mb-2">Availability</span>
+                    <div className="bg-[#E5E7EB]/40 border border-[#D1D5DB] p-5 rounded-xl flex flex-col items-center justify-center text-center">
+                      <span className="text-[#6B7280] text-xs uppercase tracking-widest font-bold mb-2">Availability</span>
                       <span className="text-2xl font-bold text-purple-400">99.9%</span>
-                      <details className="mt-3 text-left w-full text-xs text-[#94A3B8] cursor-pointer group">
+                      <details className="mt-3 text-left w-full text-xs text-[#4B5563] cursor-pointer group">
                         <summary className="text-[#3B82F6] hover:text-[#60A5FA] font-medium outline-none">Why 99.9%?</summary>
-                        <div className="mt-2 p-2 bg-[#0F172A] rounded border border-[#334155]">
+                        <div className="mt-2 p-2 bg-[#F9FAFB] rounded border border-[#D1D5DB]">
                           Based on single-AZ database deployments detected, maximum SLA guarantees hover around 99.9% (approx 43 mins downtime/month).
                         </div>
                       </details>
                     </div>
-                    <div className="bg-[#1E293B]/40 border border-[#334155] p-5 rounded-xl flex flex-col items-center justify-center text-center">
-                      <span className="text-[#64748B] text-xs uppercase tracking-widest font-bold mb-2">Complexity</span>
+                    <div className="bg-[#E5E7EB]/40 border border-[#D1D5DB] p-5 rounded-xl flex flex-col items-center justify-center text-center">
+                      <span className="text-[#6B7280] text-xs uppercase tracking-widest font-bold mb-2">Complexity</span>
                       <span className="text-2xl font-bold text-orange-400">100/100</span>
-                      <details className="mt-3 text-left w-full text-xs text-[#94A3B8] cursor-pointer group">
+                      <details className="mt-3 text-left w-full text-xs text-[#4B5563] cursor-pointer group">
                         <summary className="text-[#3B82F6] hover:text-[#60A5FA] font-medium outline-none">Complexity Breakdown</summary>
-                        <div className="mt-2 p-2 bg-[#0F172A] rounded border border-[#334155]">
+                        <div className="mt-2 p-2 bg-[#F9FAFB] rounded border border-[#D1D5DB]">
                           With {selectedWorkspace.graph?.edges?.length || 0} distinct connection pathways, maintaining this requires experienced orchestration (e.g., Kubernetes).
                         </div>
                       </details>
@@ -179,8 +179,8 @@ export function ArchitectureReviewPage() {
             {activeTab === 'inference' && (
               <div className="space-y-6 max-w-4xl">
                 <h2 className="text-xl font-bold text-indigo-400">LLM Architectural Inference</h2>
-                <div className="bg-[#1E293B]/30 border border-indigo-500/30 p-5 rounded-2xl shadow-inner text-sm">
-                  <div className="prose prose-invert prose-p:text-[#94A3B8] prose-headings:text-[#F1F5F9] max-w-none">
+                <div className="bg-[#E5E7EB]/30 border border-indigo-500/30 p-5 rounded-2xl shadow-inner text-sm">
+                  <div className="prose prose-invert prose-p:text-[#4B5563] prose-headings:text-[#111827] max-w-none">
                     <p className="leading-relaxed">
                       "Looking at the overall topology of <strong>{selectedWorkspace.name}</strong>, I can see a standard tiered architecture. You have a solid frontend communicating with a gateway, routing to backend services, which persist data in a relational store."
                     </p>
@@ -207,7 +207,7 @@ export function ArchitectureReviewPage() {
             {activeTab === 'security' && (
               <div className="space-y-6 max-w-4xl">
                 <h2 className="text-xl font-bold text-red-400">Security & Vulnerability Report</h2>
-                <p className="text-[#94A3B8] text-sm">
+                <p className="text-[#4B5563] text-sm">
                   The automated security scanner has flagged the following concerns based on the nodes provided in your design.
                 </p>
                 
@@ -244,23 +244,23 @@ export function ArchitectureReviewPage() {
             {activeTab === 'deployment' && (
               <div className="space-y-8 max-w-4xl">
                 <div>
-                  <h2 className="text-xl font-bold text-[#F1F5F9] mb-2 text-green-400">ESTIMATED COST</h2>
+                  <h2 className="text-xl font-bold text-[#111827] mb-2 text-green-400">ESTIMATED COST</h2>
                   <div className="flex gap-4 mb-6">
-                    <div className="bg-[#1E293B]/40 border border-[#334155] rounded-xl p-4 flex-1 text-center">
-                      <div className="text-xs text-[#94A3B8] font-bold tracking-wider mb-1">AWS</div>
-                      <div className="text-xl text-[#F1F5F9] font-semibold">$320</div>
+                    <div className="bg-[#E5E7EB]/40 border border-[#D1D5DB] rounded-xl p-4 flex-1 text-center">
+                      <div className="text-xs text-[#4B5563] font-bold tracking-wider mb-1">AWS</div>
+                      <div className="text-xl text-[#111827] font-semibold">$320</div>
                     </div>
-                    <div className="bg-[#1E293B]/40 border border-[#334155] rounded-xl p-4 flex-1 text-center">
-                      <div className="text-xs text-[#94A3B8] font-bold tracking-wider mb-1">GCP</div>
-                      <div className="text-xl text-[#F1F5F9] font-semibold">$304</div>
+                    <div className="bg-[#E5E7EB]/40 border border-[#D1D5DB] rounded-xl p-4 flex-1 text-center">
+                      <div className="text-xs text-[#4B5563] font-bold tracking-wider mb-1">GCP</div>
+                      <div className="text-xl text-[#111827] font-semibold">$304</div>
                     </div>
-                    <div className="bg-[#1E293B]/40 border border-[#334155] rounded-xl p-4 flex-1 text-center">
-                      <div className="text-xs text-[#94A3B8] font-bold tracking-wider mb-1">AZURE</div>
-                      <div className="text-xl text-[#F1F5F9] font-semibold">$326</div>
+                    <div className="bg-[#E5E7EB]/40 border border-[#D1D5DB] rounded-xl p-4 flex-1 text-center">
+                      <div className="text-xs text-[#4B5563] font-bold tracking-wider mb-1">AZURE</div>
+                      <div className="text-xl text-[#111827] font-semibold">$326</div>
                     </div>
                   </div>
 
-                  <div className="bg-[#1E293B]/30 border border-[#334155] rounded-xl overflow-hidden max-h-64 overflow-y-auto custom-scrollbar">
+                  <div className="bg-[#E5E7EB]/30 border border-[#D1D5DB] rounded-xl overflow-hidden max-h-64 overflow-y-auto custom-scrollbar">
                     <table className="w-full text-sm text-left">
                       <tbody>
                         {(selectedWorkspace.graph?.nodes || []).map((node, i) => {
@@ -270,11 +270,11 @@ export function ArchitectureReviewPage() {
                            if (node.serviceType.includes('postgresql')) baseCost = 45;
                            
                            return (
-                             <tr key={i} className="border-b border-[#334155]/50 hover:bg-[#334155]/20">
-                               <td className="px-6 py-4 font-medium text-[#F1F5F9]">{node.label}</td>
-                               <td className="px-6 py-4 text-right text-[#94A3B8]">
+                             <tr key={i} className="border-b border-[#D1D5DB]/50 hover:bg-[#D1D5DB]/20">
+                               <td className="px-6 py-4 font-medium text-[#111827]">{node.label}</td>
+                               <td className="px-6 py-4 text-right text-[#4B5563]">
                                  ${baseCost}
-                                 <details className="mt-1 text-left w-full text-xs text-[#64748B] cursor-pointer group">
+                                 <details className="mt-1 text-left w-full text-xs text-[#6B7280] cursor-pointer group">
                                    <summary className="text-[#3B82F6] hover:text-[#60A5FA] outline-none">Cost details</summary>
                                    <div className="mt-1">
                                      Base compute + egress bandwidth estimates for {node.serviceType}.
@@ -285,9 +285,9 @@ export function ArchitectureReviewPage() {
                            )
                         })}
                         {(!selectedWorkspace.graph?.nodes || selectedWorkspace.graph.nodes.length === 0) && (
-                          <tr className="border-b border-[#334155]/50 hover:bg-[#334155]/20">
-                            <td className="px-6 py-4 font-medium text-[#F1F5F9]">API Gateway</td>
-                            <td className="px-6 py-4 text-right text-[#94A3B8]">$15</td>
+                          <tr className="border-b border-[#D1D5DB]/50 hover:bg-[#D1D5DB]/20">
+                            <td className="px-6 py-4 font-medium text-[#111827]">API Gateway</td>
+                            <td className="px-6 py-4 text-right text-[#4B5563]">$15</td>
                           </tr>
                         )}
                       </tbody>
@@ -299,13 +299,13 @@ export function ArchitectureReviewPage() {
 
             {activeTab === 'health' && (
               <div className="space-y-6 max-w-4xl">
-                <h2 className="text-xl font-bold text-[#F1F5F9]">Design Health & Best Practices</h2>
-                <p className="text-[#94A3B8] text-sm">Evaluation of the architecture against the 12-Factor App methodology.</p>
+                <h2 className="text-xl font-bold text-[#111827]">Design Health & Best Practices</h2>
+                <p className="text-[#4B5563] text-sm">Evaluation of the architecture against the 12-Factor App methodology.</p>
                 
                 <div className="space-y-4 mt-4">
                   <div className="p-5 rounded-xl border border-green-500/20 bg-green-500/5">
-                    <h4 className="text-[#F1F5F9] font-medium text-sm">Stateless Services</h4>
-                    <p className="text-xs text-[#94A3B8] mt-2 leading-relaxed">The application tier is properly decoupled from the persistence layer. By maintaining a stateless backend architecture, the cluster can horizontally scale seamlessly.</p>
+                    <h4 className="text-[#111827] font-medium text-sm">Stateless Services</h4>
+                    <p className="text-xs text-[#4B5563] mt-2 leading-relaxed">The application tier is properly decoupled from the persistence layer. By maintaining a stateless backend architecture, the cluster can horizontally scale seamlessly.</p>
                     <details className="mt-3 text-xs text-green-400/80 cursor-pointer group">
                       <summary className="font-medium outline-none">Why is stateless better?</summary>
                       <div className="mt-2 p-2 bg-green-950/30 rounded border border-green-900/50">
@@ -315,8 +315,8 @@ export function ArchitectureReviewPage() {
                   </div>
                   
                   <div className="p-5 rounded-xl border border-yellow-500/20 bg-yellow-500/5">
-                    <h4 className="text-[#F1F5F9] font-medium text-sm">Single Point of Failure</h4>
-                    <p className="text-xs text-[#94A3B8] mt-2 leading-relaxed">Database instances are represented as single nodes. In a production setting, this should be configured in a high-availability cluster.</p>
+                    <h4 className="text-[#111827] font-medium text-sm">Single Point of Failure</h4>
+                    <p className="text-xs text-[#4B5563] mt-2 leading-relaxed">Database instances are represented as single nodes. In a production setting, this should be configured in a high-availability cluster.</p>
                     <details className="mt-3 text-xs text-yellow-400/80 cursor-pointer group">
                       <summary className="font-medium outline-none">How to resolve?</summary>
                       <div className="mt-2 p-2 bg-yellow-950/30 rounded border border-yellow-900/50">
@@ -341,7 +341,7 @@ function TabButton({ active, onClick, label }: { active: boolean, onClick: () =>
       className={`relative px-4 py-2 font-medium text-sm transition-all rounded-t-lg ${
         active 
           ? 'text-[#3B82F6]' 
-          : 'text-[#94A3B8] hover:text-[#F1F5F9]'
+          : 'text-[#4B5563] hover:text-[#111827]'
       }`}
     >
       {label}

@@ -25,17 +25,17 @@ export function ConfirmModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#0B0F1A]/80 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#FFFFFF]/80 backdrop-blur-sm">
       <AnimatePresence>
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="bg-[#0F172A] border border-[#1E293B] rounded-2xl shadow-2xl p-6 w-full max-w-md relative"
+          className="bg-[#F9FAFB] border border-[#E5E7EB] rounded-2xl shadow-2xl p-6 w-full max-w-md relative"
         >
           <button 
             onClick={onCancel}
-            className="absolute top-4 right-4 text-[#64748B] hover:text-[#F1F5F9] transition-colors"
+            className="absolute top-4 right-4 text-[#6B7280] hover:text-[#111827] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -45,15 +45,15 @@ export function ConfirmModal({
               <AlertTriangle className="w-6 h-6" />
             </div>
             <div className="pt-1">
-              <h3 className="text-lg font-semibold text-[#F1F5F9] mb-1">{title}</h3>
-              <p className="text-[#94A3B8] text-sm leading-relaxed">{message}</p>
+              <h3 className="text-lg font-semibold text-[#111827] mb-1">{title}</h3>
+              <p className="text-[#4B5563] text-sm leading-relaxed">{message}</p>
             </div>
           </div>
           
           <div className="flex justify-end gap-3">
             <button
               onClick={onCancel}
-              className="px-4 py-2 rounded-lg text-sm font-medium text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#1E293B] transition-colors"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-[#4B5563] hover:text-[#111827] hover:bg-[#E5E7EB] transition-colors"
             >
               {cancelText}
             </button>

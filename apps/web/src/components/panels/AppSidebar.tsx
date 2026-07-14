@@ -87,20 +87,20 @@ export function AppSidebar() {
 
   return (
     <>
-      <div className="w-[300px] h-full bg-[#0B0F1A] border-r border-[#1E293B] flex flex-col flex-shrink-0 z-20 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
+      <div className="w-[300px] h-full bg-[#FFFFFF] border-r border-[#E5E7EB] flex flex-col flex-shrink-0 z-20 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
       
       {/* Logo Area */}
-      <div className="h-16 px-5 flex items-center border-b border-[#1E293B]">
+      <div className="h-16 px-5 flex items-center border-b border-[#E5E7EB]">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 flex items-center justify-center rounded-full overflow-hidden border-2 border-[#334155]/60 shadow-md bg-[#0B0F1A] flex-shrink-0">
+          <div className="w-11 h-11 flex items-center justify-center rounded-full overflow-hidden border-2 border-[#D1D5DB]/60 shadow-md bg-[#FFFFFF] flex-shrink-0">
             <img src="/logo.png" alt="IsoStack Logo" className="w-full h-full object-cover object-center scale-110" />
           </div>
-          <span className="text-[#F1F5F9] text-xl font-medium tracking-wide" style={{ fontFamily: "'Newsreader', serif" }}>IsoStack</span>
+          <span className="text-[#111827] text-xl font-medium tracking-wide" style={{ fontFamily: "'Newsreader', serif" }}>IsoStack</span>
         </div>
       </div>
 
       {/* Search */}
-      <div className="p-4 border-b border-[#1E293B]">
+      <div className="p-4 border-b border-[#E5E7EB]">
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
             <input
@@ -108,13 +108,13 @@ export function AppSidebar() {
               placeholder="Search services..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-[#0F172A] border border-[#1E293B] rounded-md pl-9 pr-3 py-2 text-sm text-[#F1F5F9] placeholder-[#475569] focus:outline-none focus:border-[#3B82F6] transition-colors"
+              className="w-full bg-[#F9FAFB] border border-[#E5E7EB] rounded-md pl-9 pr-3 py-2 text-sm text-[#111827] placeholder-[#9CA3AF] focus:outline-none focus:border-[#3B82F6] transition-colors"
             />
-            <Search className="absolute left-3 top-2.5 w-4 h-4 text-[#475569]" />
+            <Search className="absolute left-3 top-2.5 w-4 h-4 text-[#9CA3AF]" />
           </div>
           <button 
             onClick={() => setShowCustomModal(true)}
-            className="w-9 h-9 flex items-center justify-center bg-[#1E293B] hover:bg-[#334155] border border-[#334155] rounded-md text-[#94A3B8] hover:text-[#F1F5F9] transition-colors"
+            className="w-9 h-9 flex items-center justify-center bg-[#E5E7EB] hover:bg-[#D1D5DB] border border-[#D1D5DB] rounded-md text-[#4B5563] hover:text-[#111827] transition-colors"
             title="Create Custom Node"
           >
             <Plus className="w-4 h-4" />
@@ -122,18 +122,18 @@ export function AppSidebar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button 
-                className={`w-9 h-9 flex items-center justify-center border rounded-md transition-colors ${filterCategory !== 'all' ? 'bg-[#3B82F6]/20 border-[#3B82F6] text-[#3B82F6]' : 'bg-[#1E293B] hover:bg-[#334155] border-[#334155] text-[#94A3B8] hover:text-[#F1F5F9]'}`}
+                className={`w-9 h-9 flex items-center justify-center border rounded-md transition-colors ${filterCategory !== 'all' ? 'bg-[#3B82F6]/20 border-[#3B82F6] text-[#3B82F6]' : 'bg-[#E5E7EB] hover:bg-[#D1D5DB] border-[#D1D5DB] text-[#4B5563] hover:text-[#111827]'}`}
                 title="Filter by category"
               >
                 <Filter className="w-4 h-4" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 bg-[#0F172A] border-[#1E293B]">
-              <DropdownMenuItem onClick={() => setFilterCategory('all')} className={filterCategory === 'all' ? 'text-[#3B82F6] bg-[#3B82F6]/10' : 'text-[#F1F5F9]'}>
+            <DropdownMenuContent align="end" className="w-48 bg-[#F9FAFB] border-[#E5E7EB]">
+              <DropdownMenuItem onClick={() => setFilterCategory('all')} className={filterCategory === 'all' ? 'text-[#3B82F6] bg-[#3B82F6]/10' : 'text-[#111827]'}>
                 All Categories
               </DropdownMenuItem>
               {Object.entries(CATEGORY_CONFIG).map(([key, config]) => (
-                <DropdownMenuItem key={key} onClick={() => setFilterCategory(key)} className={filterCategory === key ? 'text-[#3B82F6] bg-[#3B82F6]/10' : 'text-[#F1F5F9]'}>
+                <DropdownMenuItem key={key} onClick={() => setFilterCategory(key)} className={filterCategory === key ? 'text-[#3B82F6] bg-[#3B82F6]/10' : 'text-[#111827]'}>
                   <div className="flex items-center gap-2">
                     <config.icon className="w-3.5 h-3.5" />
                     {config.label}
@@ -150,11 +150,11 @@ export function AppSidebar() {
         {categories.map((cat) => (
           <div key={cat.id}>
             <div className="flex items-center gap-2 mb-3">
-              <cat.config.icon className="w-4 h-4 text-[#64748B]" />
-              <h3 className="text-[#64748B] text-xs font-semibold uppercase tracking-wider flex-1">
+              <cat.config.icon className="w-4 h-4 text-[#6B7280]" />
+              <h3 className="text-[#6B7280] text-xs font-semibold uppercase tracking-wider flex-1">
                 {cat.config.label}
               </h3>
-              <span className="text-[#334155] text-[10px] font-mono">{cat.services.length}</span>
+              <span className="text-[#D1D5DB] text-[10px] font-mono">{cat.services.length}</span>
             </div>
             
             <div className="grid grid-cols-2 gap-3">
@@ -172,15 +172,15 @@ export function AppSidebar() {
       </div>
 
       {/* Footer limits */}
-      <div className="p-4 border-t border-[#1E293B] bg-[#0F172A]">
+      <div className="p-4 border-t border-[#E5E7EB] bg-[#F9FAFB]">
         <div className="flex justify-between items-center text-xs">
-          <span className="text-[#64748B]">Nodes used</span>
+          <span className="text-[#6B7280]">Nodes used</span>
           <span className="font-mono">
             <span className={nodeCount >= maxNodes ? "text-[#EF4444]" : "text-[#4ADE80]"}>{nodeCount}</span>
-            <span className="text-[#475569]"> / {maxNodes}</span>
+            <span className="text-[#9CA3AF]"> / {maxNodes}</span>
           </span>
         </div>
-        <div className="w-full bg-[#1E293B] h-1.5 rounded-full mt-2 overflow-hidden">
+        <div className="w-full bg-[#E5E7EB] h-1.5 rounded-full mt-2 overflow-hidden">
           <div 
             className="h-full rounded-full transition-all duration-300"
             style={{ 
@@ -190,16 +190,16 @@ export function AppSidebar() {
           />
         </div>
         {user && (
-          <div className="mt-4 pt-4 border-t border-[#1E293B] flex items-center justify-between">
+          <div className="mt-4 pt-4 border-t border-[#E5E7EB] flex items-center justify-between">
             <div className="flex items-center gap-2 truncate pr-2">
-              <div className="w-6 h-6 rounded-full bg-[#334155] flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">
+              <div className="w-6 h-6 rounded-full bg-[#D1D5DB] flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">
                 {user.email?.charAt(0).toUpperCase() || 'U'}
               </div>
-              <span className="text-xs text-[#94A3B8] truncate">{user.email}</span>
+              <span className="text-xs text-[#4B5563] truncate">{user.email}</span>
             </div>
             <button 
               onClick={() => signOut()}
-              className="text-[#64748B] hover:text-[#EF4444] transition-colors p-1"
+              className="text-[#6B7280] hover:text-[#EF4444] transition-colors p-1"
               title="Sign Out"
             >
               <LogOut className="w-4 h-4" />
@@ -212,21 +212,21 @@ export function AppSidebar() {
       {/* Custom Node Modal */}
       {showCustomModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-[#1E293B]">
-              <h3 className="text-[#F1F5F9] font-bold">Create Custom Node</h3>
+          <div className="bg-[#F9FAFB] border border-[#E5E7EB] rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b border-[#E5E7EB]">
+              <h3 className="text-[#111827] font-bold">Create Custom Node</h3>
               <button 
                 onClick={() => setShowCustomModal(false)}
-                className="text-[#64748B] hover:text-[#F1F5F9] transition-colors"
+                className="text-[#6B7280] hover:text-[#111827] transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="p-4 space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] uppercase tracking-wider mb-1">Category</label>
+                <label className="block text-xs font-semibold text-[#4B5563] uppercase tracking-wider mb-1">Category</label>
                 <select 
-                  className="w-full bg-[#1E293B] border border-[#334155] rounded-md px-3 py-2 text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]"
+                  className="w-full bg-[#E5E7EB] border border-[#D1D5DB] rounded-md px-3 py-2 text-[#111827] text-sm focus:outline-none focus:border-[#3B82F6]"
                   value={customNode.category}
                   onChange={(e) => setCustomNode(prev => ({ ...prev, category: e.target.value }))}
                 >
@@ -236,29 +236,29 @@ export function AppSidebar() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] uppercase tracking-wider mb-1">Name / Label</label>
+                <label className="block text-xs font-semibold text-[#4B5563] uppercase tracking-wider mb-1">Name / Label</label>
                 <input 
                   type="text"
                   placeholder="e.g. My Legacy System"
-                  className="w-full bg-[#1E293B] border border-[#334155] rounded-md px-3 py-2 text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]"
+                  className="w-full bg-[#E5E7EB] border border-[#D1D5DB] rounded-md px-3 py-2 text-[#111827] text-sm focus:outline-none focus:border-[#3B82F6]"
                   value={customNode.label}
                   onChange={(e) => setCustomNode(prev => ({ ...prev, label: e.target.value }))}
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] uppercase tracking-wider mb-1">Description</label>
+                <label className="block text-xs font-semibold text-[#4B5563] uppercase tracking-wider mb-1">Description</label>
                 <textarea 
                   placeholder="What does this service do?"
-                  className="w-full bg-[#1E293B] border border-[#334155] rounded-md px-3 py-2 text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] resize-none h-20"
+                  className="w-full bg-[#E5E7EB] border border-[#D1D5DB] rounded-md px-3 py-2 text-[#111827] text-sm focus:outline-none focus:border-[#3B82F6] resize-none h-20"
                   value={customNode.description}
                   onChange={(e) => setCustomNode(prev => ({ ...prev, description: e.target.value }))}
                 />
               </div>
             </div>
-            <div className="p-4 border-t border-[#1E293B] flex justify-end gap-2 bg-[#0B0F1A]">
+            <div className="p-4 border-t border-[#E5E7EB] flex justify-end gap-2 bg-[#FFFFFF]">
               <button 
                 onClick={() => setShowCustomModal(false)}
-                className="px-4 py-2 text-sm text-[#94A3B8] hover:text-[#F1F5F9] transition-colors"
+                className="px-4 py-2 text-sm text-[#4B5563] hover:text-[#111827] transition-colors"
               >
                 Cancel
               </button>
@@ -315,7 +315,7 @@ function ServiceCard({ service, onAdd, disabled }: { service: Service, onAdd: (v
         className="w-7 h-7 mb-2 transition-transform group-hover:scale-110" 
         style={{ color: service.accentColor }} 
       />
-      <span className="text-xs font-semibold text-[#F1F5F9] text-center leading-tight">
+      <span className="text-xs font-semibold text-[#111827] text-center leading-tight">
         {service.label}
       </span>
       
@@ -323,7 +323,7 @@ function ServiceCard({ service, onAdd, disabled }: { service: Service, onAdd: (v
         <DropdownMenu>
           <DropdownMenuTrigger onClick={(e) => e.stopPropagation()} disabled={disabled} asChild>
             <button className="absolute bottom-1 right-1 p-1 hover:bg-black/20 rounded-md transition-colors" title="Select Variant">
-              <ChevronDown className="w-3 h-3 text-[#94A3B8]" />
+              <ChevronDown className="w-3 h-3 text-[#4B5563]" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent onClick={(e) => e.stopPropagation()} align="end">
@@ -331,7 +331,7 @@ function ServiceCard({ service, onAdd, disabled }: { service: Service, onAdd: (v
               <DropdownMenuItem key={v.id} onClick={() => onAdd(v.id)}>
                 <div className="flex flex-col">
                   <span>{v.label}</span>
-                  <span className="text-[9px] text-[#64748B] tracking-wider uppercase mt-0.5">{v.tags.slice(0,2).join(', ')}</span>
+                  <span className="text-[9px] text-[#6B7280] tracking-wider uppercase mt-0.5">{v.tags.slice(0,2).join(', ')}</span>
                 </div>
               </DropdownMenuItem>
             ))}
@@ -346,22 +346,22 @@ function ServiceCard({ service, onAdd, disabled }: { service: Service, onAdd: (v
       <TooltipTrigger asChild>
         {CardContent}
       </TooltipTrigger>
-      <TooltipContent side="right" className="w-48 p-3 bg-[#0F172A] border-[#1E293B]">
+      <TooltipContent side="right" className="w-48 p-3 bg-[#F9FAFB] border-[#E5E7EB]">
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <Icon className="w-4 h-4" style={{ color: service.accentColor }} />
-            <p className="font-semibold text-[#F1F5F9]">{service.label}</p>
+            <p className="font-semibold text-[#111827]">{service.label}</p>
           </div>
-          <p className="text-xs text-[#94A3B8] leading-relaxed">
+          <p className="text-xs text-[#4B5563] leading-relaxed">
             {service.description}
           </p>
           {hasVariants && (
-            <div className="mt-2 pt-2 border-t border-[#1E293B]">
-              <p className="text-[10px] uppercase font-semibold text-[#64748B] mb-1">Variants</p>
-              <ul className="text-xs space-y-1 text-[#CBD5E1]">
+            <div className="mt-2 pt-2 border-t border-[#E5E7EB]">
+              <p className="text-[10px] uppercase font-semibold text-[#6B7280] mb-1">Variants</p>
+              <ul className="text-xs space-y-1 text-[#374151]">
                 {service.variants.map((v) => (
                   <li key={v.id} className="flex items-center gap-1.5">
-                    <span className="w-1 h-1 rounded-full bg-[#475569]"></span>
+                    <span className="w-1 h-1 rounded-full bg-[#9CA3AF]"></span>
                     {v.label}
                   </li>
                 ))}

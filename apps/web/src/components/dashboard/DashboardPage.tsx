@@ -39,7 +39,7 @@ export function DashboardPage() {
   if (location.pathname === '/starred' || location.pathname === '/shared') {
     return (
       <div className="p-8 max-w-7xl mx-auto pb-24 flex items-center justify-center mt-20">
-        <p className="text-[#94A3B8]">This feature is under construction.</p>
+        <p className="text-[#4B5563]">This feature is under construction.</p>
       </div>
     );
   }

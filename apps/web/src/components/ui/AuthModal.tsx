@@ -64,40 +64,40 @@ export function AuthModal() {
   };
 
   return (
-    <div className="fixed inset-0 bg-[#0B0F1A]/90 backdrop-blur-md z-[999] flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-[#0F172A] border border-[#1E293B] p-8 rounded-2xl shadow-2xl max-w-md w-full flex flex-col items-center my-8">
-        <div className="w-16 h-16 rounded-full bg-[#0B0F1A] border-2 border-[#334155]/60 flex items-center justify-center mb-6 shadow-md overflow-hidden flex-shrink-0">
+    <div className="fixed inset-0 bg-[#FFFFFF]/90 backdrop-blur-md z-[999] flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-[#F9FAFB] border border-[#E5E7EB] p-8 rounded-2xl shadow-2xl max-w-md w-full flex flex-col items-center my-8">
+        <div className="w-16 h-16 rounded-full bg-[#FFFFFF] border-2 border-[#D1D5DB]/60 flex items-center justify-center mb-6 shadow-md overflow-hidden flex-shrink-0">
           <img src="/logo.png" alt="IsoStack Logo" className="w-full h-full object-cover object-center scale-110" />
         </div>
-        <h2 className="text-3xl text-[#F1F5F9] mb-2 text-center font-medium tracking-wide" style={{ fontFamily: "'Newsreader', serif" }}>Welcome to IsoStack</h2>
-        <p className="text-[#94A3B8] text-sm text-center mb-6">
+        <h2 className="text-3xl text-[#111827] mb-2 text-center font-medium tracking-wide" style={{ fontFamily: "'Newsreader', serif" }}>Welcome to IsoStack</h2>
+        <p className="text-[#4B5563] text-sm text-center mb-6">
           Sign in to generate architectures, save your progress, and export your code to GitHub.
         </p>
 
         <form onSubmit={handleEmailAuth} className="w-full space-y-3 mb-6">
           <div className="space-y-1">
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B7280]" />
               <input 
                 type="email" 
                 placeholder="Email address"
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full bg-[#1E293B] border border-[#334155] text-[#F1F5F9] rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-[#3B82F6] transition-colors"
+                className="w-full bg-[#E5E7EB] border border-[#D1D5DB] text-[#111827] rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-[#3B82F6] transition-colors"
               />
             </div>
           </div>
           <div className="space-y-1">
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B7280]" />
               <input 
                 type="password" 
                 placeholder="Password"
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full bg-[#1E293B] border border-[#334155] text-[#F1F5F9] rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-[#3B82F6] transition-colors"
+                className="w-full bg-[#E5E7EB] border border-[#D1D5DB] text-[#111827] rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-[#3B82F6] transition-colors"
               />
             </div>
           </div>
@@ -120,9 +120,9 @@ export function AuthModal() {
         </form>
 
         <div className="w-full flex items-center gap-4 mb-6">
-          <div className="h-px bg-[#1E293B] flex-1"></div>
-          <span className="text-xs text-[#64748B] uppercase tracking-wider font-semibold">Or continue with</span>
-          <div className="h-px bg-[#1E293B] flex-1"></div>
+          <div className="h-px bg-[#E5E7EB] flex-1"></div>
+          <span className="text-xs text-[#6B7280] uppercase tracking-wider font-semibold">Or continue with</span>
+          <div className="h-px bg-[#E5E7EB] flex-1"></div>
         </div>
 
         <div className="w-full space-y-3">
@@ -150,7 +150,7 @@ export function AuthModal() {
           <button
             onClick={handleGithubLogin}
             disabled={isLoadingGoogle || isLoadingGithub || isLoadingEmail}
-            className="w-full relative flex items-center justify-center gap-3 bg-[#24292F] hover:bg-[#1b1f23] text-white font-semibold px-4 py-2.5 rounded-lg transition-colors disabled:opacity-50 border border-[#475569]"
+            className="w-full relative flex items-center justify-center gap-3 bg-[#24292F] hover:bg-[#1b1f23] text-white font-semibold px-4 py-2.5 rounded-lg transition-colors disabled:opacity-50 border border-[#9CA3AF]"
           >
             {isLoadingGithub ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -165,7 +165,7 @@ export function AuthModal() {
           </button>
         </div>
         
-        <p className="mt-6 text-xs text-[#64748B] text-center px-4 leading-relaxed">
+        <p className="mt-6 text-xs text-[#6B7280] text-center px-4 leading-relaxed">
           By signing in, you agree to our Terms of Service and Privacy Policy.
         </p>
       </div>

@@ -117,17 +117,17 @@ export function FloatingCopilot() {
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              className="absolute bottom-0 w-[420px] h-[520px] bg-[#0F172A]/90 backdrop-blur-xl border border-[#1E293B] rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+              className="absolute bottom-0 w-[420px] h-[520px] bg-[#F9FAFB]/90 backdrop-blur-xl border border-[#E5E7EB] rounded-2xl shadow-2xl flex flex-col overflow-hidden"
             >
               {/* Header */}
-              <div className="h-14 border-b border-[#1E293B] flex items-center justify-between px-4 bg-[#0B0F1A]/50 shrink-0">
+              <div className="h-14 border-b border-[#E5E7EB] flex items-center justify-between px-4 bg-[#FFFFFF]/50 shrink-0">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-[#3B82F6]" />
-                  <span className="font-semibold text-[#F1F5F9] text-sm tracking-wide">Aarkus</span>
+                  <span className="font-semibold text-[#111827] text-sm tracking-wide">Aarkus</span>
                 </div>
                 <button 
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 text-[#64748B] hover:text-[#F1F5F9] hover:bg-[#1E293B] rounded-md transition-colors"
+                  className="p-1.5 text-[#6B7280] hover:text-[#111827] hover:bg-[#E5E7EB] rounded-md transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -140,7 +140,7 @@ export function FloatingCopilot() {
                     <div className={`rounded-2xl p-3 max-w-[85%] text-sm ${
                       msg.role === 'user' 
                         ? 'bg-[#3B82F6] text-white rounded-br-sm' 
-                        : 'bg-[#1E293B] text-[#F1F5F9] rounded-tl-sm markdown-body'
+                        : 'bg-[#E5E7EB] text-[#111827] rounded-tl-sm markdown-body'
                     }`}>
                       {msg.role === 'user' ? (
                         msg.content
@@ -151,11 +151,11 @@ export function FloatingCopilot() {
                             ul: ({node, ...props}) => <ul className="list-disc pl-4 mb-2 space-y-1" {...props} />,
                             ol: ({node, ...props}) => <ol className="list-decimal pl-4 mb-2 space-y-1" {...props} />,
                             li: ({node, ...props}) => <li className="leading-relaxed" {...props} />,
-                            strong: ({node, ...props}) => <strong className="font-semibold text-[#F8FAFC]" {...props} />,
+                            strong: ({node, ...props}) => <strong className="font-semibold text-[#030712]" {...props} />,
                             code: ({node, inline, ...props}: any) => 
                               inline 
-                                ? <code className="bg-[#0B0F1A] px-1.5 py-0.5 rounded text-[13px] font-mono text-[#60A5FA]" {...props} />
-                                : <pre className="bg-[#0B0F1A] p-3 rounded-lg overflow-x-auto text-[13px] font-mono mb-2 border border-[#334155]"><code {...props} /></pre>,
+                                ? <code className="bg-[#FFFFFF] px-1.5 py-0.5 rounded text-[13px] font-mono text-[#60A5FA]" {...props} />
+                                : <pre className="bg-[#FFFFFF] p-3 rounded-lg overflow-x-auto text-[13px] font-mono mb-2 border border-[#D1D5DB]"><code {...props} /></pre>,
                           }}
                         >
                           {msg.content}
@@ -167,7 +167,7 @@ export function FloatingCopilot() {
                 
                 {isLoading && (
                   <div className="flex flex-col gap-1 items-start">
-                    <div className="bg-[#1E293B] rounded-2xl rounded-tl-sm p-3 text-sm text-[#F1F5F9] flex items-center gap-3">
+                    <div className="bg-[#E5E7EB] rounded-2xl rounded-tl-sm p-3 text-sm text-[#111827] flex items-center gap-3">
                       <Loader2 className="w-4 h-4 animate-spin text-[#3B82F6]" />
                       <AnimatePresence mode="wait">
                         <motion.span 
@@ -176,7 +176,7 @@ export function FloatingCopilot() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -5 }}
                           transition={{ duration: 0.2 }}
-                          className="text-[#94A3B8] text-[13px]"
+                          className="text-[#4B5563] text-[13px]"
                         >
                           {THINKING_MESSAGES[thinkingIndex]}
                         </motion.span>
@@ -187,7 +187,7 @@ export function FloatingCopilot() {
               </div>
 
               {/* Input Area */}
-              <div className="p-3 border-t border-[#1E293B] bg-[#0B0F1A]/80 shrink-0">
+              <div className="p-3 border-t border-[#E5E7EB] bg-[#FFFFFF]/80 shrink-0">
                 <div className="relative">
                   <input 
                     type="text" 
@@ -195,7 +195,7 @@ export function FloatingCopilot() {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                     placeholder="Ask Aarkus anything..."
-                    className="w-full bg-[#1E293B] border border-[#334155] rounded-xl pl-4 pr-10 py-2.5 text-sm text-[#F1F5F9] placeholder-[#64748B] focus:outline-none focus:border-[#3B82F6] transition-colors"
+                    className="w-full bg-[#E5E7EB] border border-[#D1D5DB] rounded-xl pl-4 pr-10 py-2.5 text-sm text-[#111827] placeholder-[#6B7280] focus:outline-none focus:border-[#3B82F6] transition-colors"
                   />
                   <button 
                     onClick={handleSend}

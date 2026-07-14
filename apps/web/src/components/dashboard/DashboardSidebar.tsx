@@ -8,19 +8,19 @@ export function DashboardSidebar() {
   const navItemClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm font-medium ${
       isActive
-        ? 'bg-[#1E293B] text-[#F1F5F9]'
-        : 'text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#1E293B]/50'
+        ? 'bg-[#E5E7EB] text-[#111827]'
+        : 'text-[#4B5563] hover:text-[#111827] hover:bg-[#E5E7EB]/50'
     }`;
 
   return (
-    <div className="w-[280px] h-full bg-[#0B0F1A] border-r border-[#1E293B] flex flex-col flex-shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.5)] z-20">
+    <div className="w-[280px] h-full bg-[#FFFFFF] border-r border-[#E5E7EB] flex flex-col flex-shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.5)] z-20">
       {/* Logo */}
-      <div className="h-16 px-6 flex items-center border-b border-[#1E293B]">
+      <div className="h-16 px-6 flex items-center border-b border-[#E5E7EB]">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 flex items-center justify-center rounded-full overflow-hidden border-2 border-[#334155]/60 shadow-md bg-[#0B0F1A] flex-shrink-0">
+          <div className="w-9 h-9 flex items-center justify-center rounded-full overflow-hidden border-2 border-[#D1D5DB]/60 shadow-md bg-[#FFFFFF] flex-shrink-0">
             <img src="/logo.png" alt="IsoStack Logo" className="w-full h-full object-cover object-center scale-110" />
           </div>
-          <span className="text-[#F1F5F9] text-xl font-medium tracking-wide" style={{ fontFamily: "'Newsreader', serif" }}>IsoStack</span>
+          <span className="text-[#111827] text-xl font-medium tracking-wide" style={{ fontFamily: "'Newsreader', serif" }}>IsoStack</span>
         </div>
       </div>
 
@@ -43,7 +43,7 @@ export function DashboardSidebar() {
         </div>
 
         <div className="space-y-1">
-          <h3 className="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-2 px-3">Quick Links</h3>
+          <h3 className="text-xs font-semibold text-[#6B7280] uppercase tracking-wider mb-2 px-3">Quick Links</h3>
           <NavLink to="/starred" className={navItemClass}>
             <Star className="w-4 h-4" /> Starred
           </NavLink>
@@ -54,24 +54,24 @@ export function DashboardSidebar() {
             <div className="flex items-center gap-3 flex-1">
               <Share2 className="w-4 h-4" /> Shared
             </div>
-            <Lock className="w-3.5 h-3.5 text-[#64748B]" />
+            <Lock className="w-3.5 h-3.5 text-[#6B7280]" />
           </button>
         </div>
       </div>
 
       {/* Settings & Profile */}
-      <div className="p-4 border-t border-[#1E293B] space-y-2 bg-[#0F172A]/50">
+      <div className="p-4 border-t border-[#E5E7EB] space-y-2 bg-[#F9FAFB]/50">
         <NavLink to="/settings" className={navItemClass}>
           <Settings className="w-4 h-4" /> Settings
         </NavLink>
 
-        <NavLink to="/profile" className="flex items-center gap-3 px-3 py-2.5 mt-2 rounded-lg hover:bg-[#1E293B] transition-colors border border-transparent hover:border-[#334155]">
+        <NavLink to="/profile" className="flex items-center gap-3 px-3 py-2.5 mt-2 rounded-lg hover:bg-[#E5E7EB] transition-colors border border-transparent hover:border-[#D1D5DB]">
           <div className="w-8 h-8 rounded-full bg-[#3B82F6] flex items-center justify-center text-xs font-bold text-white flex-shrink-0 shadow-inner">
             {user?.email?.charAt(0).toUpperCase() || 'U'}
           </div>
           <div className="flex flex-col flex-1 truncate">
-            <span className="text-sm font-semibold text-[#F1F5F9] truncate">{user?.email?.split('@')[0] || 'User'}</span>
-            <span className="text-xs text-[#64748B] truncate">{user?.email}</span>
+            <span className="text-sm font-semibold text-[#111827] truncate">{user?.email?.split('@')[0] || 'User'}</span>
+            <span className="text-xs text-[#6B7280] truncate">{user?.email}</span>
           </div>
         </NavLink>
         

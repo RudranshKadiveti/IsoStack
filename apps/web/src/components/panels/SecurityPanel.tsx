@@ -6,7 +6,7 @@ export function SecurityPanel() {
 
   if (!graph || (graph.nodes?.length || 0) === 0) {
     return (
-      <div className="p-8 text-center text-[#64748B]">
+      <div className="p-8 text-center text-[#6B7280]">
         <ShieldCheck className="w-12 h-12 mx-auto mb-4 opacity-20" />
         <p>Add nodes to your architecture to see security analysis.</p>
       </div>
@@ -66,13 +66,13 @@ export function SecurityPanel() {
   return (
     <div className="p-4 space-y-4">
       <div className="mb-4">
-        <h3 className="text-sm font-semibold text-[#F1F5F9] mb-1">Security Posture</h3>
-        <p className="text-xs text-[#94A3B8]">Automated security analysis of your architecture.</p>
+        <h3 className="text-sm font-semibold text-[#111827] mb-1">Security Posture</h3>
+        <p className="text-xs text-[#4B5563]">Automated security analysis of your architecture.</p>
       </div>
 
-      <div className="bg-[#0F172A] border border-[#1E293B] rounded-xl p-4 flex items-center justify-between mb-4">
+      <div className="bg-[#F9FAFB] border border-[#E5E7EB] rounded-xl p-4 flex items-center justify-between mb-4">
         <div>
-          <p className="text-[10px] text-[#64748B] uppercase tracking-wider font-bold mb-1">Security Score</p>
+          <p className="text-[10px] text-[#6B7280] uppercase tracking-wider font-bold mb-1">Security Score</p>
           <p className={`text-2xl font-bold font-mono ${score > 70 ? 'text-emerald-400' : score > 40 ? 'text-yellow-400' : 'text-red-400'}`}>
             {score}/100
           </p>
@@ -82,18 +82,18 @@ export function SecurityPanel() {
 
       <div className="space-y-3">
         {checklist.map((item) => (
-          <div key={item.id} className="bg-[#0F172A] border border-[#1E293B] rounded-lg p-3">
+          <div key={item.id} className="bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg p-3">
             <div className="flex items-center gap-2 mb-2">
               <div className={`p-1.5 rounded-md ${item.passed ? 'bg-emerald-400/10 text-emerald-400' : 'bg-amber-400/10 text-amber-500'}`}>
                 {item.icon}
               </div>
-              <h4 className="text-xs font-bold text-[#F1F5F9]">{item.title}</h4>
+              <h4 className="text-xs font-bold text-[#111827]">{item.title}</h4>
               {item.passed ? 
                 <span className="ml-auto text-[9px] bg-emerald-400/20 text-emerald-400 px-2 py-0.5 rounded uppercase font-bold">Pass</span> :
                 <span className="ml-auto text-[9px] bg-amber-400/20 text-amber-400 px-2 py-0.5 rounded uppercase font-bold">Review</span>
               }
             </div>
-            <p className="text-[10px] text-[#94A3B8] leading-relaxed ml-9">{item.description}</p>
+            <p className="text-[10px] text-[#4B5563] leading-relaxed ml-9">{item.description}</p>
           </div>
         ))}
       </div>

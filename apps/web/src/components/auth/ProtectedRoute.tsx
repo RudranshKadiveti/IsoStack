@@ -6,7 +6,7 @@ export function ProtectedRoute() {
 
   if (!initialized) {
     return (
-      <div className="flex w-screen h-screen items-center justify-center bg-[#0F172A]">
+      <div className="flex w-screen h-screen items-center justify-center bg-[#F9FAFB]">
         <div className="w-8 h-8 rounded-full border-2 border-[#3B82F6] border-t-transparent animate-spin" />
       </div>
     );
@@ -24,7 +24,7 @@ export function PublicRoute() {
 
   if (!initialized) {
     return (
-      <div className="flex w-screen h-screen items-center justify-center bg-[#0F172A]">
+      <div className="flex w-screen h-screen items-center justify-center bg-[#F9FAFB]">
         <div className="w-8 h-8 rounded-full border-2 border-[#3B82F6] border-t-transparent animate-spin" />
       </div>
     );

@@ -8,7 +8,7 @@ export function DeploymentPanel() {
 
   if (!graph || (graph.nodes?.length || 0) === 0) {
     return (
-      <div className="p-8 text-center text-[#64748B]">
+      <div className="p-8 text-center text-[#6B7280]">
         <Terminal className="w-12 h-12 mx-auto mb-4 opacity-20" />
         <p>Add nodes to your architecture to see deployment guides.</p>
       </div>
@@ -49,16 +49,16 @@ export function DeploymentPanel() {
   return (
     <div className="p-4 space-y-4">
       <div className="mb-4">
-        <h3 className="text-sm font-semibold text-[#F1F5F9] mb-1">Deployment Guide</h3>
-        <p className="text-xs text-[#94A3B8]">Auto-generated step-by-step infrastructure setup.</p>
+        <h3 className="text-sm font-semibold text-[#111827] mb-1">Deployment Guide</h3>
+        <p className="text-xs text-[#4B5563]">Auto-generated step-by-step infrastructure setup.</p>
       </div>
 
-      <div className="flex rounded-lg overflow-hidden border border-[#1E293B] mb-4">
+      <div className="flex rounded-lg overflow-hidden border border-[#E5E7EB] mb-4">
         {['aws', 'gcp', 'azure'].map(p => (
           <button
             key={p}
             onClick={() => setProvider(p as any)}
-            className={`flex-1 py-2 text-[10px] uppercase tracking-wider font-bold transition-colors ${provider === p ? 'bg-[#3B82F6] text-white' : 'bg-[#0F172A] text-[#64748B] hover:bg-[#1E293B]'}`}
+            className={`flex-1 py-2 text-[10px] uppercase tracking-wider font-bold transition-colors ${provider === p ? 'bg-[#3B82F6] text-white' : 'bg-[#F9FAFB] text-[#6B7280] hover:bg-[#E5E7EB]'}`}
           >
             {p}
           </button>

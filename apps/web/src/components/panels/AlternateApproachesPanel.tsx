@@ -28,8 +28,8 @@ export function AlternateApproachesPanel() {
     <>
       <div className="p-4 space-y-4">
         <div className="mb-4">
-          <h3 className="text-sm font-semibold text-[#F1F5F9] mb-1">Insights & Templates</h3>
-          <p className="text-xs text-[#94A3B8]">Explore alternative architectural patterns and load them into your canvas to start building instantly.</p>
+          <h3 className="text-sm font-semibold text-[#111827] mb-1">Insights & Templates</h3>
+          <p className="text-xs text-[#4B5563]">Explore alternative architectural patterns and load them into your canvas to start building instantly.</p>
         </div>
 
         {(() => {
@@ -49,13 +49,13 @@ export function AlternateApproachesPanel() {
           if (tips.length === 0) return null;
 
           return (
-            <div className="bg-[#1E293B]/50 border border-[#334155] rounded-xl p-4 mb-6">
+            <div className="bg-[#E5E7EB]/50 border border-[#D1D5DB] rounded-xl p-4 mb-6">
               <h4 className="text-xs font-bold text-amber-400 mb-2 flex items-center gap-1.5">
                 <Lightbulb className="w-4 h-4" /> Context-Aware Optimizations
               </h4>
               <ul className="space-y-2">
                 {tips.map((tip, i) => (
-                  <li key={i} className="text-[11px] text-[#CBD5E1] leading-relaxed flex items-start gap-1.5">
+                  <li key={i} className="text-[11px] text-[#374151] leading-relaxed flex items-start gap-1.5">
                     <span className="text-amber-500 mt-0.5">•</span> {tip}
                   </li>
                 ))}
@@ -66,12 +66,12 @@ export function AlternateApproachesPanel() {
 
         <div className="space-y-4">
           {Object.values(ARCHITECTURE_TEMPLATES).map(template => (
-            <div key={template.id} className="bg-[#0F172A] border border-[#1E293B] rounded-xl overflow-hidden shadow-sm">
-              <div className="p-4 border-b border-[#1E293B]">
+            <div key={template.id} className="bg-[#F9FAFB] border border-[#E5E7EB] rounded-xl overflow-hidden shadow-sm">
+              <div className="p-4 border-b border-[#E5E7EB]">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h4 className="text-sm font-bold text-[#F1F5F9]">{template.name}</h4>
-                    <p className="text-xs text-[#64748B] mt-1">{template.description}</p>
+                    <h4 className="text-sm font-bold text-[#111827]">{template.name}</h4>
+                    <p className="text-xs text-[#6B7280] mt-1">{template.description}</p>
                   </div>
                   <button
                     onClick={() => handleLoad(template.id)}
@@ -82,12 +82,12 @@ export function AlternateApproachesPanel() {
                 </div>
               </div>
 
-              <div className="p-4 bg-[#0B0F1A]/50">
+              <div className="p-4 bg-[#FFFFFF]/50">
                 <div className="mb-3">
-                  <h5 className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider mb-2">Pros</h5>
+                  <h5 className="text-[10px] font-bold text-[#6B7280] uppercase tracking-wider mb-2">Pros</h5>
                   <ul className="space-y-1">
                     {template.pros.map((pro, i) => (
-                      <li key={i} className="text-[11px] text-[#94A3B8] flex items-start gap-1.5">
+                      <li key={i} className="text-[11px] text-[#4B5563] flex items-start gap-1.5">
                         <span className="text-emerald-500 font-bold leading-none">+</span>
                         <span className="leading-tight">{pro}</span>
                       </li>
@@ -95,10 +95,10 @@ export function AlternateApproachesPanel() {
                   </ul>
                 </div>
                 <div>
-                  <h5 className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider mb-2">Cons</h5>
+                  <h5 className="text-[10px] font-bold text-[#6B7280] uppercase tracking-wider mb-2">Cons</h5>
                   <ul className="space-y-1">
                     {template.cons.map((con, i) => (
-                      <li key={i} className="text-[11px] text-[#94A3B8] flex items-start gap-1.5">
+                      <li key={i} className="text-[11px] text-[#4B5563] flex items-start gap-1.5">
                         <span className="text-rose-500 font-bold leading-none">-</span>
                         <span className="leading-tight">{con}</span>
                       </li>

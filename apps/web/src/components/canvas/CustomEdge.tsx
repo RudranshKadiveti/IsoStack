@@ -56,7 +56,7 @@ export function CustomEdge({
           className="nodrag nopan group"
         >
           <button
-            className="w-6 h-6 flex items-center justify-center bg-[#EF4444] hover:bg-[#DC2626] text-white rounded-full shadow-lg border-2 border-[#0F172A] transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+            className="w-6 h-6 flex items-center justify-center bg-[#EF4444] hover:bg-[#DC2626] text-white rounded-full shadow-lg border-2 border-[#F9FAFB] transition-transform hover:scale-110 active:scale-95 cursor-pointer"
             onClick={(event) => {
               event.stopPropagation();
               removeEdge(id);

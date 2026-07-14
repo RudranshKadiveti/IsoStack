@@ -155,7 +155,7 @@ export function SimulationOverlay() {
           exit={{ opacity: 0, y: 50, scale: 0.95 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[100] w-full max-w-xl pointer-events-auto"
         >
-          <div className="bg-[#0F172A]/95 backdrop-blur-2xl border border-[#3B82F6]/40 p-6 rounded-3xl shadow-[0_20px_60px_-15px_rgba(59,130,246,0.4)] relative overflow-hidden">
+          <div className="bg-[#F9FAFB]/95 backdrop-blur-2xl border border-[#3B82F6]/40 p-6 rounded-3xl shadow-[0_20px_60px_-15px_rgba(59,130,246,0.4)] relative overflow-hidden">
             {/* Animated glowing border effect */}
             <div className={`absolute inset-0 border-2 border-transparent bg-[linear-gradient(90deg,#3B82F6,transparent,#10B981)] opacity-20 mix-blend-screen rounded-3xl pointer-events-none ${isPaused ? '' : 'animate-pulse'}`} />
             
@@ -173,14 +173,14 @@ export function SimulationOverlay() {
               <div className="flex items-center gap-2">
                 <button 
                   onClick={togglePause}
-                  className="w-8 h-8 flex items-center justify-center rounded-full bg-[#1E293B] hover:bg-[#334155] text-[#94A3B8] hover:text-[#F1F5F9] transition-colors border border-[#334155]"
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-[#E5E7EB] hover:bg-[#D1D5DB] text-[#4B5563] hover:text-[#111827] transition-colors border border-[#D1D5DB]"
                   title={isPaused ? "Resume" : "Pause"}
                 >
                   {isPaused ? <Play className="w-4 h-4 fill-current" /> : <Pause className="w-4 h-4 fill-current" />}
                 </button>
                 <button 
                   onClick={stopSimulation}
-                  className="w-8 h-8 flex items-center justify-center rounded-full bg-[#1E293B] hover:bg-red-500/20 text-[#94A3B8] hover:text-red-400 transition-colors border border-[#334155] hover:border-red-500/30"
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-[#E5E7EB] hover:bg-red-500/20 text-[#4B5563] hover:text-red-400 transition-colors border border-[#D1D5DB] hover:border-red-500/30"
                   title="Stop Simulation"
                 >
                   <Square className="w-4 h-4 fill-current" />
@@ -190,9 +190,9 @@ export function SimulationOverlay() {
 
             <div className="relative z-10 space-y-4">
               {message && (
-                <div className="flex items-start gap-3 bg-gradient-to-r from-[#1E293B]/80 to-[#1E293B]/40 p-4 rounded-xl border border-[#334155]/80 shadow-inner">
+                <div className="flex items-start gap-3 bg-gradient-to-r from-[#E5E7EB]/80 to-[#E5E7EB]/40 p-4 rounded-xl border border-[#D1D5DB]/80 shadow-inner">
                   <Info className="w-5 h-5 text-[#3B82F6] shrink-0 mt-0.5" />
-                  <p className="text-[#F1F5F9] text-sm leading-relaxed tracking-wide font-medium">{message}</p>
+                  <p className="text-[#111827] text-sm leading-relaxed tracking-wide font-medium">{message}</p>
                 </div>
               )}
 
@@ -211,7 +211,7 @@ export function SimulationOverlay() {
               )}
             </div>
             
-            <div className="mt-6 h-1.5 w-full bg-[#1E293B] rounded-full overflow-hidden shadow-inner">
+            <div className="mt-6 h-1.5 w-full bg-[#E5E7EB] rounded-full overflow-hidden shadow-inner">
               <div 
                 className={`h-full bg-gradient-to-r from-[#3B82F6] via-[#60A5FA] to-[#10B981] ${isPaused ? '' : 'animate-[progress_4s_linear_infinite]'}`} 
                 style={{ width: '100%', opacity: isPaused ? 0.5 : 1 }} 

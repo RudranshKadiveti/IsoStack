@@ -33,42 +33,52 @@ function ServiceNodeComponent({ data, selected }: ServiceNodeProps) {
 
   return (
     <div 
-      className={`group relative flex items-center p-[6px] gap-3 rounded-lg border min-w-[200px] shadow-sm transition-all duration-300 cursor-pointer ${
+      className={`group relative flex items-stretch bg-white rounded-xl border transition-all duration-200 cursor-pointer w-[240px] ${
         isSimulatingActive 
-          ? 'shadow-[0_0_30px_rgba(var(--tw-shadow-color),0.8)] scale-105 z-50 ring-4 ring-offset-2 ring-offset-[#0F172A] ring-[#3B82F6]' 
-          : selected ? 'shadow-[0_0_20px_rgba(var(--tw-shadow-color),0.4)]' : 'hover:shadow-lg'
+          ? 'shadow-lg scale-105 z-50 ring-2 ring-offset-2 ring-blue-500 border-blue-500' 
+          : selected ? 'shadow-md border-gray-400 ring-1 ring-gray-400' : 'shadow-sm border-gray-200 hover:shadow-md hover:border-gray-300'
       }`}
-      style={{
-        backgroundColor: `color-mix(in oklch, ${color} ${isSimulatingActive ? '30%' : selected ? '15%' : '8%'}, transparent)`,
-        borderColor: `color-mix(in oklch, ${color} ${isSimulatingActive ? '100%' : selected ? '100%' : '20%'}, transparent)`,
-        '--tw-shadow-color': isSimulatingActive ? color : selected ? color : 'transparent'
-      } as React.CSSProperties}
       onClick={handleClick}
     >
-      <Handle type="target" position={Position.Left} style={{ background: '#475569', border: 'none' }} />
-      <Handle type="source" position={Position.Right} style={{ background: '#475569', border: 'none' }} />
+      {/* Target Handle (Left) */}
+      <Handle 
+        type="target" 
+        position={Position.Left} 
+        className="w-2 h-6 !bg-gray-100 !border-2 !border-gray-300 rounded-full" 
+        style={{ left: -5, zIndex: 10 }}
+      />
+      
+      {/* Source Handle (Right) */}
+      <Handle 
+        type="source" 
+        position={Position.Right} 
+        className="w-2 h-6 !bg-gray-100 !border-2 !border-gray-300 rounded-full" 
+        style={{ right: -5, zIndex: 10 }}
+      />
 
-      {/* Icon Square */}
+      {/* Left Icon Area */}
       <div 
-        className="w-10 h-10 rounded shadow-inner flex items-center justify-center text-xl flex-shrink-0 relative overflow-hidden"
-        style={{ backgroundColor: `color-mix(in oklch, ${color} 15%, transparent)`, border: `1px solid color-mix(in oklch, ${color} 40%, transparent)`, color }}
+        className="flex items-center justify-center w-14 shrink-0 rounded-l-xl border-r border-gray-100 relative overflow-hidden"
+        style={{ backgroundColor: `color-mix(in oklch, ${color} 10%, white)` }}
       >
-        {Icon ? <Icon className="w-5 h-5 relative z-10" /> : <span className="relative z-10">?</span>}
+        {/* Subtle accent strip on the very left edge */}
+        <div className="absolute left-0 top-0 bottom-0 w-1" style={{ backgroundColor: color }} />
+        <div 
+          className="w-8 h-8 rounded-lg flex items-center justify-center text-xl bg-white shadow-sm"
+          style={{ color }}
+        >
+          {Icon ? <Icon className="w-5 h-5" /> : <span>?</span>}
+        </div>
       </div>
 
-      {/* Label and Tech */}
-      <div className="flex flex-col overflow-hidden">
-        <span className="text-[#F1F5F9] text-sm font-semibold truncate leading-tight tracking-tight">
+      {/* Right Content Area */}
+      <div className="flex flex-col py-3 px-3 overflow-hidden flex-1 justify-center bg-white rounded-r-xl">
+        <span className="text-gray-900 text-sm font-semibold truncate leading-tight tracking-tight">
           {node.label}
         </span>
-        <span className="text-[10px] font-mono truncate mt-0.5 tracking-wide" style={{ color: color }}>
-          {variantDef ? variantDef.label : node.serviceType}
+        <span className="text-gray-500 text-[11px] truncate mt-0.5 tracking-wide">
+          {variantDef ? variantDef.label : (serviceDef?.label || node.serviceType)}
         </span>
-      </div>
-      
-      {/* Type badge on hover */}
-      <div className="absolute -top-2.5 -right-2.5 border rounded px-1.5 py-0.5 text-[8px] font-mono tracking-wider opacity-0 group-hover:opacity-100 transition-opacity bg-[#0B0F1A]" style={{ color, borderColor: `color-mix(in oklch, ${color} 30%, transparent)` }}>
-        {(serviceDef?.label || node.serviceType).toUpperCase()}
       </div>
     </div>
   );

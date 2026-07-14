@@ -18,9 +18,9 @@ export function RecentWorkspaces({ workspaces, isSearch }: { workspaces: Workspa
     if (isSearch) {
       return (
         <section className="mb-12">
-          <div className="bg-[#0F172A] border border-[#1E293B] border-dashed rounded-2xl p-12 flex flex-col items-center justify-center text-center">
-            <h3 className="text-xl font-bold text-[#F1F5F9] mb-2">No results found</h3>
-            <p className="text-[#94A3B8] max-w-sm mb-6">Try adjusting your search query.</p>
+          <div className="bg-[#F9FAFB] border border-[#E5E7EB] border-dashed rounded-2xl p-12 flex flex-col items-center justify-center text-center">
+            <h3 className="text-xl font-bold text-[#111827] mb-2">No results found</h3>
+            <p className="text-[#4B5563] max-w-sm mb-6">Try adjusting your search query.</p>
           </div>
         </section>
       );
@@ -29,14 +29,14 @@ export function RecentWorkspaces({ workspaces, isSearch }: { workspaces: Workspa
     return (
       <section className="mb-12">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-[#64748B] uppercase tracking-wider">Recent Workspaces</h2>
+          <h2 className="text-sm font-semibold text-[#6B7280] uppercase tracking-wider">Recent Workspaces</h2>
         </div>
-        <div className="bg-[#0F172A] border border-[#1E293B] border-dashed rounded-2xl p-12 flex flex-col items-center justify-center text-center">
-          <div className="w-16 h-16 bg-[#1E293B] rounded-full flex items-center justify-center mb-4">
+        <div className="bg-[#F9FAFB] border border-[#E5E7EB] border-dashed rounded-2xl p-12 flex flex-col items-center justify-center text-center">
+          <div className="w-16 h-16 bg-[#E5E7EB] rounded-full flex items-center justify-center mb-4">
             <Sparkles className="w-8 h-8 text-[#3B82F6]" />
           </div>
-          <h3 className="text-xl font-bold text-[#F1F5F9] mb-2">Welcome to IsoStack</h3>
-          <p className="text-[#94A3B8] max-w-sm mb-6">Let's build your first architecture. Start from scratch or use one of our best-practice templates.</p>
+          <h3 className="text-xl font-bold text-[#111827] mb-2">Welcome to IsoStack</h3>
+          <p className="text-[#4B5563] max-w-sm mb-6">Let's build your first architecture. Start from scratch or use one of our best-practice templates.</p>
           <div className="flex gap-4">
             <button 
               onClick={handleCreate}
@@ -44,7 +44,7 @@ export function RecentWorkspaces({ workspaces, isSearch }: { workspaces: Workspa
             >
               Create Workspace
             </button>
-            <button className="bg-[#1E293B] hover:bg-[#334155] border border-[#334155] text-[#F1F5F9] px-6 py-2.5 rounded-lg font-semibold transition-colors">
+            <button className="bg-[#E5E7EB] hover:bg-[#D1D5DB] border border-[#D1D5DB] text-[#111827] px-6 py-2.5 rounded-lg font-semibold transition-colors">
               Browse Templates
             </button>
           </div>
@@ -56,7 +56,7 @@ export function RecentWorkspaces({ workspaces, isSearch }: { workspaces: Workspa
   return (
     <section className="mb-12">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-semibold text-[#64748B] uppercase tracking-wider">
+        <h2 className="text-sm font-semibold text-[#6B7280] uppercase tracking-wider">
           {isSearch ? 'Search Results' : 'Recent Workspaces'}
         </h2>
         {!isSearch && (
