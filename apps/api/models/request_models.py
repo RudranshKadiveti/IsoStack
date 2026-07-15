@@ -41,3 +41,6 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     messages: list[ChatMessage]
     context_data: Optional[str] = None
+
+class GenerateDocsRequest(BaseModel):
+    graph_data: dict

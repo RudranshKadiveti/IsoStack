@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Form, UploadFile, File
-from models.request_models import GenerateRequest, DescribeNodeRequest
+from models.request_models import GenerateRequest, DescribeNodeRequest, GenerateDocsRequest
 from models.arch_schema import ArchGraph
 from services.openai_service import generate_architecture
 from services.layout_service import resolve_grid_collisions
@@ -89,4 +89,48 @@ async def describe_node(
         response_format=NodeDescription,
     )
     return response.choices[0].message.parsed
-# Trigger reload for python-multipart update
+
+class DocsResponse(PydanticBase):
+    markdown: str
+
+@router.post("/generate-docs", response_model=DocsResponse)
+async def generate_docs(
+    req: GenerateDocsRequest,
+    user: dict = Depends(get_current_user)
+):
+    system_prompt = """You are an expert Cloud Software Architect.
+Your task is to analyze a JSON representation of a cloud architecture and generate a highly professional, comprehensive Technical Specification in Markdown format.
+
+The document MUST contain the following sections:
+# Architecture Overview
+[A high-level summary of the system, its purpose, and its primary data flows]
+
+# Infrastructure Summary
+[A categorized list of the primary components used (Compute, Database, Storage, etc.) and their roles]
+
+# Deployment Guide
+[A high-level set of instructions or considerations for deploying this architecture into a production environment (e.g., CI/CD, IaC, security boundaries)]
+
+# Architecture Decision Records (ADR)
+[Highlight 2 or 3 assumed architectural decisions based on the components chosen, outlining Context, Decision, and Consequences]
+
+Make the document detailed, structured, and strictly in Markdown."""
+
+    try:
+        response = await _openai.chat.completions.create(
+            model="gpt-4o",
+            max_tokens=1500,
+            temperature=0.3,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Here is the architecture blueprint:\n\n{json.dumps(req.graph_data, indent=2)}"}
+            ]
+        )
+        md = response.choices[0].message.content
+        if not md:
+            md = "Failed to generate documentation."
+        return DocsResponse(markdown=md)
+    except Exception as e:
+        import traceback
+        print(f"Error generating docs: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=str(e))

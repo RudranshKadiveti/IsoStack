@@ -4,11 +4,12 @@ export type NodeType =
 
 export type LayerType =
   | 'client' | 'gateway' | 'compute' | 'data'
-  | 'cache' | 'queue' | 'storage' | 'observability' | 'auth' | 'external';
+  | 'cache' | 'queue' | 'storage' | 'observability' | 'auth' | 'external'
+  | 'infrastructure' | 'messaging' | 'database';
 
 export type EdgeType =
   | 'sync_http' | 'async_event' | 'data_stream'
-  | 'db_query' | 'cache_read' | 'auth_check';
+  | 'db_query' | 'cache_read' | 'auth_check' | 'network';
 
 export interface GridHint {
   col: number; // 0–7
@@ -35,6 +36,7 @@ export interface ArchNode {
   grid_hint: GridHint;
   // Runtime-only (added by frontend, not in AI JSON):
   position?: { x: number; y: number }; // resolved 2D coords
+  properties?: Record<string, any>;    // Dynamic schema properties
 }
 
 export interface ArchEdge {
@@ -42,8 +44,9 @@ export interface ArchEdge {
   source: string;                // node id
   target: string;                // node id
   type: EdgeType;
-  label: string;
-  bidirectional: boolean;
+  label?: string;
+  bidirectional?: boolean;
+  animated?: boolean;
 }
 
 export interface UtilityItem {

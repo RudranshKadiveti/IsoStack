@@ -9,6 +9,7 @@ import { DashboardLayout } from './components/dashboard/DashboardLayout';
 import { DashboardPage } from './components/dashboard/DashboardPage';
 import { BuilderView } from './components/BuilderView';
 import { AuthModal } from './components/ui/AuthModal';
+import { CommandPalette } from './components/ui/CommandPalette';
 
 export default function App() {
   const { initialize } = useAuthStore();
@@ -53,9 +54,9 @@ export default function App() {
             <Route path="/workspace/:id" element={<BuilderView />} />
           </Route>
           
-          {/* Catch-all redirect */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        <CommandPalette />
       </BrowserRouter>
     </TooltipProvider>
   );

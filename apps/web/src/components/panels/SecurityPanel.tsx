@@ -20,7 +20,7 @@ export function SecurityPanel() {
   const hasAuth = nodes.some(n => n.layer === 'auth' || ['auth0', 'keycloak'].includes(n.serviceType));
   const hasSecrets = nodes.some(n => ['vault', 'aws_kms'].includes(n.serviceType));
   const hasPrivateDB = nodes.some(n => n.layer === 'database'); // We just assume DB needs private net
-  const hasWaf = nodes.some(n => ['cloudflare', 'aws_waf'].includes(n.serviceType) || n.layer === 'security');
+  const hasWaf = nodes.some(n => ['cloudflare', 'aws_waf'].includes(n.serviceType) || (n.layer as string) === 'security');
 
   const checklist = [
     {

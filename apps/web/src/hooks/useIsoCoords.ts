@@ -15,6 +15,9 @@ const LAYER_Z_INDEX: Record<LayerType, number> = {
   storage:       4,
   external:      4.5,
   observability: 1,
+  infrastructure: 2.5,
+  messaging: 3,
+  database: 3.5,
 };
 
 export function gridToIso(

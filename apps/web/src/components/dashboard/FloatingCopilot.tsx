@@ -40,7 +40,7 @@ export function FloatingCopilot() {
   }, [messages, isLoading]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isLoading) {
       interval = setInterval(() => {
         setThinkingIndex((prev) => (prev + 1) % THINKING_MESSAGES.length);
@@ -69,7 +69,6 @@ export function FloatingCopilot() {
         const workspaces = useWorkspaceStore.getState().workspaces.map(w => ({
           name: w.name,
           id: w.id,
-          description: w.description,
           provider: w.cloudProvider,
           health: w.healthScore
         }));

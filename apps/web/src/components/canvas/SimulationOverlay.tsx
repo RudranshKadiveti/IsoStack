@@ -10,7 +10,7 @@ export function SimulationOverlay() {
   const graph = useArchStore(s => s.graph);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   // Track simulation state locally so we can pause/resume
   const stepRef = useRef(0);

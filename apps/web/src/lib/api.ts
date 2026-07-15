@@ -106,3 +106,10 @@ export async function chatWithAarkus(
   });
   return data;
 }
+
+export async function generateDocumentation(graphData: any): Promise<{ markdown: string }> {
+  const { data } = await client.post('/generate-docs', {
+    graph_data: graphData,
+  });
+  return data;
+}

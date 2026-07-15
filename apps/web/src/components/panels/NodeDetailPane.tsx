@@ -3,18 +3,16 @@ import toast from 'react-hot-toast';
 import { useArchStore } from '../../store/useArchStore';
 import { useUIStore } from '../../store/useUIStore';
 import { generateBoilerplate, pushBoilerplate, getUserRepos, getBranches, createBranch } from '../../lib/api';
-import { SERVICE_CATALOG } from '../../lib/services.catalog';
+import { NodeRegistry } from '../../lib/registry/NodeRegistry';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
-import { ChevronDown, AlertTriangle, Info, XCircle, DollarSign, Activity, Zap, FileText, Link, Cloud, Image, FileSpreadsheet, Loader2, Plus } from 'lucide-react';
+import { ChevronDown, AlertTriangle, Info, XCircle, DollarSign, Activity, Zap, FileText, Link, Cloud, Image, FileSpreadsheet, Loader2, Plus, Trash2 } from 'lucide-react';
 import { AlternateApproachesPanel } from './AlternateApproachesPanel';
 import { DeploymentPanel } from './DeploymentPanel';
 import { SecurityPanel } from './SecurityPanel';
-import { validateArchitecture } from '../../lib/architecture.validator';
-import { estimateCost } from '../../lib/cost.estimator';
-import { generateTerraform } from '../../lib/export.terraform';
-import { generateOpenAPI } from '../../lib/export.openapi';
-import { analyzePerformance } from '../../lib/performance.analyzer';
 import { toPng } from 'html-to-image';
+import { generateOpenAPI } from '../../lib/export.openapi';
+import { generateTerraform } from '../../lib/export.terraform';
+import { estimateCost } from '../../lib/cost.estimator';
 
 function getDifficultyBadge(nodeCount: number) {
   if (nodeCount <= 5) return { label: 'basic',        color: '#10B981', bg: '#064E3B' };
@@ -32,7 +30,7 @@ export function NodeDetailPane() {
   const [repositories, setRepositories] = useState<any[]>([]);
   const [selectedRepo, setSelectedRepo] = useState<string>('');
   const [loadingRepos, setLoadingRepos] = useState(false);
-  const [wsStatus, setWsStatus] = useState<'idle' | 'loading' | 'preview' | 'pushing' | 'done' | 'error'>('idle');
+  const [wsStatus, setWsStatus] = useState<'idle' | 'loading' | 'preview' | 'error' | 'pushing' | 'done'>('idle');
   const [generationId, setGenerationId] = useState<string | null>(null);
   const [gapReport, setGapReport] = useState<string | null>(null);
   const [successRatio, setSuccessRatio] = useState<string | null>(null);
@@ -122,10 +120,10 @@ export function NodeDetailPane() {
   )?.length || 0;
   
   // Look up catalog info for the selected node
-  const serviceDef = node ? SERVICE_CATALOG.find(s => s.type === node.serviceType) : null;
+  const serviceDef = node ? NodeRegistry.getNode(node.serviceType) : null;
   const variantDef = serviceDef?.variants.find(v => v.id === node?.variantId);
   const color = serviceDef?.accentColor || '#3B82F6';
-  const Icon = serviceDef?.icon;
+  const Icon = serviceDef?.fallbackIcon;
   
   const difficulty = getDifficultyBadge(graph.nodes?.length || 0);
   const metCount = graph.utilities_checklist?.filter((u) => u.met)?.length || 0;
@@ -246,232 +244,169 @@ export function NodeDetailPane() {
           <>
             {/* Selected node details */}
             {node && (
-              <div className="p-4 border-b border-[#E5E7EB]" style={{ background: `color-mix(in oklch, ${color} 5%, transparent)` }}>
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-[10px] uppercase tracking-widest font-semibold text-[#9CA3AF]">Selected Node</p>
-                  <button
-                    onClick={() => { setDetailPane(false); selectNode(null); }}
-                    className="text-[#9CA3AF] hover:text-[#4B5563] text-xl leading-none"
-                  >
-                    ×
-                  </button>
+              <div className="p-0 flex flex-col h-full bg-[#FAFAFA]">
+                {/* Node Identity Header (Sticky) */}
+                <div className="sticky top-0 z-10 bg-white border-b border-gray-200 p-5 shadow-sm">
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-[11px] uppercase tracking-[0.15em] font-bold text-gray-500">Node Details</p>
+                    <button
+                      onClick={() => { setDetailPane(false); selectNode(null); }}
+                      className="text-gray-400 hover:text-gray-900 transition-colors p-1"
+                    >
+                      <XCircle className="w-5 h-5" />
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    {Icon && (
+                      <div 
+                        className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border bg-white"
+                        style={{ borderColor: `color-mix(in oklch, ${color} 30%, transparent)` }}
+                      >
+                        <Icon className="w-6 h-6" style={{ color }} />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-black text-lg font-bold truncate tracking-tight">{node.label}</h3>
+                      <p className="text-[12px] font-mono mt-0.5" style={{ color }}>{serviceDef?.label || node.serviceType}</p>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Service identity */}
-                <div className="flex items-center gap-3 mb-3">
-                  {Icon && (
-                    <div 
-                      className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: `color-mix(in oklch, ${color} 15%, transparent)`, border: `1px solid color-mix(in oklch, ${color} 30%, transparent)` }}
-                    >
-                      <Icon className="w-5 h-5" style={{ color }} />
+                <div className="p-5 space-y-6">
+                  {/* Variant Selection */}
+                  {serviceDef && serviceDef.variants.length > 1 && (
+                    <div className="space-y-2">
+                      <label className="text-black text-xs font-semibold uppercase tracking-wider">Variant</label>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-md border border-gray-200 bg-white hover:border-gray-300 text-sm text-black transition-all shadow-sm">
+                            <span className="font-medium">{variantDef?.label || node.variantId}</span>
+                            <ChevronDown className="w-4 h-4 text-gray-500" />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-[280px] bg-white border-gray-200 shadow-xl rounded-xl">
+                          {serviceDef.variants.map((v) => (
+                            <DropdownMenuItem
+                              key={v.id}
+                              onClick={() => updateNodeVariant(node.id, v.id)}
+                              className={`p-3 cursor-pointer ${node.variantId === v.id ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+                            >
+                              <div className="flex flex-col">
+                                <div className="flex items-center justify-between">
+                                  <span className="font-semibold text-black text-sm">{v.label}</span>
+                                  {node.variantId === v.id && (
+                                    <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">Active</span>
+                                  )}
+                                </div>
+                                <p className="text-[11px] text-gray-600 mt-1 leading-relaxed">{v.description}</p>
+                              </div>
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   )}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-[#111827] font-semibold truncate">{node.label}</h3>
-                    <span 
-                      className="text-[10px] font-mono"
-                      style={{ color }}
-                    >
-                      {serviceDef?.label || node.serviceType}
-                    </span>
-                  </div>
-                </div>
 
-                {/* Variant selector */}
-                {serviceDef && serviceDef.variants.length > 1 && (
-                  <div className="mb-3">
-                    <p className="text-[10px] uppercase tracking-wider text-[#9CA3AF] font-semibold mb-1.5">Variant</p>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <button className="w-full flex items-center justify-between px-3 py-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] hover:border-[#D1D5DB] text-sm text-[#111827] transition-colors">
-                          <span>{variantDef?.label || node.variantId}</span>
-                          <ChevronDown className="w-4 h-4 text-[#6B7280]" />
-                        </button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-[260px]">
-                        {serviceDef.variants.map((v) => (
-                          <DropdownMenuItem
-                            key={v.id}
-                            onClick={() => updateNodeVariant(node.id, v.id)}
-                            className={node.variantId === v.id ? 'bg-[#E5E7EB]' : ''}
-                          >
-                            <div className="flex flex-col py-0.5">
-                              <div className="flex items-center gap-2">
-                                <span className="font-medium">{v.label}</span>
-                                {node.variantId === v.id && (
-                                  <span className="text-[10px] text-[#3B82F6] font-mono">current</span>
-                                )}
-                              </div>
-                              <p className="text-[10px] text-[#6B7280] mt-0.5">{v.description}</p>
-                              <div className="flex gap-1 mt-1 flex-wrap">
-                                {v.tags.map(tag => (
-                                  <span key={tag} className="text-[8px] font-mono px-1.5 py-0.5 rounded bg-[#E5E7EB] text-[#4B5563]">{tag}</span>
-                                ))}
-                              </div>
-                            </div>
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                )}
-
-                <p className="text-[#4B5563] text-xs leading-relaxed mb-3">{node.description}</p>
-
-                {/* Tags */}
-                {node.tags && node.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {node.tags.map(tag => (
-                      <span key={tag} className="text-[9px] font-mono px-2 py-0.5 rounded bg-[#E5E7EB] text-[#4B5563]">{tag}</span>
-                    ))}
-                  </div>
-                )}
-
-                {node.responsibilities && node.responsibilities.length > 0 && (
-                  <ul className="space-y-1 mb-3">
-                    {node.responsibilities.map((r, i) => (
-                      <li key={i} className="flex items-start gap-2 text-[#374151] text-xs">
-                        <span style={{ color }} className="flex-shrink-0 mt-0.5">▸</span> {r}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                {node.plan_alignment && (
-                  <div className="mb-3 bg-[#F9FAFB] border border-[#E5E7EB] rounded p-2.5">
-                    <p className="text-[10px] uppercase tracking-wider text-[#9CA3AF] font-semibold mb-1 flex items-center gap-1">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-                      Plan Alignment
-                    </p>
-                    <p className="text-[#4B5563] text-[11px] leading-relaxed">{node.plan_alignment}</p>
-                  </div>
-                )}
-
-                {node.metrics && (
-                  <div className="grid grid-cols-3 gap-2 mb-3">
-                    {([['RPS', node.metrics.expected_rps], ['Data', node.metrics.data_size], ['SLA', node.metrics.sla]] as [string, string | null][]).map(([label, val]) => (
-                      <div key={label} className="bg-[#FFFFFF] border border-[#E5E7EB] rounded p-2 text-center shadow-inner">
-                        <p className="text-[#9CA3AF] text-[9px] uppercase">{label}</p>
-                        <p className="text-[#111827] text-[10px] font-mono mt-0.5">{val ?? '—'}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <p className="text-[#9CA3AF] text-xs mb-3">{edgeCount} connection{edgeCount !== 1 ? 's' : ''}</p>
-
-                <button
-                  onClick={() => { removeNode(node.id); setDetailPane(false); selectNode(null); }}
-                  className="w-full py-1.5 rounded border border-red-900/40 text-red-400 hover:bg-red-900/20 text-xs transition-colors font-medium"
-                >
-                  Remove Node
-                </button>
-              </div>
-            )}
-
-            {/* Validation Issues */}
-            {(graph.nodes?.length || 0) > 0 && (
-              <div className="p-4 border-b border-[#E5E7EB]">
-                <p className="text-[#9CA3AF] text-[10px] uppercase tracking-widest font-semibold mb-3 flex items-center justify-between">
-                  <span className="flex items-center gap-1.5"><Activity className="w-3.5 h-3.5" /> Architecture Health</span>
-                </p>
-                <div className="space-y-2">
-                  {validateArchitecture(graph).map(issue => (
-                    <div key={issue.id} className="rounded-lg p-3 border shadow-sm" style={{
-                      borderColor: issue.severity === 'error' ? '#7F1D1D40' : issue.severity === 'warning' ? '#78350F40' : '#E5E7EB',
-                      background: issue.severity === 'error' ? '#450a0a' : issue.severity === 'warning' ? '#451a03' : '#F9FAFB'
-                    }}>
-                      <div className="flex items-start gap-2.5">
-                        {issue.severity === 'error' ? <XCircle className="w-4 h-4 text-red-500 mt-0.5" /> : 
-                         issue.severity === 'warning' ? <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5" /> : 
-                         <Info className="w-4 h-4 text-blue-500 mt-0.5" />}
-                        <div>
-                          <p className={`text-xs font-bold ${issue.severity === 'error' ? 'text-red-400' : issue.severity === 'warning' ? 'text-amber-400' : 'text-blue-400'}`}>
-                            {issue.title}
-                          </p>
-                          <p className="text-[#4B5563] text-[10px] mt-1 leading-relaxed">{issue.description}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Performance Metrics */}
-            {(graph.nodes?.length || 0) > 0 && (
-              <div className="p-4 border-b border-[#E5E7EB]">
-                <p className="text-[#9CA3AF] text-[10px] uppercase tracking-widest font-semibold mb-3 flex items-center justify-between">
-                  <span className="flex items-center gap-1.5"><Zap className="w-3.5 h-3.5 text-yellow-400" /> Performance Analysis</span>
-                </p>
-                {(() => {
-                  const perf = analyzePerformance(graph);
-                  return (
+                  {/* Dynamic Properties */}
+                  {serviceDef?.propertiesSchema && serviceDef.propertiesSchema.length > 0 && (
                     <div className="space-y-3">
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded p-2 text-center shadow-inner">
-                          <p className="text-[#9CA3AF] text-[9px] uppercase">Latency Score</p>
-                          <p className="text-emerald-400 text-sm font-mono mt-0.5">{perf.latencyScore}/100</p>
-                        </div>
-                        <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded p-2 text-center shadow-inner">
-                          <p className="text-[#9CA3AF] text-[9px] uppercase">Throughput</p>
-                          <p className="text-blue-400 text-sm font-mono mt-0.5">{perf.throughputLevel}</p>
-                        </div>
-                        <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded p-2 text-center shadow-inner">
-                          <p className="text-[#9CA3AF] text-[9px] uppercase">Availability</p>
-                          <p className="text-purple-400 text-sm font-mono mt-0.5">{perf.availability}</p>
-                        </div>
-                        <div className="bg-[#FFFFFF] border border-[#E5E7EB] rounded p-2 text-center shadow-inner">
-                          <p className="text-[#9CA3AF] text-[9px] uppercase">Complexity</p>
-                          <p className="text-orange-400 text-sm font-mono mt-0.5">{perf.complexityScore}/100</p>
-                        </div>
+                      <label className="text-black text-xs font-semibold uppercase tracking-wider">Properties</label>
+                      <div className="space-y-3 bg-white border border-gray-100 p-3 rounded-md shadow-sm">
+                        {serviceDef.propertiesSchema.map((field) => {
+                          const value = node.properties?.[field.name] ?? field.defaultValue;
+                          return (
+                            <div key={field.name} className="flex flex-col gap-1">
+                              <label className="text-[11px] font-semibold text-gray-700">{field.label}</label>
+                              {field.type === 'boolean' ? (
+                                <select 
+                                  className="border border-gray-200 rounded px-2 py-1.5 text-xs text-black focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                  value={value ? 'true' : 'false'}
+                                  onChange={(e) => useArchStore.getState().updateNodeProperties(node.id, { ...node.properties, [field.name]: e.target.value === 'true' })}
+                                >
+                                  <option value="true">True</option>
+                                  <option value="false">False</option>
+                                </select>
+                              ) : field.type === 'select' && field.options ? (
+                                <select 
+                                  className="border border-gray-200 rounded px-2 py-1.5 text-xs text-black focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                  value={value}
+                                  onChange={(e) => useArchStore.getState().updateNodeProperties(node.id, { ...node.properties, [field.name]: e.target.value })}
+                                >
+                                  {field.options.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                                </select>
+                              ) : (
+                                <input 
+                                  type={field.type === 'number' ? 'number' : 'text'}
+                                  className="border border-gray-200 rounded px-2 py-1.5 text-xs text-black focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                  value={value}
+                                  onChange={(e) => useArchStore.getState().updateNodeProperties(node.id, { ...node.properties, [field.name]: field.type === 'number' ? Number(e.target.value) : e.target.value })}
+                                />
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
-                      {perf.bottlenecks.length > 0 && (
-                        <div className="mt-2">
-                          <p className="text-[#4B5563] text-[10px] mb-1 font-semibold">Potential Bottlenecks:</p>
-                          <ul className="list-disc pl-4 text-[10px] text-[#6B7280] space-y-0.5">
-                            {perf.bottlenecks.map((b, i) => <li key={i}>{b}</li>)}
-                          </ul>
-                        </div>
-                      )}
                     </div>
-                  );
-                })()}
+                  )}
+
+                  {/* Description & Tags */}
+                  <div className="space-y-2">
+                    <label className="text-black text-xs font-semibold uppercase tracking-wider">Overview</label>
+                    <p className="text-gray-700 text-sm leading-relaxed bg-white border border-gray-100 p-3 rounded-md shadow-sm">
+                      {node.description}
+                    </p>
+                    {node.tags && node.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 pt-2">
+                        {node.tags.map(tag => (
+                          <span key={tag} className="text-[10px] font-mono px-2 py-1 rounded-md bg-gray-100 border border-gray-200 text-black shadow-sm">{tag}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Metrics */}
+                  {node.metrics && (
+                    <div className="space-y-2">
+                      <label className="text-black text-xs font-semibold uppercase tracking-wider">Metrics</label>
+                      <div className="grid grid-cols-3 gap-3">
+                        {([['RPS', node.metrics.expected_rps], ['Data', node.metrics.data_size], ['SLA', node.metrics.sla]] as [string, string | null][]).map(([label, val]) => (
+                          <div key={label} className="bg-white border border-gray-200 rounded-md p-3 text-center shadow-sm">
+                            <p className="text-gray-500 text-[10px] uppercase font-bold tracking-wider">{label}</p>
+                            <p className="text-black text-xs font-mono font-bold mt-1">{val ?? '—'}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Responsibilities */}
+                  {node.responsibilities && node.responsibilities.length > 0 && (
+                    <div className="space-y-2">
+                      <label className="text-black text-xs font-semibold uppercase tracking-wider">Responsibilities</label>
+                      <ul className="space-y-2 bg-white border border-gray-100 p-3 rounded-md shadow-sm">
+                        {node.responsibilities.map((r, i) => (
+                          <li key={i} className="flex items-start gap-2 text-black text-sm leading-relaxed">
+                            <span style={{ color }} className="flex-shrink-0 mt-1 mr-1 w-1.5 h-1.5 rounded-full bg-current opacity-70"></span> {r}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Delete Action */}
+                  <div className="pt-4 border-t border-gray-200">
+                    <button
+                      onClick={() => { removeNode(node.id); setDetailPane(false); selectNode(null); }}
+                      className="w-full py-2.5 rounded-md border border-red-200 bg-white hover:bg-red-50 text-red-600 text-sm font-bold transition-all shadow-sm flex items-center justify-center gap-2"
+                    >
+                      <Trash2 className="w-4 h-4" /> Delete Node
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
 
-            {/* Cost Estimate */}
-            {(graph.nodes?.length || 0) > 0 && (
-              <div className="p-4 border-b border-[#E5E7EB]">
-                <p className="text-[#9CA3AF] text-[10px] uppercase tracking-widest font-semibold mb-3 flex items-center justify-between">
-                  <span className="flex items-center gap-1.5"><DollarSign className="w-3.5 h-3.5" /> Estimated Cost</span>
-                  <span className="text-emerald-400 font-mono">${estimateCost(graph).awsMonthly}/mo</span>
-                </p>
-                <div className="flex gap-2 mb-3">
-                  <div className="flex-1 bg-[#E5E7EB]/50 border border-[#D1D5DB] rounded p-1.5 text-center">
-                    <p className="text-[8px] text-[#4B5563] uppercase">AWS</p>
-                    <p className="text-xs font-mono text-[#030712]">${estimateCost(graph).awsMonthly}</p>
-                  </div>
-                  <div className="flex-1 bg-[#E5E7EB]/50 border border-[#D1D5DB] rounded p-1.5 text-center">
-                    <p className="text-[8px] text-[#4B5563] uppercase">GCP</p>
-                    <p className="text-xs font-mono text-[#030712]">${estimateCost(graph).gcpMonthly}</p>
-                  </div>
-                  <div className="flex-1 bg-[#E5E7EB]/50 border border-[#D1D5DB] rounded p-1.5 text-center">
-                    <p className="text-[8px] text-[#4B5563] uppercase">Azure</p>
-                    <p className="text-xs font-mono text-[#030712]">${estimateCost(graph).azureMonthly}</p>
-                  </div>
-                </div>
-                <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
-                  {estimateCost(graph).breakdown.map(item => (
-                    <div key={item.nodeId} className="flex justify-between items-center text-xs p-1.5 hover:bg-[#E5E7EB] rounded">
-                      <span className="text-[#374151] truncate mr-2" title={item.description}>{item.label}</span>
-                      <span className="text-[#4B5563] font-mono">${item.cost}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* Removed Dummy Global Graph Details */}
 
             {/* Requirements section */}
             <div className="p-4 border-b border-[#E5E7EB]">
@@ -680,7 +615,7 @@ export function NodeDetailPane() {
                   </>
                 )}
 
-                {wsStatus === 'preview' ? (
+                {(wsStatus === 'preview' || wsStatus === 'pushing') ? (
                   <div className="flex flex-col gap-2 mt-2">
                     <div className="bg-[#E5E7EB] rounded-lg p-3 text-xs text-[#1F2937] max-h-48 overflow-y-auto">
                       <h4 className="font-bold text-[#3B82F6] mb-2">Generation Preview ({successRatio} Nodes Success)</h4>
@@ -704,7 +639,7 @@ export function NodeDetailPane() {
                 ) : (
                   <button
                     onClick={handleGenerate}
-                    disabled={wsStatus === 'loading' || wsStatus === 'pushing' || !selectedRepo || !selectedBranch}
+                    disabled={wsStatus === 'loading' || !selectedRepo || !selectedBranch}
                     className="w-full bg-[#1D4ED8] hover:bg-[#2563EB] disabled:opacity-50 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors flex justify-center items-center gap-2 mt-1"
                   >
                     {wsStatus === 'loading' ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Generating AI Boilerplate...</> : wsStatus === 'done' ? '✓ Pushed' : 'Generate & Review Boilerplate'}

@@ -6,7 +6,8 @@ import { CollaborationBar } from './ui/CollaborationBar';
 import { useUIStore } from '../store/useUIStore';
 import { useArchStore } from '../store/useArchStore';
 import { useWorkspaceStore } from '../store/useWorkspaceStore';
-import { ArrowLeft, Save, Star, Trash2, MoreVertical, Play, BookOpen } from 'lucide-react';
+import { ArrowLeft, Save, Star, Trash2, MoreVertical, Play, BookOpen, Undo2, Redo2, Command, Check, Settings, ChevronDown, Terminal } from 'lucide-react';
+import { useStore } from 'zustand';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import { ARCHITECTURE_TEMPLATES } from '../lib/architecture.templates';
@@ -15,6 +16,7 @@ import { FloatingCopilot } from './dashboard/FloatingCopilot';
 import { ConfirmModal } from './ui/ConfirmModal';
 import { useSimulationStore } from '../store/useSimulationStore';
 import { SimulationOverlay } from './canvas/SimulationOverlay';
+import { ValidationPanel } from './panels/ValidationPanel';
 
 export function BuilderView() {
   const { id } = useParams<{ id: string }>();
@@ -26,6 +28,11 @@ export function BuilderView() {
   
   const graph = useArchStore((s) => s.graph);
   const setGraph = useArchStore((s) => s.setGraph);
+  
+  const pastStates = useStore(useArchStore.temporal, (state) => state.pastStates);
+  const futureStates = useStore(useArchStore.temporal, (state) => state.futureStates);
+  const undo = useArchStore.temporal.getState().undo;
+  const redo = useArchStore.temporal.getState().redo;
   
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving'>('saved');
   const [isClearConfirmOpen, setIsClearConfirmOpen] = useState(false);
@@ -119,7 +126,7 @@ export function BuilderView() {
     if (hasCache) healthScore += 15;
     if (nodes.length > 10) healthScore += 10;
     
-    return { estimatedCost, cloudProvider, healthScore: Math.min(healthScore, 100) };
+    return { estimatedCost, cloudProvider: cloudProvider as "AWS" | "GCP" | "Azure" | undefined, healthScore: Math.min(healthScore, 100) };
   };
 
   // Autosave when Graph changes
@@ -155,7 +162,7 @@ export function BuilderView() {
               graph,
               serviceCount: graph.nodes?.length || 0,
               estimatedCost: metrics.estimatedCost,
-              cloudProvider: metrics.cloudProvider,
+              cloudProvider: metrics.cloudProvider as "AWS" | "GCP" | "Azure" | undefined,
               healthScore: metrics.healthScore,
               autosaveAt: 'Just now',
               lastOpened: 'Just now',
@@ -174,7 +181,7 @@ export function BuilderView() {
             graph,
             serviceCount: graph.nodes?.length || 0,
             estimatedCost: metrics.estimatedCost,
-            cloudProvider: metrics.cloudProvider,
+            cloudProvider: metrics.cloudProvider as "AWS" | "GCP" | "Azure" | undefined,
             healthScore: metrics.healthScore,
             autosaveAt: 'Just now',
             lastOpened: 'Just now',
@@ -217,6 +224,26 @@ export function BuilderView() {
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
+            
+            <div className="flex items-center gap-1 bg-[#E5E7EB]/80 border border-[#D1D5DB] rounded-lg p-0.5 backdrop-blur-md shadow-lg shrink-0">
+              <button 
+                onClick={() => undo()}
+                disabled={pastStates.length === 0}
+                className="flex items-center justify-center w-7 h-7 rounded-md text-[#4B5563] hover:bg-[#D1D5DB] hover:text-[#111827] transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                title="Undo (Ctrl+Z)"
+              >
+                <Undo2 className="w-4 h-4" />
+              </button>
+              <div className="w-px h-4 bg-[#D1D5DB]" />
+              <button 
+                onClick={() => redo()}
+                disabled={futureStates.length === 0}
+                className="flex items-center justify-center w-7 h-7 rounded-md text-[#4B5563] hover:bg-[#D1D5DB] hover:text-[#111827] transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                title="Redo (Ctrl+Y)"
+              >
+                <Redo2 className="w-4 h-4" />
+              </button>
+            </div>
           </div>
           
           <div className="flex justify-center items-center pointer-events-auto flex-1 basis-0 min-w-0 px-4">
@@ -240,6 +267,11 @@ export function BuilderView() {
           </div>
 
           <div className="pointer-events-auto flex items-center justify-end gap-2 flex-1 basis-0 relative">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#E5E7EB]/80 border border-[#D1D5DB] rounded-full text-xs font-medium text-[#4B5563] backdrop-blur-md shadow-lg mr-2 hidden sm:flex cursor-default">
+              <Command className="w-3.5 h-3.5" />
+              <span>⌘K</span>
+            </div>
+            
             <div className="flex items-center gap-2 px-3 py-1.5 bg-[#E5E7EB]/80 border border-[#D1D5DB] rounded-full text-xs font-medium text-[#4B5563] backdrop-blur-md whitespace-nowrap shrink-0">
               {id?.startsWith('template_') ? (
               <>
@@ -295,7 +327,7 @@ export function BuilderView() {
                     Design Notes
                   </button>
 
-                  {(!id?.startsWith('template_') && !id?.startsWith('custom_')) && graph?.nodes?.length > 0 && (
+                  {(!id?.startsWith('template_') && !id?.startsWith('custom_')) && (graph?.nodes?.length || 0) > 0 && (
                     <>
                       <div className="h-px bg-[#E5E7EB] my-1 mx-1" />
                       <button
@@ -304,13 +336,13 @@ export function BuilderView() {
                           const addCustomTemplate = useWorkspaceStore.getState().addCustomTemplate;
                           addCustomTemplate({
                             id: `custom_${Date.now()}`,
-                            name: graph.project_name || 'My Custom Template',
-                            description: graph.description || 'A custom architecture template.',
+                            name: graph?.project_name || 'My Custom Template',
+                            description: graph?.description || 'A custom architecture template.',
                             category: 'My Templates',
                             pros: ['Custom built for my needs'],
                             cons: [],
-                            nodes: graph.nodes,
-                            edges: graph.edges
+                            nodes: graph?.nodes || [],
+                            edges: graph?.edges || []
                           });
                           toast.success('Saved as template!');
                         }}
@@ -339,7 +371,7 @@ export function BuilderView() {
         </div>
 
         {/* Top Header / Prompt */}
-        <div className="absolute top-0 w-full z-10 flex items-start justify-center p-4 py-6 pointer-events-none pr-16 mt-8">
+        <div className="absolute top-0 w-full z-10 flex items-start justify-center p-4 py-6 pointer-events-none pr-16 mt-12">
           <div className="pointer-events-auto w-full max-w-2xl px-4">
             <PromptBar />
           </div>
@@ -352,6 +384,7 @@ export function BuilderView() {
 
         <SimulationOverlay />
         <FloatingCopilot />
+        <ValidationPanel />
       </div>
 
       {/* Right Properties Panel */}

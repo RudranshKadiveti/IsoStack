@@ -263,7 +263,7 @@ export function ArchitectureReviewPage() {
                   <div className="bg-[#E5E7EB]/30 border border-[#D1D5DB] rounded-xl overflow-hidden max-h-64 overflow-y-auto custom-scrollbar">
                     <table className="w-full text-sm text-left">
                       <tbody>
-                        {(selectedWorkspace.graph?.nodes || []).map((node, i) => {
+                        {(selectedWorkspace.graph?.nodes || []).map((node: any, i: number) => {
                            let baseCost = 20;
                            if (node.serviceType.includes('react') || node.serviceType.includes('next')) baseCost = 10;
                            if (node.serviceType.includes('gateway')) baseCost = 15;

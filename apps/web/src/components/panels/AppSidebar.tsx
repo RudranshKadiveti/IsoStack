@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useArchStore } from '../../store/useArchStore';
-import { SERVICE_CATALOG, CATEGORY_CONFIG, type Service } from '../../lib/services.catalog';
-import { ChevronDown, Search, Plus, X, Box, Filter, LogOut } from 'lucide-react';
+import { NodeRegistry } from '../../lib/registry/NodeRegistry';
+import type { NodeDefinition as Service } from '../../lib/registry/types';
+import { ChevronDown, ChevronRight, Search, Plus, X, Box, Filter, LogOut, Star, Clock } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -11,6 +12,10 @@ export function AppSidebar() {
   const [showCustomModal, setShowCustomModal] = useState(false);
   const [customNode, setCustomNode] = useState({ label: '', description: '', category: 'custom' });
   const [filterCategory, setFilterCategory] = useState('all');
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
+    favorites: true,
+    recent: true
+  });
   
   const graph = useArchStore(s => s.graph);
   
@@ -20,12 +25,24 @@ export function AppSidebar() {
   const addNode = useArchStore(s => s.addNode);
   const addCustomService = useArchStore(s => s.addCustomService);
   const customServices = useArchStore(s => s.customServices) || [];
+  
+  const favoriteNodes = useArchStore(s => s.favoriteNodes);
+  const recentNodes = useArchStore(s => s.recentNodes);
+  const toggleFavorite = useArchStore(s => s.toggleFavorite);
+  const addRecentNode = useArchStore(s => s.addRecentNode);
 
   const { user, signOut } = useAuthStore();
+  
+  const toggleCategory = (id: string) => {
+    setExpandedCategories(prev => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const handleAdd = (serviceType: string, variantId: string, customLabel?: string) => {
     if (nodeCount >= maxNodes || !graph) return;
     
+    // Add to recent nodes
+    addRecentNode(serviceType);
+
     // Generate an ID
     const id = `${serviceType.toLowerCase()}_${Date.now().toString().slice(-4)}`;
     const newCol = Math.floor(Math.random() * 4) + 1;
@@ -56,7 +73,10 @@ export function AppSidebar() {
       label: customNode.label,
       description: customNode.description || 'Custom service node',
       defaultVariant: 'standard',
-      icon: Box,
+      fallbackIcon: Box,
+      shape: 'rectangle',
+      keywords: ['custom'],
+      tags: ['custom'],
       accentColor: 'oklch(0.7 0.1 100)',
       variants: [
         {
@@ -73,17 +93,40 @@ export function AppSidebar() {
     setCustomNode({ label: '', description: '', category: 'custom' });
   };
 
-  const allServices = [...SERVICE_CATALOG, ...customServices];
+  const searchResults = search.trim() ? NodeRegistry.searchNodes(search) : NodeRegistry.getAllNodes();
+  const allServices = [...searchResults, ...customServices.filter(s => 
+    s.label.toLowerCase().includes(search.toLowerCase()) || 
+    s.description.toLowerCase().includes(search.toLowerCase())
+  )];
+  const allCategories = NodeRegistry.getAllCategories();
 
-  // Group services by category based on CATEGORY_CONFIG ordering
-  const categories = Object.entries(CATEGORY_CONFIG).map(([key, config]) => {
-    const services = allServices.filter(
-      s => s.category === key && 
-           (s.label.toLowerCase().includes(search.toLowerCase()) || 
-            s.description.toLowerCase().includes(search.toLowerCase()))
-    );
-    return { id: key, config, services };
-  }).filter(c => c.services.length > 0 && (filterCategory === 'all' || c.id === filterCategory));
+  // Group services by category
+  const categories = useMemo(() => {
+    const baseCats = allCategories.map((config) => {
+      const services = allServices.filter(s => s.category === config.id);
+      return { id: config.id, config, services };
+    }).filter(c => c.services.length > 0 && (filterCategory === 'all' || c.id === filterCategory));
+
+    // Only inject Favorites and Recent if not filtering by category and not searching
+    if (filterCategory === 'all' && !search.trim()) {
+      const favServices = allServices.filter(s => favoriteNodes.includes(s.type));
+      const favCat = favServices.length > 0 ? {
+        id: 'favorites',
+        config: { id: 'favorites', label: 'Favorites', icon: Star, order: -2 } as any,
+        services: favServices
+      } : null;
+
+      const recServices = recentNodes.map(type => allServices.find(s => s.type === type)).filter(Boolean) as Service[];
+      const recCat = recServices.length > 0 ? {
+        id: 'recent',
+        config: { id: 'recent', label: 'Recently Used', icon: Clock, order: -1 } as any,
+        services: recServices
+      } : null;
+
+      return [...(favCat ? [favCat] : []), ...(recCat ? [recCat] : []), ...baseCats];
+    }
+    return baseCats;
+  }, [allCategories, allServices, filterCategory, search, favoriteNodes, recentNodes]);
 
   return (
     <>
@@ -128,12 +171,12 @@ export function AppSidebar() {
                 <Filter className="w-4 h-4" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 bg-[#F9FAFB] border-[#E5E7EB]">
+            <DropdownMenuContent align="end" className="w-48 bg-[#F9FAFB] border-[#E5E7EB] max-h-[60vh] overflow-y-auto custom-scrollbar">
               <DropdownMenuItem onClick={() => setFilterCategory('all')} className={filterCategory === 'all' ? 'text-[#3B82F6] bg-[#3B82F6]/10' : 'text-[#111827]'}>
                 All Categories
               </DropdownMenuItem>
-              {Object.entries(CATEGORY_CONFIG).map(([key, config]) => (
-                <DropdownMenuItem key={key} onClick={() => setFilterCategory(key)} className={filterCategory === key ? 'text-[#3B82F6] bg-[#3B82F6]/10' : 'text-[#111827]'}>
+              {allCategories.map((config) => (
+                <DropdownMenuItem key={config.id} onClick={() => setFilterCategory(config.id)} className={filterCategory === config.id ? 'text-[#3B82F6] bg-[#3B82F6]/10' : 'text-[#111827]'}>
                   <div className="flex items-center gap-2">
                     <config.icon className="w-3.5 h-3.5" />
                     {config.label}
@@ -146,29 +189,46 @@ export function AppSidebar() {
       </div>
 
       {/* Service Catalog */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-6">
-        {categories.map((cat) => (
-          <div key={cat.id}>
-            <div className="flex items-center gap-2 mb-3">
-              <cat.config.icon className="w-4 h-4 text-[#6B7280]" />
-              <h3 className="text-[#6B7280] text-xs font-semibold uppercase tracking-wider flex-1">
-                {cat.config.label}
-              </h3>
-              <span className="text-[#D1D5DB] text-[10px] font-mono">{cat.services.length}</span>
+      <div className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar">
+        {categories.map((cat) => {
+          const isExpanded = search.trim() !== '' ? true : (expandedCategories[cat.id] ?? false);
+          return (
+            <div key={cat.id} className="border border-[#E5E7EB] rounded-lg overflow-hidden bg-[#FFFFFF]">
+              <button 
+                onClick={() => toggleCategory(cat.id)}
+                className="w-full flex items-center gap-2 p-3 bg-[#F9FAFB] hover:bg-[#F3F4F6] transition-colors"
+              >
+                {isExpanded ? (
+                  <ChevronDown className="w-4 h-4 text-[#9CA3AF]" />
+                ) : (
+                  <ChevronRight className="w-4 h-4 text-[#9CA3AF]" />
+                )}
+                <cat.config.icon className="w-4 h-4 text-[#6B7280]" />
+                <h3 className="text-[#6B7280] text-xs font-semibold uppercase tracking-wider flex-1 text-left">
+                  {cat.config.label}
+                </h3>
+                <span className="text-[#D1D5DB] text-[10px] font-mono font-medium bg-[#FFFFFF] border border-[#E5E7EB] px-1.5 py-0.5 rounded">
+                  {cat.services.length}
+                </span>
+              </button>
+              
+              {isExpanded && (
+                <div className="p-3 grid grid-cols-2 gap-3 border-t border-[#E5E7EB]">
+                  {cat.services.map(service => (
+                    <ServiceCard 
+                      key={service.type} 
+                      service={service} 
+                      onAdd={(variant) => handleAdd(service.type, variant, service.label)}
+                      disabled={nodeCount >= maxNodes} 
+                      isFavorite={favoriteNodes.includes(service.type)}
+                      onToggleFavorite={() => toggleFavorite(service.type)}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
-            
-            <div className="grid grid-cols-2 gap-3">
-              {cat.services.map(service => (
-                <ServiceCard 
-                  key={service.type} 
-                  service={service} 
-                  onAdd={(variant) => handleAdd(service.type, variant, service.label)}
-                  disabled={nodeCount >= maxNodes} 
-                />
-              ))}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Footer limits */}
@@ -230,8 +290,8 @@ export function AppSidebar() {
                   value={customNode.category}
                   onChange={(e) => setCustomNode(prev => ({ ...prev, category: e.target.value }))}
                 >
-                  {Object.entries(CATEGORY_CONFIG).map(([key, config]) => (
-                    <option key={key} value={key}>{config.label}</option>
+                  {allCategories.map((config) => (
+                    <option key={config.id} value={config.id}>{config.label}</option>
                   ))}
                 </select>
               </div>
@@ -277,8 +337,14 @@ export function AppSidebar() {
   );
 }
 
-function ServiceCard({ service, onAdd, disabled }: { service: Service, onAdd: (variant: string) => void, disabled: boolean }) {
-  const Icon = service.icon;
+function ServiceCard({ service, onAdd, disabled, isFavorite, onToggleFavorite }: { 
+  service: Service, 
+  onAdd: (variant: string) => void, 
+  disabled: boolean,
+  isFavorite: boolean,
+  onToggleFavorite: () => void 
+}) {
+  const Icon = service.fallbackIcon;
   const hasVariants = service.variants.length > 1;
 
   const handleMainClick = () => {
@@ -311,10 +377,22 @@ function ServiceCard({ service, onAdd, disabled }: { service: Service, onAdd: (v
         (e.currentTarget as HTMLElement).style.backgroundColor = `color-mix(in oklch, ${service.accentColor} 15%, transparent)`;
       }}
     >
-      <Icon 
-        className="w-7 h-7 mb-2 transition-transform group-hover:scale-110" 
-        style={{ color: service.accentColor }} 
-      />
+      <button 
+        onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
+        className={`absolute top-1.5 right-1.5 p-1 rounded transition-opacity ${isFavorite ? 'opacity-100 text-[#EAB308]' : 'opacity-0 group-hover:opacity-100 text-[#9CA3AF] hover:text-[#4B5563]'}`}
+        title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+      >
+        <Star className="w-3.5 h-3.5" fill={isFavorite ? 'currentColor' : 'none'} />
+      </button>
+
+      {service.iconUrl ? (
+        <img src={service.iconUrl} alt={service.label} className="w-7 h-7 mb-2 transition-transform group-hover:scale-110 object-contain" />
+      ) : (
+        <Icon 
+          className="w-7 h-7 mb-2 transition-transform group-hover:scale-110" 
+          style={{ color: service.accentColor }} 
+        />
+      )}
       <span className="text-xs font-semibold text-[#111827] text-center leading-tight">
         {service.label}
       </span>
@@ -349,7 +427,11 @@ function ServiceCard({ service, onAdd, disabled }: { service: Service, onAdd: (v
       <TooltipContent side="right" className="w-48 p-3 bg-[#F9FAFB] border-[#E5E7EB]">
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <Icon className="w-4 h-4" style={{ color: service.accentColor }} />
+            {service.iconUrl ? (
+              <img src={service.iconUrl} alt={service.label} className="w-4 h-4 object-contain" />
+            ) : (
+              <Icon className="w-4 h-4" style={{ color: service.accentColor }} />
+            )}
             <p className="font-semibold text-[#111827]">{service.label}</p>
           </div>
           <p className="text-xs text-[#4B5563] leading-relaxed">

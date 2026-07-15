@@ -32,14 +32,24 @@ export function CustomEdge({
     <>
       <BaseEdge 
         path={edgePath} 
+        style={{ 
+          strokeWidth: 20, 
+          stroke: 'transparent', 
+          cursor: 'pointer' 
+        }}
+        className="peer"
+      />
+      <BaseEdge 
+        path={edgePath} 
         markerEnd={markerEnd} 
         style={{ 
           ...style, 
           strokeWidth: isSimulatingActive ? 4 : selected ? 3 : 2, 
           opacity: isSimulatingActive ? 1 : selected ? 1 : 0.7,
-          stroke: isSimulatingActive ? '#10B981' : style.stroke,
-          filter: isSimulatingActive ? 'drop-shadow(0 0 8px rgba(16, 185, 129, 0.8))' : 'none'
-        }} 
+          stroke: isSimulatingActive ? '#10B981' : selected ? '#3B82F6' : style.stroke || '#9CA3AF',
+          filter: isSimulatingActive ? 'drop-shadow(0 0 8px rgba(16, 185, 129, 0.8))' : selected ? 'drop-shadow(0 0 5px rgba(59, 130, 246, 0.5))' : 'none'
+        }}
+        className="transition-all duration-200 peer-hover:stroke-[3px] peer-hover:opacity-100 peer-hover:stroke-blue-400"
       />
       <EdgeLabelRenderer>
         <div
